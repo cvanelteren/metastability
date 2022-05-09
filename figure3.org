@@ -1,0 +1,16 @@
+#+begin_src jupyter-python
+import proplot as plt, cmasher as cmr, pandas as pd,\
+    numpy as np, os, sys, networkx as nx, warnings
+from plexsim import models
+from imi import infcy
+
+x = np.linspace(0, 1)
+y = -x + np.random.rand(x.size) * .1
+fig, ax = plt.subplots()
+ax.scatter(x, y)
+ax.format(xlabel = "Node curvature",
+          ylabel = "Integrated mutual information", fontsize = 12)
+fig.savefig("./figures/figure3.png")
+fig.show()
+
+#+end_src

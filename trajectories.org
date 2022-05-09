@@ -1,0 +1,467 @@
+#+begin_src jupyter-python
+import proplot as plt, cmasher as cmr, pandas as pd,\
+    numpy as np, os, sys, networkx as nx, warnings
+from plexsim import models
+from imi import infcy
+import warnings
+warnings.filterwarnings('ignore')
+
+g = nx.krackhardt_kite_graph()
+fp = "kite_exact_trajectories.pkl"
+df = pd.read_pickle(fp)
+df.head(1)
+from exact import *
+n = len(g)
+states, allowed = gen_states(n)
+def is_tipping(row):
+    return np.mean(states[row.state[-1]]) == 0.5
+df["is_tipping"] = df.apply(is_tipping, axis = 1)
+
+from utils import ccolors
+tmp = df[df.is_tipping]
+ps = np.log(np.stack(tmp.ps))
+lol = np.argsort(np.nansum(ps, axis = -1))
+idx  = lol[-1]
+highest = np.nansum(ps[idx])
+
+idxs = np.where(np.nansum(ps,-1) == highest)[0]
+#+end_src
+
+#+RESULTS:
+: Using numpy
+: 100% 1024/1024 [00:00<00:00, 7161.90it/s]
+
+#+begin_src jupyter-python
+def plot_trajectory(idx, ax):
+    most_path = tmp.state.iloc[idx]
+    most_states = np.array([states[i] for i in most_path])
+    c = ccolors(2)
+    pos = nx.kamada_kawai_layout(g)
+    for s, axi in zip(most_states, ax):
+        nx.draw(g, pos = pos, ax = axi,
+                node_color = c[s.astype(int)], with_labels = 1,
+                font_color = "white")
+        axi.set_title(f"{s.mean():0.2f}", fontsize = 24)
+    ax.format()
+    ax.axis("equal")
+
+# plt.config.use_style("seaborn-poster")
+from matplotlib.pyplot import Line2D
+from tqdm import tqdm
+for idx in tqdm(idxs):
+    fig, ax = plt.subplots(ncols = 6)
+    plot_trajectory(idx, ax)
+    handles = [Line2D([], [], color = c, label = f"{idx}",
+                    linestyle = 'none', marker = 'o') for idx, c in enumerate(ccolors(2))]
+    fig.legend(loc = "b",
+               handles = handles,
+               fontsize = 30,
+               title = "Node state",
+               title_fontsize = 24,
+               prop = dict(size = 20),
+               markerscale = 2)
+    fig.suptitle("Fraction of nodes in +1", fontsize = 32)
+    fig.savefig(f"./figures/kite_maximized_trajectory_{idx}.pdf")
+    fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: 100% 10/10 [00:09<00:00,  1.01it/s]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/d9ea3ee718f33d43898402af1516c127b01343b1.png]]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/5abe949b02ca26e61886d7749fb7b77c4ee118fa.png]]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/a8135a2cc7bb3f39e05c88837345a2cd32869bdb.png]]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/0badb4662d5024ca6a2126efb8c1fa71ecbff3b3.png]]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/ca509bc30cbc95fdeaa23b2d4743d0fa80b3a77c.png]]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/cebf13f85406d91bdf41481f1e6966768c08b24b.png]]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/883f604898e733c74bfdda02548e97061d6b53ce.png]]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/74f33bf52e4fd0413dc0b08aa8cbd8b258de3f43.png]]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/71f096b9963f8cb892b25bcdc040841de61fe46c.png]]
+#+attr_org: :width 1575 :height 602
+[[file:./.ob-jupyter/11235f6ceab35efbb7ec37ca16b0cfb1fe341632.png]]
+:END:
+
+
+#+begin_src jupyter-python
+print(tmp.columns)
+def get_expectation_node(df):
+    state_idx = np.stack(df.state) # contains state idx
+    ps = np.stack(df.ps) # contains state probability
+    t = state_idx.shape[1]
+
+    expectations = np.zeros((t, states.shape[1]))
+    # extact states and compute expectation value
+
+    tmp = ps.copy()
+    print(ps.shape)
+    tmp = np.insert(tmp, 0, np.zeros(tmp.shape[0]), axis = 1)
+    for t in range(t):
+        collection_states = state_idx[:, t]
+        states_ = states[collection_states]
+        p_states = tmp[:, t]
+        p_states /= p_states.sum()
+        p_states[np.isnan(p_states)] = 0
+        # expectation of getting state = 1
+        p = p_states @ states_
+        expectations[t, :] = p
+    return expectations
+expectations = get_expectation_node(tmp)
+#+end_src
+
+#+RESULTS:
+: Index(['state', 'ps', 'is_tipping'], dtype='object')
+: (30240, 5)
+
+
+#+begin_src jupyter-python
+import matplotlib.pyplot as pplt
+t = len(expectations)
+fig, ax = plt.subplots(ncols = t)
+pos = nx.kamada_kawai_layout(g)
+xy = np.array(list(pos.values()))
+from utils import ccolors
+plt.config.use_style("seaborn-poster")
+c = ccolors(len(g))
+g = nx.krackhardt_kite_graph()
+mag = np.linspace(0, 0.5, expectations.shape[0])
+for t, (axi, exp) in enumerate(zip(ax, expectations)):
+    # s = (exp - exp.min()) / (exp.max() - exp.min())
+    s = exp
+    print(t, s)
+    nx.draw_networkx_edges(g, pos = pos, ax = axi, alpha = 0.2)
+    axi.scatter(*xy.T, s = s * 10, c = c)
+    axi.set_title(mag[t].round(2))
+ax.axis('equal')
+ax.grid(False)
+ax.axis("off")
+fig.suptitle("Fraction of nodes with state+1", fontsize = 32)
+fig.savefig("./figures/expectation_kite.pdf")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+begin_example
+0 [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+1 [9.88618198e-04 9.88618198e-04 9.78233227e-03 1.00795773e-05
+ 9.78233227e-03 9.98283055e-05 9.98283055e-05 9.78233227e-03
+ 9.60062834e-02 8.72459747e-01]
+2 [0.06787307 0.06787307 0.1086497  0.0847056  0.1086497  0.08296401
+ 0.08296401 0.2404124  0.56804176 0.58786668]
+3 [0.27036888 0.27036888 0.24166631 0.29313185 0.24166631 0.26676218
+ 0.26676218 0.29805152 0.46635718 0.38486471]
+4 [0.40317429 0.40317429 0.36288541 0.46206092 0.36288541 0.42746
+ 0.42746    0.38242826 0.42179721 0.34667421]
+5 [0.50845744 0.50845744 0.47390214 0.57455729 0.47390214 0.54301274
+ 0.54301274 0.48132969 0.47512775 0.4182406 ]
+#+end_example
+#+attr_org: :width 1583 :height 488
+[[file:./.ob-jupyter/e453216fed5c8226039ce7c277ea60095d380542.png]]
+:END:
+alkdjfa
+#+begin_src jupyter-python
+for trajectory in trajectories:
+    fig, ax = plt.subplots(ncols = trajectory.size)
+    for axi, state_idx in zip(ax, trajectory):
+        s = states[state_idx]
+        ci = c[s.astype(int)]
+        nx.draw(g, pos = pos, ax = axi, node_color = ci,
+                with_labels = 1, font_color = 'w')
+    ax.axis("equal")
+#+end_src
+
+alkdjfalkdjfldk
+#+begin_src jupyter-python
+for idx in idxs:
+    most_path = tmp.iloc[idx].state
+    most_states = np.array([states[i] for i in most_path])
+    print(idx, ps[idx])
+    print(most_states)
+    print("-"*32)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+9070 [-9.18246351 -4.69172492 -2.99573227 -4.69172492 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 1. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 1. 0. 0. 0. 0. 0. 1. 1.]
+ [0. 0. 1. 0. 0. 0. 0. 1. 1. 1.]
+ [0. 0. 1. 0. 0. 1. 0. 1. 1. 1.]]
+--------------------------------
+15119 [-9.18246351 -4.69172492 -2.99573227 -4.69172492 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 1. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 1. 0. 0. 0. 1. 1.]
+ [0. 0. 0. 0. 1. 0. 0. 1. 1. 1.]
+ [0. 0. 0. 0. 1. 0. 1. 1. 1. 1.]]
+--------------------------------
+28222 [-4.69172492 -9.18246351 -2.99573227 -4.69172492 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 1. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 1. 0. 0. 0. 0. 0. 1. 1.]
+ [0. 0. 1. 0. 0. 0. 0. 1. 1. 1.]
+ [0. 0. 1. 0. 0. 1. 0. 1. 1. 1.]]
+--------------------------------
+28895 [-4.69172492 -9.18246351 -2.99573227 -4.69172492 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 1. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 1. 0. 0. 0. 1. 1.]
+ [0. 0. 0. 0. 1. 0. 0. 1. 1. 1.]
+ [0. 0. 0. 0. 1. 0. 1. 1. 1. 1.]]
+--------------------------------
+30214 [-4.69172492 -2.99573227 -4.69172492 -9.18246351 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 1. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 1. 1. 1.]
+ [0. 0. 1. 0. 0. 0. 0. 1. 1. 1.]
+ [0. 0. 1. 0. 0. 1. 0. 1. 1. 1.]]
+--------------------------------
+30227 [-4.69172492 -2.99573227 -4.69172492 -9.18246351 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 1. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 1. 1. 1.]
+ [0. 0. 0. 0. 1. 0. 0. 1. 1. 1.]
+ [0. 0. 0. 0. 1. 0. 1. 1. 1. 1.]]
+--------------------------------
+30230 [-4.69172492 -2.99573227 -4.69172492 -9.18246351 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 1. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 1. 1. 1.]
+ [0. 0. 0. 0. 0. 1. 0. 1. 1. 1.]
+ [0. 0. 1. 0. 0. 1. 0. 1. 1. 1.]]
+--------------------------------
+30233 [-4.69172492 -2.99573227 -4.69172492 -9.18246351 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 1. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 1. 1. 1.]
+ [0. 0. 0. 0. 0. 1. 0. 1. 1. 1.]
+ [0. 0. 0. 0. 0. 1. 1. 1. 1. 1.]]
+--------------------------------
+30238 [-4.69172492 -2.99573227 -4.69172492 -9.18246351 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 1. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 1. 1. 1.]
+ [0. 0. 0. 0. 0. 0. 1. 1. 1. 1.]
+ [0. 0. 0. 0. 1. 0. 1. 1. 1. 1.]]
+--------------------------------
+30239 [-4.69172492 -2.99573227 -4.69172492 -9.18246351 -4.69172492]
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 1. 1.]
+ [0. 0. 0. 0. 0. 0. 0. 1. 1. 1.]
+ [0. 0. 0. 0. 0. 0. 1. 1. 1. 1.]
+ [0. 0. 0. 0. 0. 1. 1. 1. 1. 1.]]
+--------------------------------
+#+end_example
+
+
+
+#+begin_src jupyter-python
+ps = np.log(np.stack(tmp.ps))
+
+print("-" * 32)
+for i in ps[idx]:
+    print(i)
+print("-" * 32)
+for i in ps[lol[-1]]:
+    print(i)
+print("-" * 32)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+--------------------------------
+-4.6917249215108
+-2.995732273553991
+-4.6917249215108
+-9.182463510965073
+-4.6917249215108
+--------------------------------
+-4.6917249215108
+-2.995732273553991
+-4.6917249215108
+-9.182463510965073
+-4.6917249215108
+--------------------------------
+#+end_example
+
+
+#+RESULTS:
+:RESULTS:
+#+begin_example
+10
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_55794/348484254.py:20: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_55794/348484254.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+#+end_example
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/9d8c34819972cc592475498a2f63ca9668e92935.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/3775c2e12e57ade29792d2c2aafd97fcaa63e6b9.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/0ec78825bc06a29bb643f1c5d616bee307851537.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/eb876d8ae20c1ba2be0dfc3be0b04d9e7d351e09.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/f2f955c8a80db8f52945a7f4c4df01e3a41d05fb.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/c64bac7f9f5669fa9d4abfc1c1428ef2e7394f42.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/6ea2f60855055535f66afe14b43bdff142203c5f.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/5f0cdcc3c0b421e38e70dd8ddf1fb6f98d7cc96e.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/8298cd7f6544444019e120fa72d5c36ecb661485.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/0ae86bc633d67a5c09eef2c98019209de6cbfd2e.png]]
+#+begin_example
+/tmp/ipykernel_74477/2289240082.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_74477/2289240082.py:21: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_74477/2289240082.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_74477/2289240082.py:21: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_74477/2289240082.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_74477/2289240082.py:21: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+  ax.axis("equal")
+/tmp/ipykernel_74477/2289240082.py:32: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+#+end_example
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/88acddd5636025bfae6cd36e3b48dfcb410e621c.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/5d97144080011d609997b6e00590f7b86945f0e3.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/3453ad85ba400481201e93fb966af7762710ffc2.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/549f52e7ebc74c07261e7f774627c2f44c2d14a8.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/dcf9d53c886449d1b91e5ac6c010c146a5c10d67.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/14bfa786a9ef765b9ef65201dc0c068edba2ac91.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/9d8c34819972cc592475498a2f63ca9668e92935.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/eb876d8ae20c1ba2be0dfc3be0b04d9e7d351e09.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/8298cd7f6544444019e120fa72d5c36ecb661485.png]]
+#+attr_org: :width 1575 :height 505
+[[file:./.ob-jupyter/0ae86bc633d67a5c09eef2c98019209de6cbfd2e.png]]
+: /tmp/ipykernel_74477/3842260443.py:33: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+:  20% 2/10 [00:08<00:33,  4.18s/it]/tmp/ipykernel_74477/3842260443.py:21: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+:   ax.axis("equal")
+:END:
+#+begin_src jupyter-python
+print(len(idx))
+#+end_src
+
+#+RESULTS:
+: 10
+
+#+begin_src jupyter-python
+from exact import *
+g = nx.krackhardt_kite_graph()
+beta = 0.5732374683235916
+settings = Settings(beta=beta, g=g, steps=5, model=None)
+A = nx.adjacency_matrix(g).todense()
+states, allowed = gen_states(n)
+E = ising(states, A)
+p, p0 = get_transfer(n, E, settings.beta, allowed)
+#+end_src
+
+#+RESULTS:
+: 100% 1024/1024 [00:00<00:00, 15460.81it/s]
+: 100% 1024/1024 [00:00<00:00, 1725.49it/s]
+
+#+begin_src jupyter-python
+d = np.log(p)
+d[np.isfinite(d) == False] = -1e20
+#+end_src
+
+#+RESULTS:
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+h = ax.imshow(d, cmap = "viridis")
+ax.format()
+fig.colorbar(h)
+fig.savefig("./test.png")
+fig.show()
+np.allclose(p, (1 - p).T)
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: False
+#+attr_org: :width 384 :height 300
+[[file:./.ob-jupyter/dc553c73a26ada7f4ac3392ba65eb8cc9a8d12f9.png]]
+:END:
+
+#+begin_src jupyter-python
+beta = 0.5732374683235916
+print(1/(1 + np.exp(6 * beta)))
+print(1/(1 + np.exp(6 * beta)))
+#+end_src
+
+#+RESULTS:
+: 0.03108580391136416

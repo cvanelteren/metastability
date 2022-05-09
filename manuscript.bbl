@@ -1,0 +1,1381 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\datalist[entry]{none/global//global/global}
+  \entry{Fries2015}{article}{}
+    \name{author}{1}{}{%
+      {{hash=FP}{%
+         family={Fries},
+         familyi={F\bibinitperiod},
+         given={Pascal},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{FP1}
+    \strng{fullhash}{FP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \verb{doi}
+    \verb 10.1016/j.neuron.2015.09.034
+    \endverb
+    \field{issn}{08966273}
+    \field{number}{1}
+    \field{pages}{220\bibrangedash 235}
+    \field{shorttitle}{Rhythms for {{Cognition}}}
+    \field{title}{Rhythms for {{Cognition}}: {{Communication}} through
+  {{Coherence}}}
+    \field{volume}{88}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/6WTTIY9L/Fries_2015_Rhythms for Cognition
+    \verb .pdf
+    \endverb
+    \field{journaltitle}{Neuron}
+    \field{month}{10}
+    \field{year}{2015}
+  \endentry
+
+  \entry{Kandel2000}{book}{}
+    \name{author}{3}{}{%
+      {{hash=KER}{%
+         family={Kandel},
+         familyi={K\bibinitperiod},
+         given={Eric\bibnamedelima R},
+         giveni={E\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=SJH}{%
+         family={Schwartz},
+         familyi={S\bibinitperiod},
+         given={J\bibnamedelima H},
+         giveni={J\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=JTM}{%
+         family={Jessell},
+         familyi={J\bibinitperiod},
+         given={Thomas\bibnamedelima M},
+         giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{McGraw-Hill Medical}}%
+    }
+    \keyw{neuroscience}
+    \strng{namehash}{KER+1}
+    \strng{fullhash}{KERSJHJTM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Now in resplendent color, the new edition continues to define the latest in
+  the scientific understanding of the brain, the nervous system, and human
+  behavior. Each chapter is thoroughly revised and includes the impact of
+  molecular biology in the mechanisms underlying developmental processes and in
+  the pathogenesis of disease. Important features to this edition include a new
+  chapter - Genes and Behavior; a complete updating of development of the
+  nervous system; the genetic basis of neurological and psychiatric disease;
+  cognitive neuroscience of perception, planning, action, motivation and
+  memory; ion channel mechanisms; and much more.%
+    }
+    \field{edition}{Fourth}
+    \field{isbn}{0-07-112000-9}
+    \field{title}{Principles of {{Neural Science}}}
+    \verb{url}
+    \verb http://www.amazon.com/exec/obidos/redirect?tag=citeulike07-20%5C&path
+    \verb =ASIN/0071120009
+    \endverb
+    \field{month}{07}
+    \field{year}{2000}
+  \endentry
+
+  \entry{Hopfield1982b}{article}{}
+    \name{author}{1}{}{%
+      {{hash=HJJ}{%
+         family={Hopfield},
+         familyi={H\bibinitperiod},
+         given={J\bibnamedelima J},
+         giveni={J\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+  \keyw{Animals,Computers,Mathematics,Memory,Models,Neurological,Neurons,Neurons:
+  physiology}
+    \strng{namehash}{HJJ1}
+    \strng{fullhash}{HJJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Computational properties of use of biological organisms or to the
+  construction of computers can emerge as collective properties of systems
+  having a large number of simple equivalent components (or neurons). The
+  physical meaning of content-addressable memory is described by an appropriate
+  phase space flow of the state of a system. A model of such a system is given,
+  based on aspects of neurobiology but readily adapted to integrated circuits.
+  The collective properties of this model produce a content-addressable memory
+  which correctly yields an entire memory from any subpart of sufficient size.
+  The algorithm for the time evolution of the state of the system is based on
+  asynchronous parallel processing. Additional emergent collective properties
+  include some capacity for generalization, familiarity recognition,
+  categorization, error correction, and time sequence retention. The collective
+  properties are only weakly sensitive to details of the modeling or the
+  failure of individual devices.%
+    }
+    \field{issn}{0027-8424}
+    \field{number}{8}
+    \field{pages}{2554\bibrangedash 8}
+    \field{title}{Neural Networks and Physical Systems with Emergent Collective
+  Computational Abilities.}
+    \field{volume}{79}
+    \field{journaltitle}{Proceedings of the National Academy of Sciences of the
+  United States of America}
+    \field{month}{05}
+    \field{year}{1982}
+  \endentry
+
+  \entry{Glauber1963}{article}{}
+    \name{author}{1}{}{%
+      {{hash=GRJ}{%
+         family={Glauber},
+         familyi={G\bibinitperiod},
+         given={Roy\bibnamedelima J.},
+         giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{GRJ1}
+    \strng{fullhash}{GRJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    The individual spins of the Ising model are assumed to interact with an
+  external agency (e.g., a heat reservoir) which causes them to change their
+  states randomly with time. Coupling between the spins is introduced through
+  the assumption that the transition probabilities for any one spin depend on
+  the values of the neighboring spins. This dependence is determined, in part,
+  by the detailed balancing condition obeyed by the equilibrium state of the
+  model. The Markoff process which describes the spin functions is analyzed in
+  detail for the case of a closed N-member chain. The expectation values of the
+  individual spins and of the products of pairs of spins, each of the pair
+  evaluated at a different time, are found explicitly. The influence of a
+  uniform, time-varying magnetic field upon the model is discussed, and the
+  frequency-dependent magnetic susceptibility is found in the weak-field limit.
+  Some fluctuation-dissipation theorems are derived which relate the
+  susceptibility to the Fourier transform of the time-dependent correlation
+  function of the magnetization at equilibrium.%
+    }
+    \verb{doi}
+    \verb 10.1063/1.1703954
+    \endverb
+    \field{isbn}{0022-2488}
+    \field{issn}{00222488}
+    \field{number}{2}
+    \field{pages}{294\bibrangedash 307}
+    \field{title}{Time-Dependent Statistics of the {{Ising}} Model}
+    \field{volume}{4}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/VPS5IRAR/Glauber - 1963 - Time-dependent
+    \verb statistics of the Ising model(2).pdf
+    \endverb
+    \field{journaltitle}{Journal of Mathematical Physics}
+    \field{year}{1963}
+  \endentry
+
+  \entry{DOrsogna2015a}{article}{}
+    \name{author}{2}{}{%
+      {{hash=DMR}{%
+         family={D'Orsogna},
+         familyi={D\bibinitperiod},
+         given={Maria\bibnamedelima R.},
+         giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=PM}{%
+         family={Perc},
+         familyi={P\bibinitperiod},
+         given={Matja{\v z}},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{DMRPM1}
+    \strng{fullhash}{DMRPM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{abstract}{%
+    Containing the spread of crime in urban societies remains a major
+  challenge. Empirical evidence suggests that, if left unchecked, crimes may be
+  recurrent and proliferate. On the other hand, eradicating a culture of crime
+  may be difficult, especially under extreme social circumstances that impair
+  the creation of a shared sense of social responsibility. Although our
+  understanding of the mechanisms that drive the emergence and diffusion of
+  crime is still incomplete, recent research highlights applied mathematics and
+  methods of statistical physics as valuable theoretical resources that may
+  help us better understand criminal activity. We review different approaches
+  aimed at modeling and improving our understanding of crime, focusing on the
+  nucleation of crime hotspots using partial differential equations,
+  self-exciting point process and agent-based modeling, adversarial
+  evolutionary games, and the network science behind the formation of gangs and
+  large-scale organized crime. We emphasize that statistical physics of crime
+  can relevantly inform the design of successful crime prevention strategies,
+  as well as improve the accuracy of expectations about how different policing
+  interventions should impact malicious human activity that deviates from
+  social norms. We also outline possible directions for future research,
+  related to the effects of social and coevolving networks and to the
+  hierarchical growth of criminal structures due to self-organization.%
+    }
+    \verb{doi}
+    \verb 10.1016/j.plrev.2014.11.001
+    \endverb
+    \field{issn}{15710645}
+    \field{pages}{1\bibrangedash 21}
+    \field{shorttitle}{Statistical Physics of Crime}
+    \field{title}{Statistical Physics of Crime: {{A}} Review}
+    \field{volume}{12}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/RHNXHZCZ/D'Orsogna and Perc - 2015 - Stat
+    \verb istical physics of crime A review.pdf
+    \endverb
+    \field{journaltitle}{Physics of Life Reviews}
+    \field{month}{03}
+    \field{year}{2015}
+  \endentry
+
+  \entry{vanElteren2022}{article}{}
+    \name{author}{3}{}{%
+      {{hash=vC}{%
+         family={{van Elteren}},
+         familyi={v\bibinitperiod},
+         given={Casper},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=QR}{%
+         family={Quax},
+         familyi={Q\bibinitperiod},
+         given={Rick},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SP}{%
+         family={Sloot},
+         familyi={S\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{vC+1}
+    \strng{fullhash}{vCQRSP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    One of the most central questions in network science is: which nodes are
+  most important? Often this question is answered using structural properties
+  such as high connectedness or centrality in the network. However, static
+  structural connectedness does not necessarily translate to dynamical
+  importance. To demonstrate this, we simulate the kinetic Ising spin model on
+  generated networks and one real-world weighted network. The dynamic impact of
+  nodes is assessed by causally intervening on node state probabilities and
+  measuring the effect on the systemic dynamics. The results show that
+  structural features such as network centrality or connectedness are actually
+  poor predictors of the dynamical impact of a node on the rest of the network.
+  A solution is offered in the form of an information theoretical measure named
+  integrated mutual information. The metric is able to accurately predict the
+  dynamically most important node ("driver" node) in networks based on
+  observational data of non-intervened dynamics. We conclude that the driver
+  node(s) in networks are not necessarily the most well-connected or central
+  nodes. Indeed, the common assumption of network structural features being
+  proportional to dynamical importance is false. Consequently, great care
+  should be taken when deriving dynamical importance from network data alone.
+  These results highlight the need for novel inference methods that take both
+  structure and dynamics into account.%
+    }
+    \verb{doi}
+    \verb 10.1016/j.physa.2022.126889
+    \endverb
+    \field{issn}{03784371}
+    \field{pages}{126889}
+    \field{title}{Dynamic Importance of Network Nodes Is Poorly Predicted by
+  Static Structural Features}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/3H33TVIN/van Elteren et al. - 2022 - Dyna
+    \verb mic importance of network nodes is poorly pred.pdf
+    \endverb
+    \field{journaltitle}{Physica A: Statistical Mechanics and its Applications}
+    \field{month}{01}
+    \field{year}{2022}
+  \endentry
+
+  \entry{Quax2013}{article}{}
+    \name{author}{3}{}{%
+      {{hash=QR}{%
+         family={Quax},
+         familyi={Q\bibinitperiod},
+         given={Rick},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=AA}{%
+         family={Apolloni},
+         familyi={A\bibinitperiod},
+         given={Andrea},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=aSPM}{%
+         prefix={a},
+         prefixi={a},
+         family={Sloot},
+         familyi={S\bibinitperiod},
+         given={Peter\bibnamedelima M},
+         giveni={P\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+    }
+    \keyw{★,computational biology,mathematical physics,systems biology}
+    \strng{namehash}{QR+1}
+    \strng{fullhash}{QRAAaSPM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    It is notoriously difficult to predict the behaviour of a complex
+  self-organizing system, where the interactions among dynamical units form a
+  heterogeneous topology. Even if the dynamics of each microscopic unit is
+  known, a real understanding of their contributions to the macroscopic system
+  behaviour is still lacking. Here, we develop information-theoretical methods
+  to distinguish the contribution of each individual unit to the collective
+  out-of-equilibrium dynamics. We show that for a system of units connected by
+  a network of interaction potentials with an arbitrary degree distribution,
+  highly connected units have less impact on the system dynamics when compared
+  with intermediately connected units. In an equilibrium setting, the hubs are
+  often found to dictate the long-term behaviour. However, we find both
+  analytically and experimentally that the instantaneous states of these units
+  have a short-lasting effect on the state trajectory of the entire system. We
+  present qualitative evidence of this phenomenon from empirical findings about
+  a social network of product recommendations, a protein-protein interaction
+  network and a neural network, suggesting that it might indeed be a widespread
+  property in nature.%
+    }
+    \verb{doi}
+    \verb 10.1098/rsif.2013.0568
+    \endverb
+    \verb{eprint}
+    \verb 1111.5483
+    \endverb
+    \field{isbn}{1742-5689}
+    \field{issn}{1742-5662}
+    \field{number}{88}
+    \field{pages}{20130568}
+    \field{title}{The Diminishing Role of Hubs in Dynamical Processes on
+  Complex Networks.}
+    \field{volume}{10Q}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/3HHYCR2N/Quax, Apolloni, Sloot - 2013 - T
+    \verb he diminishing role of hubs in dynamical processes on complex network
+    \verb s(2).pdf
+    \endverb
+    \field{journaltitle}{Journal of the Royal Society, Interface / the Royal
+  Society}
+    \field{eprinttype}{arxiv}
+    \field{year}{2013}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{Forgoston2018}{article}{}
+    \name{author}{2}{}{%
+      {{hash=FE}{%
+         family={Forgoston},
+         familyi={F\bibinitperiod},
+         given={Eric},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=MRO}{%
+         family={Moore},
+         familyi={M\bibinitperiod},
+         given={Richard\bibnamedelima O.},
+         giveni={R\bibinitperiod\bibinitdelim O\bibinitperiod},
+      }}%
+    }
+    \keyw{37H10 60F10 78A60 92D25 82C26,Condensed Matter - Statistical
+  Mechanics,Mathematics - Analysis of PDEs,Mathematics -
+  Probability,Quantitative Biology - Populations and Evolution}
+    \strng{namehash}{FEMRO1}
+    \strng{fullhash}{FEMRO1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Noise plays a fundamental role in a wide variety of physical and biological
+  dynamical systems. It can arise from an external forcing or due to random
+  dynamics internal to the system. It is well established that even weak noise
+  can result in large behavioral changes such as transitions between or escapes
+  from quasi-stable states. These transitions can correspond to critical events
+  such as failures or extinctions that make them essential phenomena to
+  understand and quantify, despite the fact that their occurrence is rare. This
+  article will provide an overview of the theory underlying the dynamics of
+  rare events for stochastic models along with some example applications.%
+    }
+    \verb{doi}
+    \verb 10.1137/17M1142028
+    \endverb
+    \verb{eprint}
+    \verb 1712.03785
+    \endverb
+    \field{issn}{0036-1445, 1095-7200}
+    \field{number}{4}
+    \field{pages}{969\bibrangedash 1009}
+    \field{title}{A Primer on Noise-Induced Transitions in Applied Dynamical
+  Systems}
+    \field{volume}{60}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/8ED7F67X/Forgoston and Moore - 2018 - A p
+    \verb rimer on noise-induced transitions in applied d.pdf
+    \endverb
+    \field{journaltitle}{SIAM Review}
+    \field{eprinttype}{arxiv}
+    \field{month}{01}
+    \field{year}{2018}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{Calim2021}{article}{}
+    \name{author}{3}{}{%
+      {{hash=CA}{%
+         family={Calim},
+         familyi={C\bibinitperiod},
+         given={Ali},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=PT}{%
+         family={Palabas},
+         familyi={P\bibinitperiod},
+         given={Tugba},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=UM}{%
+         family={Uzuntarla},
+         familyi={U\bibinitperiod},
+         given={Muhammet},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CA+1}
+    \strng{fullhash}{CAPTUM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    The concept of resonance in nonlinear systems is crucial and traditionally
+  refers to a specific realization of maximum response provoked by a particular
+  external perturbation. Depending on the system and the nature of
+  perturbation, many different resonance types have been identified in various
+  fields of science. A prominent example is in neuroscience where it has been
+  widely accepted that a neural system may exhibit resonances at microscopic,
+  mesoscopic and macroscopic scales and benefit from such resonances in various
+  tasks. In this context, the two well-known forms are stochastic and
+  vibrational resonance phenomena which manifest that detection and propagation
+  of a feeble information signal in neural structures can be enhanced by
+  additional perturbations via these two resonance mechanisms. Given the
+  importance of network architecture in proper functioning of the nervous
+  system, we here present a review of recent studies on stochastic and
+  vibrational resonance phenomena in neuronal media, focusing mainly on their
+  emergence in complex networks of neurons as well as in simple network
+  structures that represent local behaviours of neuron communities. From this
+  perspective, we aim to provide a secure guide by including theoretical and
+  experimental approaches that analyse in detail possible reasons and necessary
+  conditions for the appearance of stochastic resonance and vibrational
+  resonance in neural systems. This article is part of the theme issue
+  `Vibrational and stochastic resonance in driven nonlinear systems (part 2)'.%
+    }
+    \verb{doi}
+    \verb 10.1098/rsta.2020.0236
+    \endverb
+    \field{issn}{1364-503X, 1471-2962}
+    \field{number}{2198}
+    \field{pages}{rsta.2020.0236, 20200236}
+    \field{title}{Stochastic and Vibrational Resonance in Complex Networks of
+  Neurons}
+    \field{volume}{379}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/399EZSZT/Calim et al. - 2021 - Stochastic
+    \verb  and vibrational resonance in complex ne.pdf
+    \endverb
+    \field{journaltitle}{Philosophical Transactions of the Royal Society A:
+  Mathematical, Physical and Engineering Sciences}
+    \field{month}{05}
+    \field{year}{2021}
+  \endentry
+
+  \entry{Czaplicka2013a}{article}{}
+    \name{author}{3}{}{%
+      {{hash=CA}{%
+         family={Czaplicka},
+         familyi={C\bibinitperiod},
+         given={Agnieszka},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=HJA}{%
+         family={Holyst},
+         familyi={H\bibinitperiod},
+         given={Janusz\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=SPM}{%
+         family={Sloot},
+         familyi={S\bibinitperiod},
+         given={Peter\bibnamedelima M.A.},
+         giveni={P\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+    }
+    \keyw{statistical physics}
+    \strng{namehash}{CA+2}
+    \strng{fullhash}{CAHJASPM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    We study the influence of noise on information transmission in the form of
+  packages shipped between nodes of hierarchical networks. Numerical
+  simulations are performed for artificial tree networks, scale-free
+  Ravasz-Barab\'asi networks as well for a real network formed by email
+  addresses of former Enron employees. Two types of noise are considered. One
+  is related to packet dynamics and is responsible for a random part of packets
+  paths. The second one originates from random changes in initial network
+  topology. We find that the information transfer can be enhanced by the noise.
+  The system possesses optimal performance when both kinds of noise are tuned
+  to specific values, this corresponds to the Stochastic Resonance phenomenon.
+  There is a non-trivial synergy present for both noisy components. We found
+  also that hierarchical networks built of nodes of various degrees are more
+  efficient in information transfer than trees with a fixed branching factor.%
+    }
+    \verb{doi}
+    \verb 10.1038/srep01223
+    \endverb
+    \field{issn}{20452322}
+    \field{title}{Noise Enhances Information Transfer in Hierarchical Networks}
+    \field{volume}{3}
+    \field{journaltitle}{Scientific Reports}
+    \field{year}{2013}
+  \endentry
+
+  \entry{Cover2005}{book}{}
+    \name{author}{2}{}{%
+      {{hash=CTM}{%
+         family={Cover},
+         familyi={C\bibinitperiod},
+         given={Thomas\bibnamedelima M.},
+         giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=TJA}{%
+         family={Thomas},
+         familyi={T\bibinitperiod},
+         given={Joy\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CTMTJA1}
+    \strng{fullhash}{CTMTJA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Following a brief introduction and overview, early chapters cover the basic
+  algebraic relationships of entropy, relative entropy and mutual information,
+  AEP, entropy rates of stochastics processes and data compression, duality of
+  data compression and the growth rate of wealth. Later chapters explore
+  Kolmogorov complexity, channel capacity, differential entropy, the capacity
+  of the fundamental Gaussian channel, the relationship between information
+  theory and statistics, rate distortion and network information theories. The
+  final two chapters examine the stock market and inequalities in information
+  theory. In many cases the authors actually describe the properties of the
+  solutions before the presented problems.%
+    }
+    \verb{doi}
+    \verb 10.1002/047174882X
+    \endverb
+    \field{isbn}{978-0-471-24195-9}
+    \field{issn}{15579654}
+    \field{title}{Elements of {{Information Theory}}}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/296ZDX75/Cover, Thomas - 2005 - Elements
+    \verb of Information Theory(2).pdf
+    \endverb
+    \field{journaltitle}{Elements of Information Theory}
+    \field{year}{2005}
+  \endentry
+
+  \entry{Nicolis2016}{article}{}
+    \name{author}{2}{}{%
+      {{hash=NG}{%
+         family={Nicolis},
+         familyi={N\bibinitperiod},
+         given={Gr{\'e}goire},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=NC}{%
+         family={Nicolis},
+         familyi={N\bibinitperiod},
+         given={Catherine},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{NGNC1}
+    \strng{fullhash}{NGNC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    A class of complex self-organizing systems subjected to fluctuations of
+  environmental or intrinsic origin and to nonequilibrium constraints in the
+  form of an external periodic forcing is analyzed from the standpoint of
+  information theory. Conditions under which the response of information
+  entropy and related quantities to the nonequilibrium constraint can be
+  optimized via a stochastic resonance-type mechanism are identified, and the
+  role of key parameters is assessed.%
+    }
+    \verb{doi}
+    \verb 10.3390/e18050172
+    \endverb
+    \field{issn}{1099-4300}
+    \field{number}{5}
+    \field{pages}{172}
+    \field{title}{Stochastic {{Resonance}}, {{Self-Organization}} and
+  {{Information Dynamics}} in {{Multistable Systems}}}
+    \field{volume}{18}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/IC42LUGS/Nicolis and Nicolis - 2016 - Sto
+    \verb chastic Resonance, Self-Organization and Inform.pdf
+    \endverb
+    \field{journaltitle}{Entropy}
+    \field{month}{05}
+    \field{year}{2016}
+  \endentry
+
+  \entry{Lizier2010}{article}{}
+    \name{author}{3}{}{%
+      {{hash=LJT}{%
+         family={Lizier},
+         familyi={L\bibinitperiod},
+         given={Joseph\bibnamedelima T.},
+         giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=PM}{%
+         family={Prokopenko},
+         familyi={P\bibinitperiod},
+         given={Mikhail},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=ZAY}{%
+         family={Zomaya},
+         familyi={Z\bibinitperiod},
+         given={Albert\bibnamedelima Y.},
+         giveni={A\bibinitperiod\bibinitdelim Y\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LJT+1}
+    \strng{fullhash}{LJTPMZAY1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1063/1.3486801
+    \endverb
+    \field{issn}{1054-1500, 1089-7682}
+    \field{number}{3}
+    \field{pages}{037109}
+    \field{title}{Information Modification and Particle Collisions in
+  Distributed Computation}
+    \field{volume}{20}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/6QDDKZ4Z/Lizier et al. - 2010 - Informati
+    \verb on modification and particle collisions i.pdf
+    \endverb
+    \field{journaltitle}{Chaos: An Interdisciplinary Journal of Nonlinear
+  Science}
+    \field{month}{09}
+    \field{year}{2010}
+  \endentry
+
+  \entry{Schreiber}{book}{}
+    \name{author}{1}{}{%
+      {{hash=SM}{%
+         family={Schreiber},
+         familyi={S\bibinitperiod},
+         given={M},
+         giveni={M},
+      }}%
+    }
+    \strng{namehash}{SM1}
+    \strng{fullhash}{SM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{isbn}{978-3-642-46246-7}
+    \field{title}{Volume 1 {{Edited}} by {{K}}. {{Krickeberg}}{$\cdot$} {{R}}.
+  {{C}}. {{Lewontin}} . {{J}}. {{Neyman M}}. {{Schreiber}}}
+    \field{volume}{1}
+  \endentry
+
+  \entry{Ay2008}{article}{}
+    \name{author}{2}{}{%
+      {{hash=AN}{%
+         family={Ay},
+         familyi={A\bibinitperiod},
+         given={Nihat},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=PD}{%
+         family={Polani},
+         familyi={P\bibinitperiod},
+         given={Daniel},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \keyw{bayesian networks,causality,information flow,information theory}
+    \strng{namehash}{ANPD1}
+    \strng{fullhash}{ANPD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    We use a notion of causal independence based on intervention, which is a
+  fundamental concept of the theory of causal networks, to define a measure for
+  the strength of a causal effect. We call this measure " information flow "
+  and compare it with known information flow measures such as transfer
+  entropy.%
+    }
+    \verb{doi}
+    \verb 10.1142/S0219525908001465
+    \endverb
+    \field{isbn}{0219-5259}
+    \field{issn}{0219-5259}
+    \field{number}{01}
+    \field{pages}{17\bibrangedash 41}
+    \field{title}{Information {{Flows}} in {{Causal Networks}}}
+    \field{volume}{11}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/DBASDI5W/Ay, Polani - 2008 - Information
+    \verb Flows in Causal Networks(2).pdf
+    \endverb
+    \field{journaltitle}{Advances in Complex Systems}
+    \field{year}{2008}
+  \endentry
+
+  \entry{Runge2019}{article}{}
+    \name{author}{21}{}{%
+      {{hash=RJ}{%
+         family={Runge},
+         familyi={R\bibinitperiod},
+         given={Jakob},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Bathiany},
+         familyi={B\bibinitperiod},
+         given={Sebastian},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=BE}{%
+         family={Bollt},
+         familyi={B\bibinitperiod},
+         given={Erik},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=CG}{%
+         family={{Camps-Valls}},
+         familyi={C\bibinitperiod},
+         given={Gustau},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Coumou},
+         familyi={C\bibinitperiod},
+         given={Dim},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=DE}{%
+         family={Deyle},
+         familyi={D\bibinitperiod},
+         given={Ethan},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=GC}{%
+         family={Glymour},
+         familyi={G\bibinitperiod},
+         given={Clark},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=KM}{%
+         family={Kretschmer},
+         familyi={K\bibinitperiod},
+         given={Marlene},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=MMD}{%
+         family={Mahecha},
+         familyi={M\bibinitperiod},
+         given={Miguel\bibnamedelima D.},
+         giveni={M\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=MJ}{%
+         family={{Mu{\~n}oz-Mar{\'i}}},
+         familyi={M\bibinitperiod},
+         given={Jordi},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=vEH}{%
+         family={{van Nes}},
+         familyi={v\bibinitperiod},
+         given={Egbert\bibnamedelima H.},
+         giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=PJ}{%
+         family={Peters},
+         familyi={P\bibinitperiod},
+         given={Jonas},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=QR}{%
+         family={Quax},
+         familyi={Q\bibinitperiod},
+         given={Rick},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=RM}{%
+         family={Reichstein},
+         familyi={R\bibinitperiod},
+         given={Markus},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Scheffer},
+         familyi={S\bibinitperiod},
+         given={Marten},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SB}{%
+         family={Sch{\"o}lkopf},
+         familyi={S\bibinitperiod},
+         given={Bernhard},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=SP}{%
+         family={Spirtes},
+         familyi={S\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=SG}{%
+         family={Sugihara},
+         familyi={S\bibinitperiod},
+         given={George},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=SJ}{%
+         family={Sun},
+         familyi={S\bibinitperiod},
+         given={Jie},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=ZK}{%
+         family={Zhang},
+         familyi={Z\bibinitperiod},
+         given={Kun},
+         giveni={K\bibinitperiod},
+      }}%
+      {{hash=ZJ}{%
+         family={Zscheischler},
+         familyi={Z\bibinitperiod},
+         given={Jakob},
+         giveni={J\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{Springer US}}%
+    }
+    \strng{namehash}{RJ+1}
+    \strng{fullhash}{RJBSBECGCDDEGCKMMMDMJvEHPJQRRMSMSBSPSGSJZKZJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    The heart of the scientific enterprise is a rational effort to understand
+  the causes behind the phenomena we observe. In large-scale complex dynamical
+  systems such as the Earth system, real experiments are rarely feasible.
+  However, a rapidly increasing amount of observational and simulated data
+  opens up the use of novel data-driven causal methods beyond the commonly
+  adopted correlation techniques. Here, we give an overview of causal inference
+  frameworks and identify promising generic application cases common in Earth
+  system sciences and beyond. We discuss challenges and initiate the benchmark
+  platform causeme.net to close the gap between method users and developers.%
+    }
+    \verb{doi}
+    \verb 10.1038/s41467-019-10105-3
+    \endverb
+    \field{isbn}{4146701910}
+    \field{issn}{20411723}
+    \field{number}{1}
+    \field{pages}{1\bibrangedash 13}
+    \field{title}{Inferring Causation from Time Series in {{Earth}} System
+  Sciences}
+    \field{volume}{10}
+    \field{journaltitle}{Nature Communications}
+    \field{year}{2019}
+  \endentry
+
+  \entry{Li2018}{article}{}
+    \name{author}{4}{}{%
+      {{hash=LS}{%
+         family={Li},
+         familyi={L\bibinitperiod},
+         given={Songting},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=XY}{%
+         family={Xiao},
+         familyi={X\bibinitperiod},
+         given={Yanyang},
+         giveni={Y\bibinitperiod},
+      }}%
+      {{hash=ZD}{%
+         family={Zhou},
+         familyi={Z\bibinitperiod},
+         given={Douglas},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=CD}{%
+         family={Cai},
+         familyi={C\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LS+1}
+    \strng{fullhash}{LSXYZDCD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \verb{doi}
+    \verb 10.1103/PhysRevE.97.052216
+    \endverb
+    \field{issn}{2470-0045, 2470-0053}
+    \field{number}{5}
+    \field{pages}{052216}
+    \field{shorttitle}{Causal Inference in Nonlinear Systems}
+    \field{title}{Causal Inference in Nonlinear Systems: {{Granger}} Causality
+  versus Time-Delayed Mutual Information}
+    \field{volume}{97}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/AA9EZE7D/Li et al. - 2018 - Causal infere
+    \verb nce in nonlinear systems Granger cau.pdf
+    \endverb
+    \field{journaltitle}{Physical Review E}
+    \field{month}{05}
+    \field{year}{2018}
+  \endentry
+
+  \entry{James2016}{article}{}
+    \name{author}{3}{}{%
+      {{hash=JRG}{%
+         family={James},
+         familyi={J\bibinitperiod},
+         given={Ryan\bibnamedelima G.},
+         giveni={R\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=BN}{%
+         family={Barnett},
+         familyi={B\bibinitperiod},
+         given={Nix},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=CJP}{%
+         family={Crutchfield},
+         familyi={C\bibinitperiod},
+         given={James\bibnamedelima P.},
+         giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+    }
+    \keyw{-a 89,05,45,50,70,75,an important task in,c 05,causation
+  entropy,ey,kd 89,network science,pacs numbers,partial information
+  decomposi-,stochastic process,tion,tp 02,transfer entropy,understanding a
+  complex system}
+    \strng{namehash}{JRG+1}
+    \strng{fullhash}{JRGBNCJP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    A central task in analyzing complex dynamics is to determine the loci of
+  information storage and the communication topology of information flows
+  within a system. Over the last decade and a half, diagnostics for the latter
+  have come to be dominated by the transfer entropy. Via straightforward
+  examples, we show that it and a derivative quantity, the causation entropy,
+  do not, in fact, quantify the flow of information. At one and the same time
+  they can overestimate flow or underestimate influence. We isolate why this is
+  the case and propose several avenues to alternate measures for information
+  flow. We also address an auxiliary consequence: The proliferation of networks
+  as a now-common theoretical model for large-scale systems, in concert with
+  the use of transfer-like entropies, has shoehorned dyadic relationships into
+  our structural interpretation of the organization and behavior of complex
+  systems. This interpretation thus fails to include the effects of polyadic
+  dependencies. The net result is that much of the sophisticated organization
+  of complex systems may go undetected.%
+    }
+    \verb{doi}
+    \verb 10.1103/PhysRevLett.116.238701
+    \endverb
+    \verb{eprint}
+    \verb 1512.06479
+    \endverb
+    \field{issn}{10797114}
+    \field{number}{23}
+    \field{pages}{1\bibrangedash 6}
+    \field{title}{Information {{Flows}}? {{A Critique}} of {{Transfer
+  Entropies}}}
+    \field{volume}{116}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/UYJ9A9ZX/James, Barnett, Crutchfield - 20
+    \verb 16 - Information Flows A Critique of Transfer Entropies(2).pdf
+    \endverb
+    \field{journaltitle}{Physical Review Letters}
+    \field{eprinttype}{arxiv}
+    \field{year}{2016}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{Janzing2013}{article}{}
+    \name{author}{4}{}{%
+      {{hash=JD}{%
+         family={Janzing},
+         familyi={J\bibinitperiod},
+         given={Dominik},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=BD}{%
+         family={Balduzzi},
+         familyi={B\bibinitperiod},
+         given={David},
+         giveni={D\bibinitperiod},
+      }}%
+      {{hash=GM}{%
+         family={{Grosse-Wentrup}},
+         familyi={G\bibinitperiod},
+         given={Moritz},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SB}{%
+         family={Sch{\"o}lkopf},
+         familyi={S\bibinitperiod},
+         given={Bernhard},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \keyw{Bayesian networks,Causality,Information flow,Transfer entropy}
+    \strng{namehash}{JD+1}
+    \strng{fullhash}{JDBDGMSB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Manymethods for causal inference generate directed acyclic graphs (DAGs)
+  that formalize causal relations between n variables. Given the joint
+  distribution on all these variables, the DAG contains all information about
+  how intervening on one variable changes the distribution of the other n-1
+  variables. However, quantifying the causal influence of one variable on
+  another one remains a nontrivial question. Here we propose a set of natural,
+  intuitive postulates that a measure of causal strength should satisfy. We
+  then introduce a communication scenario, where edges in a DAG play the role
+  of channels that can be locally corrupted by interventions. Causal strength
+  is then the relative entropy distance between the old and the new
+  distribution. Many other measures of causal strength have been proposed,
+  including average causal effect, transfer entropy, directed information, and
+  information flow. We explain how they fail to satisfy the postulates on
+  simple DAGs of {$\leq$} 3 nodes. Finally, we investigate the behavior of our
+  measure on time-series, supporting our claims with experiments on simulated
+  data.%
+    }
+    \verb{doi}
+    \verb 10.1214/13-AOS1145
+    \endverb
+    \verb{eprint}
+    \verb 1203.6502v2
+    \endverb
+    \field{issn}{00905364}
+    \field{number}{5}
+    \field{pages}{2324\bibrangedash 2358}
+    \field{title}{Quantifying Causal Influences}
+    \field{volume}{41}
+    \field{journaltitle}{Annals of Statistics}
+    \field{eprinttype}{arxiv}
+    \field{year}{2013}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{Schamberg2020}{article}{}
+    \name{author}{4}{}{%
+      {{hash=SG}{%
+         family={Schamberg},
+         familyi={S\bibinitperiod},
+         given={Gabriel},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=CW}{%
+         family={Chapman},
+         familyi={C\bibinitperiod},
+         given={William},
+         giveni={W\bibinitperiod},
+      }}%
+      {{hash=XSP}{%
+         family={Xie},
+         familyi={X\bibinitperiod},
+         given={Shang-Ping},
+         giveni={S\bibinithyphendelim P\bibinitperiod},
+      }}%
+      {{hash=CTP}{%
+         family={Coleman},
+         familyi={C\bibinitperiod},
+         given={Todd\bibnamedelima P.},
+         giveni={T\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{Multidisciplinary Digital Publishing Institute}}%
+    }
+    \keyw{causality,El Niño–Southern oscillation,KL divergence,mediation
+  analysis,specific information}
+    \strng{namehash}{SG+1}
+    \strng{fullhash}{SGCWXSPCTP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Information theoretic (IT) approaches to quantifying causal influences have
+  experienced some popularity in the literature, in both theoretical and
+  applied (e.g., neuroscience and climate science) domains. While these causal
+  measures are desirable in that they are model agnostic and can capture
+  non-linear interactions, they are fundamentally different from common
+  statistical notions of causal influence in that they (1) compare
+  distributions over the effect rather than values of the effect and (2) are
+  defined with respect to random variables representing a cause rather than
+  specific values of a cause. We here present IT measures of direct, indirect,
+  and total causal effects. The proposed measures are unlike existing IT
+  techniques in that they enable measuring causal effects that are defined with
+  respect to specific values of a cause while still offering the flexibility
+  and general applicability of IT techniques. We provide an identifiability
+  result and demonstrate application of the proposed measures in estimating the
+  causal effect of the El Ni\&ntilde;o\&ndash;Southern Oscillation on
+  temperature anomalies in the North American Pacific Northwest.%
+    }
+    \verb{doi}
+    \verb 10.3390/e22080854
+    \endverb
+    \field{number}{8}
+    \field{pages}{854}
+    \field{title}{Direct and {{Indirect Effects}}\textemdash{{An Information
+  Theoretic Perspective}}}
+    \field{volume}{22}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/ZM36G7PM/Schamberg et al_2020_Direct and
+    \verb Indirect Effects—An Information Theoretic Perspective.pdf;/home/cas
+    \verb per/Zotero/storage/B9L9R8TX/854.html
+    \endverb
+    \field{journaltitle}{Entropy}
+    \field{month}{08}
+    \field{year}{2020}
+  \endentry
+
+  \entry{Williams2010a}{article}{}
+    \name{author}{2}{}{%
+      {{hash=WPL}{%
+         family={Williams},
+         familyi={W\bibinitperiod},
+         given={Paul\bibnamedelima L.},
+         giveni={P\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=BRD}{%
+         family={Beer},
+         familyi={B\bibinitperiod},
+         given={Randall\bibnamedelima D.},
+         giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+    }
+    \keyw{94A15,Computer Science - Information Theory,Mathematical
+  Physics,Physics - Biological Physics,Physics - Data Analysis; Statistics and
+  Probability,Quantitative Biology - Neurons and Cognition,Quantitative Biology
+  - Quantitative Methods}
+    \strng{namehash}{WPLBRD1}
+    \strng{fullhash}{WPLBRD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Of the various attempts to generalize information theory to multiple
+  variables, the most widely utilized, interaction information, suffers from
+  the problem that it is sometimes negative. Here we reconsider from first
+  principles the general structure of the information that a set of sources
+  provides about a given variable. We begin with a new definition of redundancy
+  as the minimum information that any source provides about each possible
+  outcome of the variable, averaged over all possible outcomes. We then show
+  how this measure of redundancy induces a lattice over sets of sources that
+  clarifies the general structure of multivariate information. Finally, we use
+  this redundancy lattice to propose a definition of partial information atoms
+  that exhaustively decompose the Shannon information in a multivariate system
+  in terms of the redundancy between synergies of subsets of the sources.
+  Unlike interaction information, the atoms of our partial information
+  decomposition are never negative and always support a clear interpretation as
+  informational quantities. Our analysis also demonstrates how the negativity
+  of interaction information can be explained by its confounding of redundancy
+  and synergy.%
+    }
+    \verb{eprint}
+    \verb 1004.2515
+    \endverb
+    \field{title}{Nonnegative {{Decomposition}} of {{Multivariate
+  Information}}}
+    \verb{url}
+    \verb http://arxiv.org/abs/1004.2515
+    \endverb
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/4VLTWLN9/Williams and Beer - 2010 - Nonne
+    \verb gative Decomposition of Multivariate Informat.pdf
+    \endverb
+    \field{journaltitle}{arXiv:1004.2515 [math-ph, physics:physics, q-bio]}
+    \field{eprinttype}{arxiv}
+    \field{eprintclass}{math-ph, physics:physics, q-bio}
+    \field{month}{04}
+    \field{year}{2010}
+    \field{urlday}{18}
+    \field{urlmonth}{01}
+    \field{urlyear}{2022}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{vanElteren2021}{article}{}
+    \name{author}{3}{}{%
+      {{hash=vC}{%
+         family={{van Elteren}},
+         familyi={v\bibinitperiod},
+         given={Casper},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=QR}{%
+         family={Quax},
+         familyi={Q\bibinitperiod},
+         given={Rick},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=SP}{%
+         family={Sloot},
+         familyi={S\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{vC+1}
+    \strng{fullhash}{vCQRSP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    One of the most central questions in network science is: which nodes are
+  most important? Often this question is answered using structural properties
+  such as high connectedness or centrality in the network. However, static
+  structural connectedness does not necessarily translate to dynamical
+  importance. To demonstrate this, we simulate the kinetic Ising spin model on
+  generated networks and one real-world weighted network. The dynamic impact of
+  nodes is assessed by causally intervening on node state probabilities and
+  measuring the effect on the systemic dynamics. The results show that
+  structural features such as network centrality or connectedness are actually
+  poor predictors of the dynamical impact of a node on the rest of the network.
+  A solution is offered in the form of an information theoretical measure named
+  integrated mutual information. The metric is able to accurately predict the
+  dynamically most important node (`driver' node) in networks based on
+  observational data of non-intervened dynamics. We conclude that the driver
+  node(s) in networks are not necessarily the most well-connected or central
+  nodes. Indeed, the common assumption of network structural features being
+  proportional to dynamical importance is false. Consequently, great care
+  should be taken when deriving dynamical importance from network data alone.
+  These results highlight the need for novel inference methods that take both
+  structure and dynamics into account.%
+    }
+    \field{pages}{27}
+    \field{title}{Dynamic Importance of Network Nodes Is Poorly Predicted by
+  Static Structural Features}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/K7JPD7LM/van Elteren et al. - 2021 - Dyna
+    \verb mic importance of network nodes is poorly pred.pdf
+    \endverb
+    \field{journaltitle}{PHYSICA A}
+    \field{year}{2021}
+  \endentry
+
+  \entry{Lopez-Ruiz1995a}{article}{}
+    \name{author}{3}{}{%
+      {{hash=LR}{%
+         family={{L{\'o}pez-Ruiz}},
+         familyi={L\bibinitperiod},
+         given={R.},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=MHL}{%
+         family={Mancini},
+         familyi={M\bibinitperiod},
+         given={H.\bibnamedelima L.},
+         giveni={H\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=CX}{%
+         family={Calbet},
+         familyi={C\bibinitperiod},
+         given={X.},
+         giveni={X\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LR+1}
+    \strng{fullhash}{LRMHLCX1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    A measure of complexity based on a probabilistic description of physical
+  systems is proposed. This measure incorporates the main features of the
+  intuitive notion of such a magnitude. It can be applied to many physical
+  situations and to different descriptions of a given system. Moreover, the
+  calculation of its value does not require a considerable computational effort
+  in many cases of physical interest. \textcopyright{} 1995.%
+    }
+    \verb{doi}
+    \verb 10.1016/0375-9601(95)00867-5
+    \endverb
+    \field{issn}{03759601}
+    \field{number}{5-6}
+    \field{pages}{321\bibrangedash 326}
+    \field{title}{A Statistical Measure of Complexity}
+    \field{volume}{209}
+    \field{journaltitle}{Physics Letters A}
+    \field{year}{1995}
+  \endentry
+
+  \entry{Virtanen2020}{article}{}
+    \name{author}{1}{}{%
+      {{hash=VP}{%
+         family={Virtanen},
+         familyi={V\bibinitperiod},
+         given={Pauli},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{VP1}
+    \strng{fullhash}{VP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{pages}{15}
+    \field{title}{{{SciPy}} 1.0: Fundamental Algorithms for Scientific
+  Computing in {{Python}}}
+    \field{volume}{17}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/Y4S98XZF/Virtanen - 2020 - SciPy 1.0 fund
+    \verb amental algorithms for scientific c.pdf
+    \endverb
+    \field{journaltitle}{Nature Methods}
+    \field{year}{2020}
+  \endentry
+\enddatalist
+\endinput

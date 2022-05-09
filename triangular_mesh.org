@@ -1,0 +1,1503 @@
+#+title: The emergence of double exponential
+
+Study the  effect of  information decay by  introducing more
+and more triangles into the network.
+
+Hypothesis: as the number of triangles increase, information
+can get  trapped more and  information will be more  able to
+resonate with previous flows.
+
+#+begin_src jupyter-python
+import proplot as plt, cmasher as cmr, pandas as pd,\
+    numpy as np, os, sys, networkx as nx, warnings
+from plexsim import models
+from imi import infcy
+from functools import partial
+from fa2 import ForceAtlas2 as fa2
+from exact import store_results, gen_information_curves
+from pathlib import Path
+from exact_utils import *
+#+end_src
+
+#+RESULTS:
+
+#+RESULTS:
+: Index(['system', 'nodes', 'graph', 'mag', 'p', 'pc', 'p0', 'node_system',
+:        'system_system', 'H', 'HC', 'beta', 'node_mag'],
+:       dtype='object')
+
+* TODO:
+- What is the main message?
+- What are the main figures?
+- Plot the offset
+- Make imi plot with degree on  y-axis
+- Error single exponential decay
+- refer that the results hold for any system p(x) = exp(-x)
+
+* Energy vs System magnetization
+#+begin_src jupyter-python
+f = "./data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=3_matching=0.7.pkl"
+p = Path(f)
+df = pd.read_pickle(p)
+
+
+g = df.graph.iloc[0]
+imi = np.stack(df.imi)
+E   = np.stack(df.node_mag)
+mag = np.unique(df.mag)
+
+n = E.shape[1]
+from utils import ccolors
+def get_deg(g):
+    degs = {}
+    for node, deg in g.degree():
+        degs[deg] = degs.get(deg, []) + [node]
+    return degs
+cmap  = plt.Colormap('prussian blue_r', l=100, name='Pacific', space='hpl')
+cmap = cmr.prinsenvlag
+# cmap = plt.Colormap("hot")
+# cmap = cmr.iceburn
+c = ccolors(n, cmap)
+
+idx = np.argsort(imi, axis = 1)
+rimi = (imi - imi.min(1)[:, None]) / (imi.max(1)[:, None] - imi.min(1)[:, None])
+# rimi = imi / imi.max(1)[:, None]
+rimi[np.isnan(rimi)] = 0
+
+fig, ax = plt.subplots()
+node = 0
+cliques = nx.number_of_cliques(g)
+for i, y, ci in zip(rimi[1:].T, E[1:].T, c):
+    ax.scatter(mag[1:], y.flat, color = cmap(i), s = g.degree(node) * 10)
+    node += 1
+
+
+from matplotlib.pyplot import Line2D as LP
+
+degrees = np.unique(list(dict(g.degree()).values()))
+hdeg = []
+cliques = np.unique(list(cliques.values()))
+for deg in degrees:
+    h = LP([], [], marker = 'o',
+           linestyle = 'none',
+           markersize = deg * 2,
+           label = deg, color = "gray")
+    hdeg.append(h)
+
+ax.legend(loc = 'r', handles = hdeg,
+          title = "Degree (k)",
+          align = "top",
+          ncols = 1)
+ax.format(ylabel = "Node energy <$E_i$>",
+          xlabel = "System magnetization $M(S)$",
+          # yscale = "symlog"
+)
+
+import matplotlib.pyplot as pplt
+from matplotlib import colors
+norm = pplt.cm.colors.Normalize(0, 1)
+h = pplt.cm.ScalarMappable(norm = norm, cmap = cmap)
+ax.colorbar(h,
+             loc = "t",
+             length = 0.3,
+             align = 'right',
+             title = "IMI \n Higher is better")
+fig.format(fc = "gray")
+# ax.legend(loc = 'r', handles = handles, title = "IMI intensity rank\n Higher is better")
+
+fig.show()
+
+
+#+end_src
+
+#+begin_src jupyter-python
+f = "./data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=0_matching=0.8.pkl"
+p = Path(f)
+df = pd.read_pickle(p)
+
+coeffs = np.stack(df.coeffs)[..., [1, 3]]
+coeffs.sort(axis = -1)
+mi = np.stack(df.node_system)
+test = coeffs[..., 0] / coeffs[..., 1]
+print(test.shape)
+print(np.where(test > 1))
+x = test[1:]
+y = imi[1:]
+
+tmp = np.ones(imi[1:].shape)
+#node size is proportional to the distance to tipping
+#larger is closer
+s = (1- 2 * abs(mag[1:, None] - 0.5)) * tmp
+# s = np.clip(s, 0.001, 1)
+idx = 3
+
+fig, ax = plt.subplots(ncols = 2, sharey = 0, sharex = 0)
+# ax[0].scatter(test[1:, idx], imi[1:, idx], s = s)
+ax[0].scatter(test[1:], imi[1:], s = s)
+ax[0].set_title(f"{mag[idx]}")
+ax[1].plot(mi[5, :, :])
+# ax[1].set_xlim(0, 100)
+
+ax.axvline(1,
+           linestyle = "dashed",
+           color = 'k')
+
+# print(mi[1])
+ax[0].format(xlabel = "Exponent ratio $\\frac{e1}{e2}$",
+          ylabel = "IMI",
+          # yscale = "log",
+          # xscale = "log"
+          )
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: (12, 10)
+: (array([], dtype=int64), array([], dtype=int64))
+: /tmp/ipykernel_569214/1950501328.py:28: ProplotWarning: Calling arbitrary axes methods from SubplotGrid was deprecated in v0.8 and will be removed in a future release. Please index the grid or loop over the grid instead.
+:   ax.axvline(1,
+: /tmp/ipykernel_569214/1950501328.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 590 :height 328
+[[file:./.ob-jupyter/ec150324cc8c63fad3189fb1537ae981c9006d3b.png]]
+:END:
+* Show singular information decay
+
+
+#+begin_src jupyter-python
+f = "./data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=4_matching=0.9.pkl"
+# f = "./exact_LCF_graph_n=10_shift_list=[-2]_repeat=4.pkl"
+p = Path(f)
+df = pd.read_pickle(p)
+
+mag = -1
+mag = 0.3
+g = df.graph.iloc[0]
+mi = df[np.round(df.mag, 2) == mag].node_system.iloc[0]
+H = df[np.round(df.mag,2) == mag].H.iloc[0]
+HC = df[np.round(df.mag,2) == mag].HC.iloc[0]
+fig, ax = plt.subplots(figsize = (3,2), sharey =0)
+# ax[0].plot(HC)
+# ax[1].plot(H)
+from utils import ccolors
+c = ccolors(len(mi.T))
+for idx, (ci, node) in enumerate(zip(c, mi.T)):
+    ax.plot(node , color = ci)
+    # ax.plot(H[:, idx])
+    # ax.plot(HC[:, idx])
+
+ax.set_xlim(250, 300)
+ax.set_ylim(0, 0.1)
+inax = ax.inset_axes((0.5, 0.5, 0.5, 0.5), zoom =0)
+pos = nx.kamada_kawai_layout(g)
+nx.draw(g, pos, ax = inax, node_color = c, node_size = 100)
+inax.axis("equal")
+# ax.set_yscale("log")
+# ax.set_xscale('log')
+
+# fig, ax = plt.subplots()
+# # d= np.sqrt((mi[:100] - mii)**2).sum(1)
+# # ax.plot(d)
+# ax.plot(mi[:, 0])
+# # ax.plot(mii[:, 0])
+# ax.format()
+# fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+| -1.1924001624337524 | 1.0247826618028222 | -0.9988263243854322 | 0.8739049274158307 |
+#+attr_org: :width 300 :height 200
+[[file:./.ob-jupyter/a36b9ae2e75c4589c818b8955e0e484b6153a474.png]]
+:END:
+
+* Show panels all graphs
+#+begin_src jupyter-python
+p = Path(".")
+for fp in p.iterdir():
+    if fp.name.startswith("exact_LCF_graph"): #and fp.name.endswith(".pkl") and fp.name == f:
+        print(f"loading {fp}") ,
+        df = pd.read_pickle(fp)
+        show_panel(df, fp, which = "node")
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+begin_example
+loading exact_LCF_graph_n=10_shift_list=[-2]_repeat=1.pkl
+[-1.   0.   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1. ]
+loading exact_LCF_graph_n=10_shift_list=[-2]_repeat=7.pkl
+[-1.   0.   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1. ]
+loading exact_LCF_graph_n=10_shift_list=[-2]_repeat=5.pkl
+[-1.   0.   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1. ]
+loading exact_LCF_graph_n=10_shift_list=[-2]_repeat=2.pkl
+[-1.   0.   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1. ]loading exact_LCF_graph_n=10_shift_list=[-2]_repeat=6.pkl
+[-1.   0.   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1. ]
+loading exact_LCF_graph_n=10_shift_list=[-2]_repeat=4.pkl
+[-1.   0.   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1. ]
+loading exact_LCF_graph_n=10_shift_list=[-2]_repeat=3.pkl
+[-1.   0.   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9  1. ]
+#+end_example
+#+attr_org: :width 2112 :height 318
+[[file:./.ob-jupyter/3f0651fec9749bb3e8efbc2521e924327c55aa0d.png]]
+#+attr_org: :width 2112 :height 318
+[[file:./.ob-jupyter/a253bcde2fbce06dc6cea757d43d9b0bc3b2001f.png]]
+#+attr_org: :width 2122 :height 318
+[[file:./.ob-jupyter/9d3627d492a2a18c563dd75bad66de12e7de4801.png]]
+#+attr_org: :width 2112 :height 318
+[[file:./.ob-jupyter/af4c1d049fcd975647067c41d78e8d2209923b2d.png]]
+#+attr_org: :width 2122 :height 318
+[[file:./.ob-jupyter/f6832a4ede819b720ec2c6177a7767df3967df4c.png]]
+#+attr_org: :width 2129 :height 318
+[[file:./.ob-jupyter/861441378e41be83af9f484f7de219a4902b4745.png]]
+#+attr_org: :width 2119 :height 318
+[[file:./.ob-jupyter/680f5bbde10c023f917085a10113f5fe61247893.png]]
+:END:
+* Fit double exponents
+#+begin_src jupyter-python
+%load_ext autoreload
+%autoreload 2
+from exact_utils import fit_curve
+
+f = lambda x, a, b, g: a * np.exp(-b * x) + g
+f = lambda x, a, c, g: 1/((x - a)**c + 1)# + g
+f = lambda x, a, b, c: np.exp(-a * (x - b)**c/c)
+
+f = lambda x, a, b, c, d, g: a * np.exp(-b * x) + c * np.exp(-d * x) + g
+# f = lambda x, a, b, g: a * np.exp(-b * x) + g
+# f = lambda , a, b, c, d, e, f, g: a * np.exp(-b * x) + c * np.exp(-d * x) + e * np.exp(-f * x) + g
+# f = lambda x, a, b, g: a * np.exp(-b * x) + g
+# f = lambda x, a, b, g: a ** (-b ** x) + g
+# f = lambda x, a, b, g: a * np.exp(-b * x) + g
+p = Path("./data")
+for fp in p.iterdir():
+    if fp.name.startswith("exact_LCF_graph"): #and fp.name.endswith(".pkl") and fp.name == f:
+        print(f"loading {fp}") ,
+        df = pd.read_pickle(fp)
+        ndf = fit_curve(df, f)
+        s = p / fp.name
+        print(f"Saving at {s}")
+        pd.to_pickle(ndf, s)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=6_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=6_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=1_matching=0.9.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=1_matching=0.9.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=8_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=8_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=0_matching=0.9.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=0_matching=0.9.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=2_matching=0.9.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=2_matching=0.9.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=9_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=9_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=4_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=4_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=0_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=0_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=7_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=7_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=3_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=3_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=9_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=9_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=1_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=1_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=9_matching=0.9.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=9_matching=0.9.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=2_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=2_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=6_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=6_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=5_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=5_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=4_matching=0.9.pkl
+1.0Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=4_matching=0.9.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=8_matching=0.9.pkl
+1.0Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=8_matching=0.9.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=5_matching=0.9.pkl
+0.8999999999999999/tmp/ipykernel_37654/1395267341.py:9: RuntimeWarning: overflow encountered in exp
+  f = lambda x, a, b, c, d, g: a * np.exp(-b * x) + c * np.exp(-d * x) + g
+/home/casper/miniconda3/lib/python3.9/site-packages/scipy/optimize/_numdiff.py:576: RuntimeWarning: invalid value encountered in subtract
+  df = fun(x) - f0
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=5_matching=0.9.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=2_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=2_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=5_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=5_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=3_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=3_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=0_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=0_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=1_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=1_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=7_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=7_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=3_matching=0.9.pkl
+-1.0/tmp/ipykernel_37654/1395267341.py:9: RuntimeWarning: overflow encountered in exp
+  f = lambda x, a, b, c, d, g: a * np.exp(-b * x) + c * np.exp(-d * x) + g
+/home/casper/miniconda3/lib/python3.9/site-packages/scipy/optimize/_numdiff.py:576: RuntimeWarning: invalid value encountered in subtract
+  df = fun(x) - f0
+0.30000000000000004/tmp/ipykernel_37654/1395267341.py:9: RuntimeWarning: overflow encountered in exp
+  f = lambda x, a, b, c, d, g: a * np.exp(-b * x) + c * np.exp(-d * x) + g
+/home/casper/miniconda3/lib/python3.9/site-packages/scipy/optimize/_numdiff.py:576: RuntimeWarning: invalid value encountered in subtract
+  df = fun(x) - f0
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=3_matching=0.9.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=4_matching=0.8.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=4_matching=0.8.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=7_matching=0.9.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=7_matching=0.9.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=8_matching=0.7.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=8_matching=0.7.pkl
+loading data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=6_matching=0.9.pkl
+Saving at data/exact_LCF_graph_n=10_shift_list=[-2]_repeat=6_matching=0.9.pkl
+#+end_example
+
+#+begin_src jupyter-python
+from scipy import optimize
+h = lambda x, a, c: 1/((x - a)**c + 1)
+k = lambda x, a, b, c: np.exp(-a * (x - b)**c/c)
+l = lambda x, a, b: x**-a
+m = lambda x, a, b, c, d, e, f, g: a * np.exp(- b * (x - c)) + d * np.exp(- f * (x - g))
+f = lambda x, a, b: a * np.exp(-b * x)
+# f = lambda x, a, b, c, d: a * np.exp(-b * x) + c * np.exp(-d * x)
+
+s = np.stack(ndf.node_system)
+c = np.stack(ndf.coeffs)
+print(c.shape, s.shape)
+idx = 6
+y = s[idx, :, 0]
+xr = np.arange(len(s[0]))
+c, cov = optimize.curve_fit(f, xr, y)
+
+x = np.linspace(0, 50)
+yy =f(x, *c)
+print(yy)
+
+fig, ax = plt.subplots()
+ax.plot(x, yy)
+ax.scatter(xr, y, linestyle = 'dashed')
+ax.set_xlim(0, 100)
+ax.format()
+fig.show()
+g = ndf.graph.iloc[0]
+print(nx.find_cliques(g))
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+begin_example
+(12, 10, 3) (12, 500, 10)
+[0.87779341 0.82631191 0.77784974 0.73222981 0.68928543 0.64885969
+ 0.61080487 0.57498192 0.54125994 0.50951571 0.47963324 0.45150334
+ 0.42502323 0.40009614 0.37663099 0.35454205 0.3337486  0.31417465
+ 0.2957487  0.2784034  0.26207538 0.24670499 0.23223604 0.21861568
+ 0.20579414 0.19372457 0.18236286 0.17166751 0.16159942 0.15212181
+ 0.14320006 0.13480155 0.1268956  0.11945333 0.11244754 0.10585263
+ 0.09964451 0.09380048 0.0882992  0.08312056 0.07824564 0.07365663
+ 0.06933676 0.06527024 0.06144222 0.05783871 0.05444654 0.05125332
+ 0.04824738 0.04541773]
+<generator object find_cliques at 0x7f9808afb350>
+/tmp/ipykernel_37654/3726812836.py:26: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+#+end_example
+#+attr_org: :width 298 :height 282
+[[file:./.ob-jupyter/a254e353ffa9c023c84481ea44c8c23e31714aff.png]]
+:END:
+* pr
+#+begin_src jupyter-python
+
+
+x = np.linspace(0, 10)
+fig, ax = plt.subplots()
+ax.plot(x, h(x, 0.5, 1))
+ax.plot(x, k(x, 1, 1, 1))
+ax.format()
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_37654/2397972552.py:9: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 295 :height 282
+[[file:./.ob-jupyter/0ff22bdaeafe24a969024e7ef43285833dd0361e.png]]
+:END:
+
+
+
+
+
+
+
+#+begin_src jupyter-python
+from exact import gen_binary
+states = np.zeros((2**n, n))
+for idx in range(2**n):
+    states[idx] = gen_binary(idx, n)
+A = nx.adjacency_matrix(g).todense()
+E = -np.multiply((states * 2  - 1) , ((states * 2 - 1) @ A))
+
+bins = np.linspace(0.0 - 1 / (2 * (n)), 1.0 + 1 / (2 * (n)), n + 2)
+s = states.mean(1)
+vals = np.zeros(bins.size)
+idx = np.digitize(s, bins, right=False)
+mag = {}
+for jdx, bin in enumerate(idx):
+    magi = (bins[bin] + bins[bin - 1]) / 2
+    assert np.allclose(s[jdx], magi), (s[jdx], magi)
+    mag[magi] = mag.get(magi, []) + [jdx]
+
+node_mag = {}
+for magi, idxs in mag.items():
+    node_mag[magi] = E[idxs].mean(0)
+#+end_src
+
+
+#+RESULTS:
+: /tmp/ipykernel_698270/237268597.py:5: FutureWarning: adjacency_matrix will return a scipy.sparse array instead of a matrix in Networkx 3.0.
+:   A = nx.adjacency_matrix(g).todense()
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+for magi, magj in node_mag.items():
+    for i in np.array(magj).flatten():
+        ax.scatter(magi, i)
+ax.format()
+fig.show()
+#+end_src
+
+
+#+begin_src jupyter-python
+%matplotlib qt5
+tmp = np.asarray(list(node_mag.values())).squeeze()
+c = np.stack(ndf.coeffs)[1:, ..., [1, -1]].squeeze()
+n = tmp.shape[1]
+colors = ccolors(n)
+
+fig, ax = plt.subplots(subplot_kw = dict(projection = '3d'))
+for node in range(n):
+    ax.scatter(tmp[:, node], c[:, node, 0], c[:, node, 1], color = colors[node])
+fig.show()
+
+
+#+end_src
+
+#+RESULTS:
+: /tmp/ipykernel_698270/988803437.py:7: ProplotWarning: 'subplot_kw' is not necessary in proplot. Pass the parameters as keyword arguments instead.
+:   fig, ax = plt.subplots(subplot_kw = dict(projection = '3d'))
+: /home/casper/miniconda3/lib/python3.9/site-packages/proplot/axes/base.py:718: MatplotlibDeprecationWarning: Axes3D(fig) adding itself to the figure is deprecated since 3.4. Pass the keyword argument auto_add_to_figure=False and use fig.add_axes(ax) to suppress this warning. The default value of auto_add_to_figure will change to False in mpl3.5 and True values will no longer work in 3.6.  This is consistent with other Axes classes.
+:   super().__init__(*args, **kwargs)
+: virtual void QEventDispatcherUNIX::registerSocketNotifier(QSocketNotifier*): Multiple socket notifiers for same socket 11 and type Read
+
+#+begin_src jupyter-python
+c = np.stack(ndf.coeffs)[..., [1,-1]].squeeze()
+print(c.shape)
+mag = np.unique(ndf.mag)
+print(mag.shape, c.shape)
+
+n = c.shape[1]
+colors = ccolors(n)
+fig, ax = plt.subplots(ncols = 2)
+
+for idx in range(n):
+    ci = colors[idx]
+    xi = c[:, idx, :]
+    ax[0].plot(mag[1:], xi[1:, 0], color = ci, label = idx)
+    ax[1].plot(mag[1:], xi[1:, 1], color = ci, label  = idx)
+# for coeff, magi in zip(c,mag):
+    # ax.scatter(*coeff)
+ax.legend(loc = "r", title = "Node", ncols = 1)
+ax.format(yscale = "log",
+          ylabel = "Exponent 1",
+          xlabel ="$M(S)$")
+fig.show()
+#+end_src
+* Show double exponent plot
+#+begin_src jupyter-python
+coeffs = np.stack(ndf.coeffs)[..., [1, 3]]
+coeffs.sort(axis = -1)
+mag = np.unique(ndf.mag)
+c = ccolors(mag.size)
+fig, ax = plt.subplots()
+ax.scatter(coeffs[:, 0, 1], coeffs[:, 0, 0], color = c)
+ax.format(xscale = "log",
+          yscale = "log")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_809548/2982387946.py:9: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 295 :height 282
+[[file:./.ob-jupyter/8531fd6e5baeeba12766bee04ae8cda771ffeb63.png]]
+:END:
+
+#+begin_src jupyter-python
+s = np.mean(states, 1)
+
+bins = np.linspace(0.0 - 1 / (2 * (n)), 1.0 + 1 / (2 * (n)), n + 2)
+print(bins)
+vals = np.zeros(bins.size)
+idx = np.digitize(s, bins, right=False)
+mag = {}
+for jdx, bin in enumerate(idx):
+    # vals[bin] += p0[jdx]
+    magi = (bins[bin] + bins[bin - 1]) / 2
+
+    assert np.allclose(s[jdx], magi), (s[jdx], magi)
+    mag[magi] = mag.get(magi, []) + [jdx]
+
+
+#+end_src
+
+
+
+
+#+begin_src jupyter-python
+imi = np.stack(ndf.imi)
+fig, ax = plt.subplots()
+ax.scatter(imi[1:], color = c[1:])
+ax.format()
+fig.show()
+#+end_src
+
+
+
+
+* Rank plot of discrepancy of state transition matrices
+#+begin_src jupyter-python
+fp = "./exact_small_tree.pkl"
+df = pd.read_pickle(fp)
+tmp = df.iloc[0]
+for mag, dfi in df.groupby("mag"):
+    if mag > 0.5:
+        break
+    if mag != -1:
+        p0 = dfi.p0.iloc[0]
+        other_mag = abs((1 - mag))
+        dfj = df[ np.round(df.mag,2) == np.round(other_mag,2)]
+
+        A = dfi.pc.iloc[0]
+        B = dfj.pc.iloc[0]
+
+        T = A.shape[0]
+        A_ = np.array([p0 @ i for i in A])
+        B_ = np.array([p0 @ i for i in B])
+
+        diff = np.sqrt((A - B)**2)
+
+        p0_diff = np.sqrt((A_ - B_)**2)
+
+        for t in np.linspace(0, T-1, 5, 0).astype(int):
+            fig, ax = plt.subplots()
+            ax.plot(p0_diff[t])
+            ax.format(xlabel = "State idx", ylabel = f"$P(S^t, M(S) = {mag:.2f}) - P(S^t, M(S) = {other_mag:.2f})$")
+            ax.set_title(f"time = {t}")
+            fig.show()
+            fig.savefig(f"./figures/exact_small_tree_{t=}_{mag=:.2f}_{other_mag=:.2f}_p(S^t).png")
+
+
+            fig, ax = plt.subplots(1, )
+            # ax.imshow(np.log(B))
+            h = ax.imshow(diff[t])
+            ax.set_title(f"t = {t}\n$sqrt(P(S^t, M(S) = {mag:.2f}) - P(S^t, M(S) = {other_mag:.2f}))^2$")
+            ax.colorbar(h)
+            ax.format(xlabel = "state", ylabel = "state")
+            fig.show()
+            fig.savefig(f"./figures/exact_small_tree_{t=}_{mag=:.2f}_{other_mag:.2f}_state_diff.png")
+
+
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+begin_example
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/3404681104.py:37: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+#+end_example
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/fe37763c220715bc69ca95c42338cacef2fa3dbc.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/762f0893224a4c4d330d94c152c5a7b2889718dc.png]]
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/2174948dbbaf684c219b2958d77c4f416387a616.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/1577bf3e4d4461be476f7ee12393349f6b92499b.png]]
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/8ad33dfcb7b82948ba6b013225772a875a92a516.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/a4d7aed57adb0d3bd67c2140dfe0d9661d041cff.png]]
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/359445354f579d0c320b689926017c14bab40ad1.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/980fa283552adbc5c2218e12cedbcaadafa2fde5.png]]
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/c0692eed84dbe587fcf1aeaf0cbb5f84e3fe0fb0.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/b580fbd9796ed1b0d3ffe82868a405d65b173fe7.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/bf0b15e674f0808ad470620f05fef963bbd29a11.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/74320bd7283c0bb3a1174640c57fa67fe83f2159.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/af2513a0d252d5a8811ea3679b0b6c190ed3a63f.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/0b953602fa8d62c098de9e5c9fa5b9e276c12bdb.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/fa98b72d27d7931476e64116101d1beae4849f73.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/1f7a48e116af8ffe91671722c83bf6f1769bdb61.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/1573324cf353a1be228a5d0c716bd78699dcb230.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/8b73cad6b3f6a2576cc0b19590c41301dfbdb0db.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/a4ee34d703a5a1b562f55f3c6b4144f40b20b5ff.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/9406940bc5452b541cf094a4f4a6a0b225d65fe6.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/2cb839775f99c030c1023211dbdfb9d43e8b768f.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/123d4906ddfefca658853d6485263183965a9685.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/4144ecd7e109bfe935ffd82b010d2fccc13115f8.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/b47dc4d106e44986b61776c24b06ab697436eac5.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/318d6cc9beebf457bc84c69fbf18fbd7cd080ec7.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/2590810dfc20aaf3457e91fdb4bdeed581e673c4.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/a029c867f513ea8653651524837647af2c1123db.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/a069d917556d73774ef64cd47d9a622452cbac84.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/e78a5648e831fcb30bd461468d35c78cac9e50c7.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/8f5d56c42cddd73c3d75bc5dcf74ec2f870cc099.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/cb8aa2d9057bbf6f28b1d7ba5da02d6aec77b272.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/c0ff749ed83b8436c5cc894f7f18a7b158a75aa6.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/2efb7ae31959fdd34131f272cd83a83814e7c4b9.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/509fa27b79d3425620d37910714f972c55dbae1c.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/33ab9f95d8597d0f5fe473ad92d77e26d275de18.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/20ee3fab5baab9d69925e971b6e491fd74ecd6f9.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/adb1c3fc00948f2a74f8952e8a03182816e47d0d.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/8273da898b3393657d4dafaa9eb0d29afc11bbdd.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/067c69b25f9655b3764902edcfa17a41bc9ea239.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/b482133f18688fb7aa7e66dff4b5636539c7de37.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/762206d587c565b62691e6360ae1f459eb007ba1.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/01625f0c4827dab443de6333425a8a19a7e36d95.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/7a0a0f2b938cc36ba8d4cf6910b6b77e9d5bfed6.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/c459528462783052dbe1e2deaca2c338357ae7bf.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/7c0edb21a55557ad48696743dbb798409f434a19.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/5d0b04e44df82375f8f706457fb4c89c2158b5d0.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/76c45888133ec9e4cafd50a358c367b4bc72f6e0.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/50a8b413c679792dd91d0200383dd3a8f53791be.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/ad13330610f17aea2a0124e3bdc7d7acddc7ac6f.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/8402b1d5c9df51b239c56e9a903c81a66f232396.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/0546164fc4800f0ef1065f894440f049664f6451.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/9fab4fe13b761cc970d1318ad7d9fb8c7838ccd9.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/6b07064d1afe40c401551c6e3dd29ec3278b6d4d.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/3941f7d49a8f7ff236e0d5e18ac256585809ee98.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/ec9b839a17b07412569683daf1a72763239a68b0.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/56a2db664bd840d1fcd6f21e6904b095ec70799c.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/70bfe8c1f7d9a796b43ab8849678e195df0f1098.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/69f01b3fa01eaf4f4c9fd7dd7e51ccfb11ae0f65.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/e3c23aa0d2422b57ee64782c8d86034969877557.png]]
+#+attr_org: :width 324 :height 339
+[[file:./.ob-jupyter/a504c48a7bab501a4ffe37067c4b2d51397dc1de.png]]
+#+begin_example
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/home/casper/miniconda3/lib/python3.9/site-packages/proplot/ui.py:143: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+  return plt.figure(FigureClass=pfigure.Figure, **kwargs)
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:28: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/tmp/ipykernel_18013/4198083151.py:38: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+#+end_example
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/fe37763c220715bc69ca95c42338cacef2fa3dbc.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/6edcc09a4300f10a7f207eccc409432b3cce5374.png]]
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/2174948dbbaf684c219b2958d77c4f416387a616.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/f22addbdb6ee8c8ff93d38282f669970246b39d8.png]]
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/8ad33dfcb7b82948ba6b013225772a875a92a516.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/5a3aa976b75570ab19f8056c6cc8657142e992df.png]]
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/359445354f579d0c320b689926017c14bab40ad1.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/0703effdb48a638bc67cd0040dd2c33c34ea654d.png]]
+#+attr_org: :width 320 :height 318
+[[file:./.ob-jupyter/c0692eed84dbe587fcf1aeaf0cbb5f84e3fe0fb0.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/20941101220a9d86c13c6c61eff001859e53b1cf.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/bf0b15e674f0808ad470620f05fef963bbd29a11.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/90f647c5d9d0b282d0e2f44aec9c561fd1103300.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/af2513a0d252d5a8811ea3679b0b6c190ed3a63f.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/6592945295bbb8cdc294b17c87f5da660826ed0b.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/fa98b72d27d7931476e64116101d1beae4849f73.png]]
+#+attr_org: :width 383 :height 339
+[[file:./.ob-jupyter/289b4b7eb4790d3c75f57cdc568c7a82b85332ac.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/1573324cf353a1be228a5d0c716bd78699dcb230.png]]
+#+attr_org: :width 383 :height 339
+[[file:./.ob-jupyter/dcb03f2e80c6b9b41c9127455f09eb9af01cf9ea.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/a4ee34d703a5a1b562f55f3c6b4144f40b20b5ff.png]]
+#+attr_org: :width 383 :height 339
+[[file:./.ob-jupyter/37a1674586085d5312f2e3242c26d7a8c4e878a3.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/2cb839775f99c030c1023211dbdfb9d43e8b768f.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/25edbabf755992f914e3c3319e205ef3fee66730.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/4144ecd7e109bfe935ffd82b010d2fccc13115f8.png]]
+#+attr_org: :width 383 :height 339
+[[file:./.ob-jupyter/4cff4da0253f5afe2ee5f9bfaddc1f4894af0b73.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/318d6cc9beebf457bc84c69fbf18fbd7cd080ec7.png]]
+#+attr_org: :width 383 :height 339
+[[file:./.ob-jupyter/2e4e639aa4472b5ea43b4e3a8255506c8c751cfd.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/a029c867f513ea8653651524837647af2c1123db.png]]
+#+attr_org: :width 390 :height 339
+[[file:./.ob-jupyter/55849335fa7b81dbc2ee0b98f048ad717baa270f.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/e78a5648e831fcb30bd461468d35c78cac9e50c7.png]]
+#+attr_org: :width 397 :height 339
+[[file:./.ob-jupyter/56c9a5498a4823d59cd330a32f26878544e4c9d3.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/cb8aa2d9057bbf6f28b1d7ba5da02d6aec77b272.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/f02d5183bc6ce64df0fecfc98a132e66e37928bb.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/2efb7ae31959fdd34131f272cd83a83814e7c4b9.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/b7ff64e07f06e4d8987a53e3b8c9ce6f1dfed784.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/33ab9f95d8597d0f5fe473ad92d77e26d275de18.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/871c68c565fa3542bae22b2a4f37e068ded35f38.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/adb1c3fc00948f2a74f8952e8a03182816e47d0d.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/bc47942eaa375b97baedefb744241ab9c22e658f.png]]
+#+attr_org: :width 334 :height 318
+[[file:./.ob-jupyter/067c69b25f9655b3764902edcfa17a41bc9ea239.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/30b7812ac46d105c2104d5f95d693209db694a2c.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/762206d587c565b62691e6360ae1f459eb007ba1.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/09a3c72219f1d7b4018e76d88b489391110d1fd8.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/7a0a0f2b938cc36ba8d4cf6910b6b77e9d5bfed6.png]]
+#+attr_org: :width 376 :height 339
+[[file:./.ob-jupyter/398e9c9505521544ecf6de8bfa6b9f06600ab429.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/7c0edb21a55557ad48696743dbb798409f434a19.png]]
+#+attr_org: :width 383 :height 339
+[[file:./.ob-jupyter/c498c0661e21c6b32d9b32fc277eee9c526102ce.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/76c45888133ec9e4cafd50a358c367b4bc72f6e0.png]]
+#+attr_org: :width 383 :height 339
+[[file:./.ob-jupyter/05fcfc698c0def23abed313972b08a479f3e4a15.png]]
+#+attr_org: :width 348 :height 318
+[[file:./.ob-jupyter/ad13330610f17aea2a0124e3bdc7d7acddc7ac6f.png]]
+#+attr_org: :width 383 :height 339
+[[file:./.ob-jupyter/6e11ef39c8f9d374e88001a8503b8251982fc293.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/0546164fc4800f0ef1065f894440f049664f6451.png]]
+#+attr_org: :width 397 :height 339
+[[file:./.ob-jupyter/206a7e2301dd6caf5da0ba20e2f4849901a006ee.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/6b07064d1afe40c401551c6e3dd29ec3278b6d4d.png]]
+#+attr_org: :width 397 :height 339
+[[file:./.ob-jupyter/e95c3f74a708ab9d809ec692f2a158da98110d46.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/ec9b839a17b07412569683daf1a72763239a68b0.png]]
+#+attr_org: :width 397 :height 339
+[[file:./.ob-jupyter/48f48a4a0a530c1bac1c5436f855e0f0cfc8afaf.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/70bfe8c1f7d9a796b43ab8849678e195df0f1098.png]]
+#+attr_org: :width 397 :height 339
+[[file:./.ob-jupyter/314aaee923babd37f41bbbbfbb0f74fb5afe875e.png]]
+#+attr_org: :width 335 :height 318
+[[file:./.ob-jupyter/e3c23aa0d2422b57ee64782c8d86034969877557.png]]
+#+attr_org: :width 397 :height 339
+[[file:./.ob-jupyter/832e0223a9e70a7e6df526b978f974cc330ea147.png]]
+:END:
+* Exact phase transitions
+#+begin_src jupyter-python
+from exact import gen_states, get_transfer
+def get_p_gibbs(e, beta):
+    p = np.exp(-e * beta)
+    return p / p.sum()
+
+def match_temp_exact(t, s, e, theta):
+    p = get_p_gibbs(e, 1/t)
+    return  np.abs((p @ s) - theta)
+
+
+
+n = len(g)
+states, _ = gen_states(n)
+A = nx.adjacency_matrix(g).todense()
+states, allowed = gen_states(n)
+E = -np.multiply((states * 2 - 1), (states * 2 - 1).dot(A)).sum(1)
+E = np.array(E).squeeze()
+# p = np.array([get_transfer(n, E, beta, allowed)[1] for beta in  1/temps])
+s = np.array(abs(states.mean(1) - 0.5) * 2)
+
+mag = np.array([match_temp_exact(t, s, E, 0) for t in temps])
+
+from scipy import optimize
+
+theta = 0.99
+res = optimize.minimize(match_temp_exact, 0.2, args = (s, E, theta,),
+                        method = "COBYLA")
+fig, ax = plt.subplots()
+ax.plot(temps, mag)
+ax.axvline(res.x)
+ax.format(xlabel = "Temperature (T)",
+          ylabel  = "$M(S)$")
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: 100% 1024/1024 [00:00<00:00, 21131.45it/s]
+: /tmp/ipykernel_809548/3043170778.py:14: FutureWarning: adjacency_matrix will return a scipy.sparse array instead of a matrix in Networkx 3.0.
+:   A = nx.adjacency_matrix(g).todense()
+: 100% 1024/1024 [00:00<00:00, 20519.84it/s]
+: /tmp/ipykernel_809548/3043170778.py:33: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 313 :height 300
+[[file:./.ob-jupyter/d76963ada84b6f886768e133ea2fd96b770ff13d.png]]
+:END:
+plot stuff
+#+begin_src jupyter-python
+def get_bins(p0)->dict:
+    s = np.mean(states, 1)
+    bins = np.linspace(0.0 - 1 / (2 * (n)), 1.0 + 1 / (2 * (n)), n + 2)
+    vals = np.zeros(bins.size)
+    idx = np.digitize(s, bins, right=1)
+    mag = {}
+    for jdx, bin in enumerate(idx):
+        vals[bin] += p0[jdx]
+        magi = bins[bin]
+        mag[magi] = mag.get(magi, []) + [jdx]
+    return bins, vals
+
+N = 5
+idx = np.linspace(0, temps.size, temps.size, 0).astype(int)
+
+fig, ax = plt.subplots(nrows = 2, ncols = N)
+for axi, kdx in zip(ax, idx):
+    bins, vals = get_bins(p[kdx])
+    # axi.hist(p[idx])
+    axi.bar(bins, vals, width = 0.2)
+    # print(vals.min(), vals.max())
+    # axi.hist(p[idx])
+    # axi.set_xlim(0, 1)
+    axi.set_title(f"T = {temps[kdx]}")
+
+ax.format()
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_809548/3772741406.py:27: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 1367 :height 588
+[[file:./.ob-jupyter/5b991add8832ffceb40588a0d2ec18f1ce942e1a.png]]
+:END:
+
+* Estimate
+#+begin_src jupyter-python
+m = models.Potts(g)
+mag, sus = m.magnetize(temps)
+fig, ax = plt.subplots()
+ax.plot(temps, mag)
+ax.format()
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+begin_example
+Spawning threads
+Magnetizing temperatures
+0% [###                           ] 100% | ETA: 00:00:01/tmp/ipykernel_809548/2686880089.py:2: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  mag, sus = m.magnetize(temps)
+0% [##############################] 100% | ETA: 00:00:00
+Total time elapsed: 00:00:00
+Total time elapsed: 00:00:00
+
+Total time elapsed: 00:00:00
+
+Total time elapsed: 00:00:00
+
+Total time elapsed: 00:00:00
+
+Total time elapsed: 00:00:00
+/tmp/ipykernel_809548/2686880089.py:6: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+#+end_example
+#+attr_org: :width 291 :height 282
+[[file:./.ob-jupyter/0b1be0ffcb8b39b3111fd2cb97035130a56a37b0.png]]
+:END:
+* test
+#+begin_src jupyter-python
+import proplot as plt, cmasher as cmr, pandas as pd,\
+    numpy as np, os, sys, networkx as nx, warnings
+from plexsim import models
+from imi import infcy
+from exact import gen_states, to_binary, gen_binary
+
+#P(S^t | s_i)
+#2**n x 2**n * n * 2
+def gen_states_node(n) -> tuple:
+    """
+    Creates binary state space and returns allowed transitions
+    """
+    states = np.zeros((2**n, n))
+    allowed = {}
+    # ntrans = {}
+    from tqdm import tqdm
+
+    for idx in tqdm(range(2**n)):
+        states[idx] = gen_binary(idx, n)
+        for node in range(n):
+            state = states[idx].copy()
+            node_state =  state[node]
+            if state[node] == 0:
+                state[node] = 1
+            else:
+                state[node] = 0
+            kdx = to_binary(state)
+            allowed[(idx, node, node_state)] = allowed.get(idx, []) + [kdx]
+    return states, allowed
+
+n = 10
+states, allowed = gen_states_node(n)
+g = nx.LCF_graph(n, [-2], repeats = 1)
+# g = nx.path_graph(n)
+A = nx.adjacency_matrix(g).todense()
+
+p = np.zeros((2**n, 2**n, n, 2))
+
+E = - np.multiply(states * 2 - 1, (states * 2 - 1) @ A)
+beta = 2.0
+
+p0 = np.zeros((n, 2))
+for (idx, node, node_state), trans in allowed.items():
+    s = states[idx]
+    # for node, s_i in enumerate(s):
+        # p[idx, node, s_i]
+    e1 = E[idx].sum()
+    p0[node, int(node_state)] += np.exp(- beta * e1)
+
+    for other in trans:
+        s = states[other]
+        e2 = E[other].sum()
+        pi =  1/n *  1 / (1 + np.exp(beta * (e2 - e1)))
+        assert 0 <= pi <= 1.0
+        node_state = int(node_state)
+        p[idx, other, node, node_state] += pi
+
+
+p0 /= p0.sum(-1)[..., None]
+assert p.max() <= 1.0
+assert p.min() >= 0
+assert np.allclose(p0.sum(1), 1), p0.sum(0)
+
+from tqdm import tqdm
+for node in tqdm(range(n)):
+    np.fill_diagonal(p[..., node, 0], 1 - p[..., node, 0].sum(-1))
+    np.fill_diagonal(p[..., node, 1], 1 - p[..., node, 1].sum(-1))
+
+    # conditionals should sum to 1 per node
+    assert np.allclose(p[..., node, 0].sum(-1), 1), p[..., node, 0].sum(-1)
+    assert np.allclose(p[..., node, 1].sum(-1), 1), p[..., node, 1].sum(-1)
+
+# assert np.allclose(p.sum(-1), 1)
+#+end_src
+
+#+RESULTS:
+: 100% 1024/1024 [00:00<00:00, 4061.80it/s]
+: /tmp/ipykernel_1639640/142174812.py:33: FutureWarning: adjacency_matrix will return a scipy.sparse array instead of a matrix in Networkx 3.0.
+:   A = nx.adjacency_matrix(g).todense()
+: 100% 10/10 [00:00<00:00, 160.39it/s]
+
+#+begin_src jupyter-python
+# print(p[..., 0, 0].diagonal())
+# assert np.allclose(p.sum(-1), 1)
+# print(p.sum(-1)[..., 0])
+
+
+# fig, ax = plt.subplots()
+# ax.bar(p0[:, 0])
+# ax.bar(p0[:, 1])
+# ax.format()
+# fig.show()
+
+# fig, ax = plt.subplots()
+# d = (p[..., 0, 0] - p[..., 0, 1])
+# print(d.max(), d.min())
+# h = ax.imshow(d)
+# ax.set_xlim(0,5)
+# ax.set_ylim(0,5)
+# ax.colorbar(h)
+# ax.format()
+# fig.show()
+
+# # print(p.sum(-1))
+#+end_src
+
+
+#+begin_src jupyter-python
+p_ = np.zeros((2**n, n, 2))
+p_[..., 0] = states == 0
+p_[..., 1] = states == 1
+
+print(p.shape, p_.shape, p0.shape)
+# print(np.unique(p_))
+pst = np.einsum("ijkl, kl -> jk", p, p0)
+print(pst[:, 0])
+
+fig, ax = plt.subplots()
+ax.bar(p0[:, 0])
+ax.set_xlim(0, 1)
+ax.format()
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: (2, 10, 1024, 1024) (1024, 10, 2) (10, 2)
+# [goto error]
+#+begin_example
+---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+Input In [105], in <cell line: 7>()
+      5 print(p.shape, p_.shape, p0.shape)
+      6 # print(np.unique(p_))
+----> 7 pst = np.einsum("ijkl, kl -> jk", p, p0)
+      8 print(pst[:, 0])
+     10 fig, ax = plt.subplots()
+
+File <__array_function__ internals>:5, in einsum(*args, **kwargs)
+
+File ~/miniconda3/lib/python3.9/site-packages/numpy/core/einsumfunc.py:1359, in einsum(out, optimize, *operands, **kwargs)
+   1357     if specified_out:
+   1358         kwargs['out'] = out
+-> 1359     return c_einsum(*operands, **kwargs)
+   1361 # Check the kwargs to avoid a more cryptic error later, without having to
+   1362 # repeat default values here
+   1363 valid_einsum_kwargs = ['dtype', 'order', 'casting']
+
+ValueError: operands could not be broadcast together with remapped shapes [original->remapped]: (2,10,1024,1024)->(10,1024,2,1024) (10,2)->(10,newaxis,2)
+#+end_example
+:END:
+
+#+begin_src jupyter-python
+print(allowed[(0, 0, 0.0)])
+# print(allowed[(0, 0, 1.0)])
+print(allowed[1, 0, 1.0])
+#+end_src
+
+#+RESULTS:
+: [1]
+: [0]
+
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+ax.plot(p[0, ..., 0, 0])
+ax.plot(p[0, ..., 0, 1])
+ax.set_xlim(0, 10)
+ax.format()
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_1639640/2726270363.py:6: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 295 :height 282
+[[file:./.ob-jupyter/4cf0bf1e17c11351327521f7e734391e3599be46.png]]
+:END:
+
+
+#+begin_src jupyter-python
+np.log2(2) * n
+#+end_src
+
+#+RESULTS:
+: 10.0
+
+#+begin_src jupyter-python
+a = np.ones((2, 2))
+a[0,0] = 0
+b = np.ones((2, 2, 2))
+c = np.einsum("ij, kjl -> ij",a,b)
+print(c[0], c[1] )
+
+d = (a @ (b.reshape(2, -1))).reshape(b.shape)
+print(d[:, 0], d[1])
+print(p_.shape, p0.shape)
+#+end_src
+
+#+RESULTS:
+: [0. 4.] [4. 4.]
+: [[1. 1.]
+:  [2. 2.]] [[2. 2.]
+:  [2. 2.]]
+: (1024, 10, 2) (10, 2)
+
+#+begin_src jupyter-python
+print(p_.shape, p.shape)
+p_ = np.zeros((2**n, n, 2))
+p_[..., 0] = states == 0
+p_[..., 1] = states == 1
+
+
+T = 100
+I = np.zeros((T, n))
+print(p.shape, p_.shape)
+
+for ti in tqdm(range(T)):
+    # get state distribution at t
+    # pst = np.einsum("ijk, jk -> ij", p_, p0)
+    # pst = (p_ @ p0.reshape(2**n))
+    pst = np.sum(np.multiply(p_, p0), - 1)
+    h = - np.nansum(np.log2(pst) * pst, 0)
+    # get conditional state distribution
+    hc = - np.nansum(np.log2(p_) * p_, 0)
+    hc = np.sum(np.multiply(p0, hc), -1)
+
+    diff = h - hc
+    if ti == 0:
+        print(h, hc)
+
+    I[ti] = diff
+    # move state forward
+    # print(p_.shape, p.shape, p0.shape)
+    p_ = np.sum(np.multiply(p_,  p), 1)
+    # p_ = np.einsum("ijkl, jkl-> ikl", p, p_ )
+
+print(p.shape, p_.shape )
+# fig, ax = plt.subplots()
+# ax.bar(pst[:, 1], width = 1/len(pst))
+# ax.format()
+# fig.show()
+
+# print(I[0], I[1])
+
+#+end_src
+
+#+RESULTS:
+: (1024, 10, 2) (1024, 1024, 10, 2)
+: (1024, 1024, 10, 2) (1024, 10, 2)
+:   0% 0/100 [00:00<?, ?it/s]/tmp/ipykernel_1639640/3598777474.py:18: RuntimeWarning: divide by zero encountered in log2
+:   hc = - np.nansum(np.log2(p_) * p_, 0)
+: /tmp/ipykernel_1639640/3598777474.py:18: RuntimeWarning: invalid value encountered in multiply
+:   hc = - np.nansum(np.log2(p_) * p_, 0)
+:   2% 2/100 [00:00<00:06, 16.25it/s][512. 512. 512. 512. 512. 512. 512. 512. 512. 512.] [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+: 100% 100/100 [00:04<00:00, 22.69it/s](1024, 1024, 10, 2) (1024, 10, 2)
+#+RESULTS:
+
+
+#+begin_src jupyter-python
+from utils import ccolors
+colors = ccolors(len(I.T))
+fig, ax = plt.subplots()
+for idx, (c, mi) in enumerate(zip(colors, I.T)):
+    ax.plot(mi - 1 * idx, color = c)
+c = np.ones(4) * 0.5
+inax = ax.inset_axes(c, zoom = 0)
+nx.draw(g, ax = inax, node_color = colors,
+        node_size = 100)
+ax.format(
+    # xscale = "log",
+    # yscale = "log",
+    xlim = (0, 100))
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_1639640/4252889805.py:14: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 302 :height 282
+[[file:./.ob-jupyter/6f1bc6e0c2cb6b4d9dda32e9b281f91a6eb6ec0f.png]]
+:END:
+
+$H(S^t) - H(S^t | s_i)$
+
+#+begin_src jupyter-python
+%load_ext autoreload
+%autoreload 2
+import numpy as np, networkx as nx
+import cupy as cp
+from exact import NodeToSystem, SystemToNode,get_transfer, gen_states, simulate_system2 as ss
+n = 10
+# g = recursive_tree(4)
+g = nx.LCF_graph(n=n, shift_list=[-2], repeats=4)
+g = nx.path_graph(n)
+g = nx.convert_node_labels_to_integers(g)
+A = cp.asarray(nx.adjacency_matrix(g).todense())
+
+states, allowed = gen_states(n)
+E = -np.einsum("ij, ij->ij", (states * 2 - 1), (states * 2 - 1)@ A)
+beta = 1
+transfer_matrix, state_dist = get_transfer(n, E, beta, allowed)
+print(transfer_matrix.shape)
+sim = NodeToSystem(transfer_matrix, state_dist, states)
+sim.setup()
+t = 100
+I = np.zeros((t, n))
+
+for idx in range(t):
+    h, hc, i = sim.update()
+    I[idx] = i.get()
+import proplot as plt
+fig, ax = plt.subplots()
+
+ax.plot(I)
+ax.format()
+fig.show()
+
+# I, II, _, H, HC = ss(2, transfer_matrix, state_dist, n, states)
+# print(H, HC)
+
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: Using cupy
+: The autoreload extension is already loaded. To reload it, use:
+:   %reload_ext autoreload
+: 100% 1024/1024 [00:01<00:00, 554.74it/s]
+: 100% 1024/1024 [00:01<00:00, 683.78it/s]
+: (1024, 1024)
+: /tmp/ipykernel_50660/1577048566.py:31: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 295 :height 282
+[[file:./.ob-jupyter/3cf2431015d6bab8e5259291c85726131b849db2.png]]
+:END:

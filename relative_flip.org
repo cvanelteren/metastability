@@ -1,0 +1,6 @@
+Make  network   with  Ising  spin  dynamics   and  show  the
+trajectory  of   relative  flips.  That  is,   what  is  the
+probability of flipping from minority to majority given
+#+begin_src jupyter-python
+
+#+end_src

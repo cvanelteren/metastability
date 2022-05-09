@@ -1,0 +1,429 @@
+#    -*- mode: org -*-
+
+
+Archived entries from file /home/casper/orgfiles/roam/papers/Metastability/manuscript.org
+
+
+* Appendix code old :noexport:
+:PROPERTIES:
+:ARCHIVE_TIME: 2022-03-24 Thu 14:27
+:ARCHIVE_FILE: ~/orgfiles/roam/papers/Metastability/manuscript.org
+:ARCHIVE_CATEGORY: manuscript
+:END:
+#+begin_src jupyter-python
+from matplotlib import style; style.use("fivethirtyeight".split())
+import matplotlib.pyplot as plt, cmasher as cmr
+import numpy as np, os, sys, networkx as nx, warnings, pickle, pandas as pd
+warnings.simplefilter("ignore")
+base = "/home/casper/projects/information_impact/slurm/data"
+fp   = "TIPPINGPOINTS_FLORENTINE"
+
+base = "./data"
+fp = ""
+
+
+df = []
+for root, _, files in os.walk(os.path.join(base, fp)):
+    for file in files:
+        with open(os.path.join(root, file), 'rb') as f:
+            data = pickle.load(f)
+            df.append(data)
+df = pd.DataFrame(df)
+df.columns
+#+end_src
+
+#+begin_src jupyter-python
+
+mis = df.mis[0]
+distances = np.asarray([float(i) for i in mis.keys()])
+fig, ax = plt.subplots(1, distances.size, figsize = (12, 3))
+counter = 0
+for (k, v), axi in zip(mis.items(), ax):
+    counter += 1
+
+    print(df.df.shape)
+    axi.plot(v)
+    axi.set_xlim(0, 5)
+fig.show()
+#+end_src
+
+
+- TODO  Show results  of  information flows  differing as  a
+  function of tipping distance.
+- Place holders are in ref:fig:tipping_florence and ref:fig:power_law_results.
+
+#+begin_src jupyter-python
+mi = df.mi.iloc[0]
+g = df.graph.iloc[0]
+
+labels = abs(np.array([i for i in mi]))
+
+bins = np.linspace(0, 1, 5)
+mapper = {idx: b for idx, b in enumerate(bins)}
+layout = np.zeros(len(mapper), dtype = object)
+
+for idx, k in enumerate(mi):
+    k = abs(k)
+    idx = np.digitize(k, bins, right = True)
+    val = mapper[idx]
+    layout[idx] = str(val)
+layout = layout[::-1].reshape(1, -1)
+fig = plt.figure(figsize = (20, 5), constrained_layout = 1)
+ax = fig.subplot_mosaic(layout)
+
+degs_node = dict(g.degree())
+degs = {}
+for node, k in degs_node.items():
+    degs[k] = degs.get(k, []) + [node]
+from plexsim.models.adjacency import Adjacency
+adj = Adjacency(g)
+
+colors = cmr.pride(np.linspace(0, 1, len(degs), endpoint = 0))
+
+colors = {k: c for k, c in zip(degs, colors)}
+
+tmp = {}
+for k, v in mi.items():
+    k = abs(k)
+    idx = np.digitize(k, bins, right = True)
+    val = mapper[idx]
+    axi = ax.get(str(val))
+    tmp[str(val)] = tmp.get(str(val), {})
+    for deg, nodes in degs.items():
+        idx = np.array([adj.mapping[node] for node in nodes])
+        tmp[str(val)][deg] = tmp[str(val)].get(deg, []) + [v[:, idx].mean(-1)]
+
+
+
+from scipy.stats import sem
+for k, v in tmp.items():
+    axi = ax.get(k)
+    for deg, vv in v.items():
+        vv = np.array(vv)
+        mu = vv.mean(0)
+        s  = sem(vv, axis = 0)
+        xr = np.arange(mu.size)
+        axi.errorbar(xr, mu, s, linewidth = 2.5,
+                     color = colors[deg], elinewidth = 1)
+    axi.set_title(val)
+handles = []
+for k in degs:
+    e = plt.Line2D([], [], marker = '.', linestyle = 'none', color = colors[k],
+                   label = k, markersize = 30)
+    handles.append(e)
+axi = fig.add_subplot(111, frameon = 0,
+                  xticks = [],
+                  yticks = [],
+                  )
+axi.legend(handles = handles, title = "Degree")
+fig.suptitle("Distance to tipping", fontsize = 37, y = 1.1)
+fig.subplots_adjust()
+axi.set_xlabel("Time (t)", labelpad = 45, fontsize = 30)
+axi.set_ylabel("$I(s_i^{t}; S^t)$", fontsize = 30,  labelpad = 45)
+fig.show()
+#+end_src
+
+
+# #+name: fig:tipping_florence
+# #+attr_latex: :float multicolumn :position HT!
+# #+caption: Information flow as a function of tipping distance. Each node is dictated by kinetic Ising model. As the stability (left) of the system decreases (right), the information flows shift from processing in low degree nodes to higher degree nodes.
+# [[./figures/tipping_florence.png]]
+
+
+# #+name: fig:power_law_results
+# #+attr_latex: :float multicolumn :position HT!
+# #+caption: Integrated mutual information as a function of degree. (left) Normalized cumulative integrated mutual information as function of tipping distance. Far away from the metastable point, information processing mainly occurs in low degree nodes.  As the system approaches the metastable point, higher degree nodes are recruited.
+# [[./figures/aggregate_flows.png]]
+
+* Appendix code old :noexport:
+:PROPERTIES:
+:ARCHIVE_TIME: 2022-03-24 Thu 14:28
+:ARCHIVE_FILE: ~/orgfiles/roam/papers/Metastability/manuscript.org
+:ARCHIVE_CATEGORY: manuscript
+:END:
+#+begin_src jupyter-python
+from matplotlib import style; style.use("fivethirtyeight".split())
+import matplotlib.pyplot as plt, cmasher as cmr
+import numpy as np, os, sys, networkx as nx, warnings, pickle, pandas as pd
+warnings.simplefilter("ignore")
+base = "/home/casper/projects/information_impact/slurm/data"
+fp   = "TIPPINGPOINTS_FLORENTINE"
+
+base = "./data"
+fp = ""
+
+
+df = []
+for root, _, files in os.walk(os.path.join(base, fp)):
+    for file in files:
+        with open(os.path.join(root, file), 'rb') as f:
+            data = pickle.load(f)
+            df.append(data)
+df = pd.DataFrame(df)
+df.columns
+#+end_src
+
+#+begin_src jupyter-python
+
+mis = df.mis[0]
+distances = np.asarray([float(i) for i in mis.keys()])
+fig, ax = plt.subplots(1, distances.size, figsize = (12, 3))
+counter = 0
+for (k, v), axi in zip(mis.items(), ax):
+    counter += 1
+
+    print(df.df.shape)
+    axi.plot(v)
+    axi.set_xlim(0, 5)
+fig.show()
+#+end_src
+
+
+- TODO  Show results  of  information flows  differing as  a
+  function of tipping distance.
+- Place holders are in ref:fig:tipping_florence and ref:fig:power_law_results.
+
+#+begin_src jupyter-python
+mi = df.mi.iloc[0]
+g = df.graph.iloc[0]
+
+labels = abs(np.array([i for i in mi]))
+
+bins = np.linspace(0, 1, 5)
+mapper = {idx: b for idx, b in enumerate(bins)}
+layout = np.zeros(len(mapper), dtype = object)
+
+for idx, k in enumerate(mi):
+    k = abs(k)
+    idx = np.digitize(k, bins, right = True)
+    val = mapper[idx]
+    layout[idx] = str(val)
+layout = layout[::-1].reshape(1, -1)
+fig = plt.figure(figsize = (20, 5), constrained_layout = 1)
+ax = fig.subplot_mosaic(layout)
+
+degs_node = dict(g.degree())
+degs = {}
+for node, k in degs_node.items():
+    degs[k] = degs.get(k, []) + [node]
+from plexsim.models.adjacency import Adjacency
+adj = Adjacency(g)
+
+colors = cmr.pride(np.linspace(0, 1, len(degs), endpoint = 0))
+
+colors = {k: c for k, c in zip(degs, colors)}
+
+tmp = {}
+for k, v in mi.items():
+    k = abs(k)
+    idx = np.digitize(k, bins, right = True)
+    val = mapper[idx]
+    axi = ax.get(str(val))
+    tmp[str(val)] = tmp.get(str(val), {})
+    for deg, nodes in degs.items():
+        idx = np.array([adj.mapping[node] for node in nodes])
+        tmp[str(val)][deg] = tmp[str(val)].get(deg, []) + [v[:, idx].mean(-1)]
+
+
+
+from scipy.stats import sem
+for k, v in tmp.items():
+    axi = ax.get(k)
+    for deg, vv in v.items():
+        vv = np.array(vv)
+        mu = vv.mean(0)
+        s  = sem(vv, axis = 0)
+        xr = np.arange(mu.size)
+        axi.errorbar(xr, mu, s, linewidth = 2.5,
+                     color = colors[deg], elinewidth = 1)
+    axi.set_title(val)
+handles = []
+for k in degs:
+    e = plt.Line2D([], [], marker = '.', linestyle = 'none', color = colors[k],
+                   label = k, markersize = 30)
+    handles.append(e)
+axi = fig.add_subplot(111, frameon = 0,
+                  xticks = [],
+                  yticks = [],
+                  )
+axi.legend(handles = handles, title = "Degree")
+fig.suptitle("Distance to tipping", fontsize = 37, y = 1.1)
+fig.subplots_adjust()
+axi.set_xlabel("Time (t)", labelpad = 45, fontsize = 30)
+axi.set_ylabel("$I(s_i^{t}; S^t)$", fontsize = 30,  labelpad = 45)
+fig.show()
+#+end_src
+
+
+# #+name: fig:tipping_florence
+# #+attr_latex: :float multicolumn :position HT!
+# #+caption: Information flow as a function of tipping distance. Each node is dictated by kinetic Ising model. As the stability (left) of the system decreases (right), the information flows shift from processing in low degree nodes to higher degree nodes.
+# [[./figures/tipping_florence.png]]
+
+
+# #+name: fig:power_law_results
+# #+attr_latex: :float multicolumn :position HT!
+# #+caption: Integrated mutual information as a function of degree. (left) Normalized cumulative integrated mutual information as function of tipping distance. Far away from the metastable point, information processing mainly occurs in low degree nodes.  As the system approaches the metastable point, higher degree nodes are recruited.
+# [[./figures/aggregate_flows.png]]
+
+* old :noexport:
+:PROPERTIES:
+:ARCHIVE_TIME: 2022-03-24 Thu 14:48
+:ARCHIVE_FILE: ~/orgfiles/roam/papers/Metastability/manuscript.org
+:ARCHIVE_OLPATH: Introduction
+:ARCHIVE_CATEGORY: manuscript
+:END:
+# # add something about what this means
+
+# Prior research  highlights that  for networked
+# dynamical systems, the dynamic  importance of nodes does not
+# monotonically scale with the  structural importance of nodes
+# cite:Quax2013.  This  questions  the status  quo  that  high
+# degree  nodes are  important  causal  forces in  determining
+# system dynamics.
+
+# Another  challenge  for  studying metastability  in  complex
+# systems  relies in  the tendency  for real-world  systems to
+# consist  of  many   element  with  non-trivial,  non-regular
+# interaction structures. Complex systems are often studied as
+# dynamical processes on networks  where the network structure
+# is constant over time. For real-world systems, these network
+# structure may be dynamic (e.g. neural adaptation, ecological
+# collapse, rumor spreading, epidemic spreading and so on) and
+# interact through noise.
+
+
+# #+begin_comment
+# - Is there research on stability of systems and structural components?
+# #+end_comment
+
+# Additionally, on short-time  scales it is known  that it was
+# shown that  for real-world networks with  simulated dynamics
+# can  yield different  "causal" phases  on short  time scales
+# cite:vanElteren2021.   As  the   system   relaxes  from   an
+# out-of-equilibrium state,  the causal  impact of  nodes show
+# highly non-trivial  interactions at short-time  scales. This
+# may indicate  that metastable  behavior may be  initiated by
+# short-lived correlations absorbing  the noise and initiating
+# a cascade of information transfer that primes the system for
+# metastable point.
+
+For example, the brain  can readily switch between different
+"modes".  Similarly, a  cell  regulates  its internal  state
+depending   on  its   environment.   Metastability  can   be
+understood  from  a  thermodynamics perspective  where  each
+state of the system is  assigned a configuration energy. The
+energy of the  system is proportional to  the probability of
+observing the system state; a high energy state will be less
+probable than a low energy  state. The totality of the state
+energies bright  forth an  energy landscape  that determines
+whether  metastability can  occur. Stable  states are  those
+that  form  (local)  minima  in the  energy  landscapes.  If
+multiple  minima  exist,   metastability  occurs  by  energy
+barriers separting  these minima. The description  of energy
+landscapes may take  form in real systems  as network motifs
+in brain networks, gene-protein regulatory networks, opinion
+dynamics in social systems and so on.
+
+Stochasticity manifest itself as either external or internal
+noise coming  from a  source intside  or outside  the system
+being  considered,  and is  often  modeled  by replacing  an
+external parameter with a  random process. Internal noise is
+inherent to  the system itself  and is caused by  the random
+fluctuations of  discrete particles  (e.g. individuals  in a
+populations, or  molecules undergoing a  chemical reaction).
+Both types of noise can leas  to a rare switch event between
+metastable states  or rare  escape events from  a metastable
+states. There  are many possible escape/switching  paths but
+there is  a path along  which the  switch or escape  is most
+likely to occur. We call this the most likely path of escape
+or switching the optimal path.  It is of great importance in
+a variety of applied problems to determine this optimal path
+since knowledge  of the path then  enables the determination
+of the mean time to escape.
+
+Rare events such as metastable points in Ising model are hard
+to determine. Care must be taken into place to ensure that the sampling of the rare 
+events are fair. 
+
+Traditionally metastability is studied from an analytical perspective using 
+master equations or Langevis or Fokker-Planck equations.
+For master equations the equations are translate into deterministic equations which double the number of parameters to describe the trajectory.
+
+- What is metastability?
+  Metastability refers to systems  that appear to be stable,
+  but can  be tipped  into another  stable state.  If enough
+  energy  is  supplied, the  system  may  move into  another
+  stable state. Consider  a rectangular box. The  box is the
+  most stable when  its center of mass $m$ is  closes to the
+  ground. Any  perturbations (tipping) to the  box, will not
+  cause the  box to change  its state. However,  setting the
+  box upright, will cause some  perturbations for the box to
+  tip over. This is called a metastable state.
+
+  - Dynamic systems (with feedback)  stability is defined as
+    the time-invariance  of systemic behavior.  For example,
+    the lack  of profound  system changes  as a  function of
+    external   perturbations   of  neural   processing,   or
+    electronic circuits.
+- What is the edge of Chaos?
+- How does a system use noise?
+
+A complex system consists of system entities or nodes that
+are dictated  by some dynamics. These  nodes are connected
+through   an  interactions   structure   which  is   often
+represented  as a  simple (weighted)  graph. A  metastable
+system  is  a  system   that  operates  between  so-called
+unstable and stable points.
+
+Studying  metastable  systems  is common  in  physics  and
+chemistry where  systems are studied from  the microscopic
+(i.e. many  body assemblies)  to statistical  ensembles of
+molecules  (viscuous  fluids,   amorphous  solids,  liquid
+crystals, minerals and so on)  at a molecular levels or as
+a whole. As the number of elements in the system grows, so
+does the possible system states. However, for many complex
+systems these states are not  equally likely. That is, the
+complex  systems often  show transiently  stable behavior.
+For  example  on a  macroscopic  level,  cells are  stable
+regulating  their  inner  processes and  interacting  with
+their external environment.
+
+
+
+
+Archived entries from file /home/casper/orgfiles/roam/papers/Metastability/manuscript.org
+
+
+* Background :noexport:
+:PROPERTIES:
+:ARCHIVE_TIME: 2022-03-24 Thu 14:58
+:ARCHIVE_FILE: ~/orgfiles/roam/papers/Metastability/manuscript.org
+:ARCHIVE_CATEGORY: manuscript
+:END:
+#+begin_comment
+- [X] How is metastability studied?
+- [X] What sources of noise are there?
+- [ ] How are noise sources used in complex systems?
+#+end_comment
+** What language to use [[id:a216a07a-670b-4a5f-b294-ebdbe89113fc][Tipping points]] or metastable transitions
+** Language : tipping points or metastable transitions
+** [[id:1bc767b9-5ea1-48e8-910a-93180c09b7cd][Noise sources]]
+** Methods to study metastabilty
+- Mathematical analysis
+  - Difficult due to intractability
+- Numerical simulation
+  - Difficult due to rarity of the events
+Other  measures
+
+A first quantity of this kind is mutual information, defined
+as the  difference between  the information entropies  of an
+output  time  series  per  se  and  an  output  time  series
+constrained by  a given  input time  series. Of  interest is
+also  the  Fisher  information,  defined as  the  amount  of
+information carried by an observable  (e.g., the output of a
+device) about  a parameter (e.g.,  the strength of  an input
+signal)  and  related   closely  to  statistical  estimation
+theory.
+** [[id:2fc06007-eea5-41bc-ae1d-823bd2e44626][Stochastic resonance]]
+

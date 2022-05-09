@@ -1,0 +1,1512 @@
+#+begin_src jupyter-python
+%load_ext autoreload
+%autoreload 2
+import matplotlib.pyplot as plt, cmasher as cmr, pandas as pd
+import numpy as np, os, sys, networkx as nx, warnings
+import proplot as pplt
+from plexsim import models
+# warnings.simplefilter("ignore");
+#plt.style.use("fivethirtyeight spooky".split())
+import pickle
+base = "./data"
+base = ""
+fp = "1642669842.9124289_nNodes=10_mag=0.85.pkl"
+fp = "1642670204.2829592_nNodes=10_mag=0.7.pkl"
+fp = "1642671326.7454023_nNodes=10_mag=0.5.pkl"
+fp = "1642690904.038695_nNodes=10_mag=0.5.pkl"
+fp = "1643873175.1454494_nNodes=50_mag=0.5.pkl"
+fp = "1644237848.7720973_nNodes=100_mag=0.5.pkl"
+fp = "1644239066.464625_nNodes=100_mag=0.5.pkl"
+fp = "1644241473.6108677_nNodes=15_mag=0.5.pkl"
+fp = "1644242790.8074355_nNodes=15_mag=0.5.pkl"
+fp = "1644332398.557447_nNodes=15_mag=0.7.pkl"
+from pathlib import Path
+
+base = Path("/home/casper/projects/experiments/data")
+base = Path("/home/casper/papers/Metastability/data/")
+base = Path("/home/casper/papers/Metastability/data/data")
+
+fp = "1644241107.458607_nNodes=15_mag=0.5.pkl"
+fp = "1644241261.648101_nNodes=15_mag=0.5.pkl" #florence
+fp = "1644396204.224943_nNodes=15_mag=0.85.pkl"
+# fp = "1644822785.2312176_nNodes=32_mag=0.85.pkl" #davis southern women
+# fp = "1644822656.1563392_nNodes=34_mag=0.85.pkl" #karate club
+
+# fp = "1645014724.506016_nNodes=15_mag=0.5.pkl" #florentine with theta = 0.5
+
+# fp ="1645117740.2008944_nNodes=36_mag=0.5.pkl" ## resursive tree 5
+# fp = "1645197014.165427_nNodes=30_mag=0.8.pkl"
+# fp = "1645196860.2391655_nNodes=30_mag=0.8.pkl"
+fp = "1645196783.4526474_nNodes=36_mag=0.8.pkl"
+
+# fp = "1645601640.2094977_nNodes=15_mag=0.8.pkl"
+
+
+# new datasets
+# fp = "1645705957.1789765_nNodes=20_mag=0.8.pkl"
+# fp  = "1645705955.7824504_nNodes=20_mag=0.8.pkl"
+# fp = "1646059575.9936392_nNodes=20_mag=0.5.pkl"
+fp = base / fp
+with open(fp, "rb") as f:
+    data = pickle.load(f)
+
+data["file"] = fp.name
+m = models.Potts(**data["model_settings"])
+print(data.keys())
+print(m.graph)
+#+end_src
+
+#+RESULTS:
+: dict_keys(['df', 'mis', 'graph', 'model_settings', 'samples_needed', 'file'])
+: Graph with 36 nodes and 35 edges
+
+
+#+RESULTS:
+: Rebinning data
+: Creating new dataframe
+: saving to new_file=PosixPath('data/1645705955.7824504_nNodes=20_mag=0.8.pkl')
+Fit imi
+#+begin_src jupyter-python
+%load_ext autoreload
+%autoreload 2
+from utils import do_fit, do_halfimi
+r = False
+f = lambda x, a,b,c,d,e,f,g: a * np.exp(-b * x) + c * np.exp(- d * x) + e * np.exp(- f * x) + g
+
+# f = lambda x, a, b, c, d, g: a * np.exp(-b * x) + c * np.exp(-d * x) + g
+# f = lambda x, a, b, c, d, e, f, g: a * np.exp(-b * (x - c)) + d * np.exp(-e * (x - f)) + g
+f = lambda x, a, b, c: a * np.exp(-b * x) + c
+
+from utils import compute_abs_mi_decay
+data = compute_abs_mi_decay(data)
+coeffs = do_fit(data, f = f, redo = 1)
+half_imi = do_halfimi(data, f, redo = 1)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
+Rebinning data
+Creating new dataframe
+/home/casper/papers/Metastability/utils.py:435: RuntimeWarning: divide by zero encountered in log2
+  px, mi = MI(cond, snap)
+/home/casper/papers/Metastability/utils.py:435: RuntimeWarning: invalid value encountered in multiply
+  px, mi = MI(cond, snap)
+saving to new_file=PosixPath('data/1645196783.4526474_nNodes=36_mag=0.8.pkl')
+100% 19/19 [00:03<00:00,  4.90it/s]
+100% 19/19 [00:03<00:00,  5.59it/s]
+#+end_example
+
+mse
+#+begin_src jupyter-python
+%matplotlib inline
+from utils import show_fit_rmse
+show_fit_rmse(data, f).show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: loading from disk
+: /tmp/ipykernel_282708/702316094.py:3: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   show_fit_rmse(data, f).show()
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/e1c48b9a4b0bc09ec533428b8294139d21617f95.png]]
+:END:
+
+
+time decay
+#+begin_src jupyter-python
+%matplotlib inline
+from tqdm import tqdm
+from utils import show_time_decay
+show_time_decay(data, f)
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: loading from disk
+:   0% 0/19 [00:00<?, ?it/s]/home/casper/miniconda3/lib/python3.9/site-packages/matplotlib/collections.py:1003: RuntimeWarning: invalid value encountered in sqrt
+:   scale = np.sqrt(self._sizes) * dpi / 72.0 * self._factor
+: 100% 19/19 [00:06<00:00,  2.78it/s]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/891fe55c6fc27e5c7359507ead01123b40295b83.png]]
+: /home/casper/miniconda3/lib/python3.9/site-packages/matplotlib/collections.py:1003: RuntimeWarning: invalid value encountered in sqrt
+:   scale = np.sqrt(self._sizes) * dpi / 72.0 * self._factor
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/ba563bd90f35901f0ad289aaa70b112c14816b1e.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/1fc9691c5f68071b1ba63002705fcd805a59ead0.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/1d946a92e4710edf6d730aa5953122de910ca283.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/45986330e218236626fece4f100092e13247e6b5.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/2dcd70e3c8e4a598983e80b526ea5c472bae0a5d.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/093f6a21c26d3e5b593ce957487a31a3fbbdf8e6.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/ecb6a40f2eb3aebf16c898045ec0e01b63e79699.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/76044dc50e4d9d292d5f92a8e488277f626c3914.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/1f86d12e93adb0fb013fafc1e2319a1fd93097d0.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/efc9a2e6dd1d8da9dbb6bbd4798041d34905aaf7.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/6bce150ed12f5648b965427612aec8ef80d926b8.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/9b9be95df3a88a2b482f29c7c2722b6f18eac47d.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/5f8ffad8dd171f404523cbcc511e04432dd58feb.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/014aa5709d6c68bd922d33343f04a8bf4b1cd93f.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/0cddb969d7606ab65482ec1039966916d27c6872.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/27389fa08fb925988e999e0cc4e773ed54ae1924.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/efef64a5fde797d1b4dff2022378013888a757d4.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/b21af73e15adff57dd062b0f961d1395542e37e1.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/891fe55c6fc27e5c7359507ead01123b40295b83.png]]
+:END:
+
+
+
+* snazziness
+#+begin_src jupyter-python
+print(half_imi.keys())
+#+end_src
+
+#+RESULTS:
+: dict_keys(['0.0', '0.05526315789473685', '0.1105263157894737', '0.16578947368421054', '0.2210526315789474', '0.27631578947368424', '0.3315789473684211', '0.38684210526315793', '0.4421052631578948', '0.4973684210526316', '0.5526315789473685', '0.6078947368421053', '0.6631578947368422', '0.7184210526315791', '0.7736842105263159', '0.8289473684210527', '0.8842105263157896', '0.9394736842105265', '0.9947368421052633'])
+
+#+begin_src jupyter-python
+from utils import *
+from fa2 import ForceAtlas2
+binds = get_binds(data)
+g = data["model_settings"]["graph"]
+deg = dict(sorted(g.degree(), key=lambda x: x[1], reverse=1))
+tdeg = {}
+for k, v in deg.items():
+    tdeg[v] = tdeg.get(v, []) + [k]
+l = list(tdeg.values())
+
+# pos = fa2().forceatlas2_networkx_layout(g)
+pos = nx.shell_layout(m.graph, nlist=l)
+pos = ForceAtlas2(verbose=0).forceatlas2_networkx_layout(
+    m.graph, pos=pos, iterations=20
+)
+minmax = lambda x: (x - x.min()) / (x.max() - x.min())
+
+targets = ['0.0',
+           '0.1105263157894737',
+           '0.2210526315789474',
+           '0.3315789473684211',
+           '0.4973684210526316',
+           ]
+N = len(targets)
+colors = ccolors(len(g))
+
+mis = load_mis(data)
+
+fig, ax = pplt.subplots(nrows = N, ncols = 3)
+fig.show()
+for idx, k in enumerate(targets):
+    v = half_imi[k]
+    if idx >= N:
+        break
+    imi, half, asym = v["halfimi"]
+    for jdx, s in enumerate([imi, half, asym]):
+        if jdx == 0:
+            s = mis[k].sum(0)
+        s = np.argsort(s).astype(float)
+        s /= float(s.size)
+        s *= 1000
+        # s /= s.max() * 100
+        # s = minmax(s)
+        nx.draw(g, pos = pos, ax = ax[idx, jdx],
+            node_size = s, node_color = colors)
+
+    mag = round(float(k), 2)
+    text = f"M(S) = {mag}"
+    ax[idx, 0].annotate(text, (0, 0.5), xycoords = "axes fraction",
+                        rotation = 90)
+ax[0, 0].set_title("IMI")
+ax[0, 1].set_title("Halftime")
+ax[0, 2].set_title("Asymptotic")
+fig.savefig(f"./figures/snazzy_distance_{data['file']}.png")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_282708/2558910009.py:30: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+: /tmp/ipykernel_282708/2558910009.py:55: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 787 :height 1330
+[[file:./.ob-jupyter/b33997cbf89664b20cdee8fef979681197bb6f77.png]]
+:END:
+:RESULTS:
+
+
+#+begin_src jupyter-python
+mis = load_mis(data)
+d = mis[targets[-1]]
+print(d.sum(0), half_imi[targets[-1]]["halfimi"][0])
+#+end_src
+
+#+RESULTS:
+#+begin_example
+[53.03808577 88.18698998 85.87391792 76.31384921 60.53650201 80.56635316
+ 80.96451104 78.41828026 79.52950125 72.72312126 75.49229573 76.66075865
+ 63.47718423 71.6935731  67.52424819 49.49987506 48.58904749 56.57776409
+ 60.90646485 76.61099275 70.52241436 74.20484968 69.90505602 72.21385201
+ 65.95681408 68.48502037 70.45198561 61.87536682 65.73251127 63.90798671
+ 55.02050574 47.53682143 56.5991022  54.70334228 69.46878669 64.32359643] [150.92377982 364.94424178 315.25271096 300.43468236 227.72178918
+ 128.1987216   64.56875058 171.69331773  89.94390042 304.51670881
+ 154.30781571 273.09554515 230.44853108  79.36726722  66.93221533
+ 183.06112112  65.91150609  75.75702998  57.1182867   96.9899982
+  50.80724554 294.56027707  83.90105818 199.00331412 117.29896849
+ 257.25702198 272.58133914 190.86179788 138.12063769 205.9578544
+  32.59632791 206.84485546  68.12935098 265.88798512 243.44582856
+ 245.23510149]
+#+end_example
+
+* Conditional distribution check
+#+begin_src jupyter-python
+from collections import Counter
+new_df = data["new_df"]
+
+node_df = []
+
+mapper = {0: 0, 1: 1}
+x = np.array([0, 1])
+y = np.zeros(2)
+for idx, dfi in new_df.groupby("bin"):
+    # get conditional at t = 0
+    cond = np.stack(dfi.conditional)[:, 0]
+    for node in range(cond.shape[1]):
+        counts = Counter(cond[:, node].flat)
+        for k, v in counts.items():
+            tmp = mapper[round(k)]
+            y[tmp] = v
+        y /= y.sum()
+        row = dict(node = node, x0 = x[0], y0 = y[0], y1 = y[1], x1 = x[1], bin  = idx)
+        node_df.append(row)
+node_df = pd.DataFrame(node_df)
+node_df.head(1)
+#+end_src
+
+#+RESULTS:
+:    node  x0   y0   y1  x1       bin
+: 0     0   0  0.5  0.5   1  0.016667
+#+RESULTS:
+
+
+#+begin_src jupyter-python
+import proplot as pplt
+fig, ax = pplt.subplots()
+
+color = np.unique(node_df.bin).size
+w = 1.0/(1 * color)
+print(color, w)
+c = cmr.pride(np.linspace(0, 1, color, 0))
+for node, info in node_df.groupby("node"):
+    for idx, (b, row) in enumerate(info.groupby("bin")):
+        offset = node + idx * w
+        ax.bar([ offset, offset + w/4 ],  [ row.y0, row.y1],
+               width = w * .8, color = c[idx])
+ax.set_xlabel("Node")
+ax.set_ylim(0, 1)
+# ax.set_xlim(0, 2)
+h = [
+    plt.Line2D([], [], marker = 'o', linestyle = '',
+               color = ci, label = lab) for ci, lab in zip(c, np.unique(node_df.bin))
+]
+ax.legend(handles = h, loc = 't', ncols = 2)
+# ax.set_xlim(0, 5)
+ax.axhline(0.5, color = 'k', linestyle = 'dashed')
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: 6 0.16666666666666666
+#+attr_org: :width 397 :height 388
+[[file:./.ob-jupyter/bbc031ddca9d674344e4acbcce51a5c6c73bc3b5.png]]
+:END:
+Plot state distribution
+
+#+begin_src jupyter-python
+from scipy.stats import sem
+bins = np.unique(new_df.bin)
+mus = np.zeros(np.unique(bins).size)
+es  =  np.zeros(mus.shape)
+for idx, (lab, dfi) in enumerate(new_df.groupby("bin")):
+    y = np.stack(dfi.state_count)
+    mus[idx] = y.mean()
+    es[idx]  = sem(y)
+print(bins.size, mus.shape, es.shape)
+fig, ax = plt.subplots()
+ax.errorbar(bins, mus, yerr = es, linestyle = 'none', color = 'k')
+ax.bar(bins, mus, width = np.diff(bins)[0] * .8)
+ax.set_yscale("log")
+ax.set_xlabel("abs distance to tipping")
+ax.set_ylabel("PMF")
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: 5 (5,) (5,)
+#+attr_org: :width 640 :height 480
+[[file:./.ob-jupyter/ed372859fae730501caca548f9ed0fccc456606c.png]]
+:END:
+
+* Exponent analysis
+
+#+begin_src jupyter-python
+import proplot as pplt
+mis = data["new_mis"]
+from utils import get_binds
+binds = get_binds(data)
+n = len(data["model_settings"]["graph"])
+d = []
+for idx, (k, tmp) in enumerate(half_imi.items()):
+    tmp = tmp["coeffs"]
+    distance = round(float(k), 2)
+    for kk, v in binds.items():
+        for vi in v:
+            e1, e2, o1, o2, o3= tmp[vi, [1, 3, 0, 2, 4]]
+            row = dict(deg = kk,
+                       node = vi,
+                       e1 = e1, e2 = e2,
+                       o1 = o1, o2 = o2,
+                       o3 = o3,
+                       ms = distance,)
+            d.append(row)
+d = pd.DataFrame(d)
+print(d.ms.unique())
+#+end_src
+
+#+RESULTS:
+: [0.   0.06 0.11 0.17 0.22 0.28 0.33 0.39 0.44 0.5  0.55 0.61 0.66 0.72
+:  0.77 0.83 0.88 0.94 0.99]
+
+#+begin_src jupyter-python
+from utils import load_mis
+mis = load_mis(data)
+N = np.unique(d.ms).size
+colors = cmr.pride(np.linspace(0, 1, N, 0))
+cdict = {round(float(k),2): c for k, c in zip(half_imi, colors)}
+c = [cdict[j] for j in d.ms.values]
+fig, ax = pplt.subplots()
+x = np.linspace(0, 1)
+y = 1 - x
+ax.plot(x, y)
+ax.scatter(d.o1, d.o2, color = c, s = 5)
+handles = [
+    plt.Line2D([], [],
+               color = c, marker = 'o',
+               linestyle = 'none',
+               label = round(float(k), 2)) for k, c in zip(mis, colors)
+
+]
+
+ax.legend(loc = 'r', ncol = 2,
+          handles = handles)
+# ax.format(xscale = "log",yscale = "log")
+fig.show()
+
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_275079/2322248253.py:23: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 454 :height 300
+[[file:./.ob-jupyter/fd5a7efe7ed81ba659f8d39d6a7ff336d18fad1b.png]]
+:END:
+
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+ax.hist(d.o3, density = 1)
+ax.set_title("Offset distribution")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_275079/864454909.py:4: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/1407d009cc5c0b211ff770594984980b64fcb57d.png]]
+:END:
+
+#+begin_src jupyter-python
+%matplotlib qt5
+fig, ax = pplt.subplots(subplot_kw=dict(projection = '3d'))
+ax.scatter(np.log(d.e1), np.log(d.e2), d.o3, color = c)
+fig.show()
+#+end_src
+
+#+RESULTS:
+: Warning: Ignoring XDG_SESSION_TYPE=wayland on Gnome. Use QT_QPA_PLATFORM=wayland to run on Wayland anyway.
+: /tmp/ipykernel_275079/1610618114.py:2: ProplotWarning: 'subplot_kw' is not necessary in proplot. Pass the parameters as keyword arguments instead.
+:   fig, ax = pplt.subplots(subplot_kw=dict(projection = '3d'))
+: /home/casper/miniconda3/lib/python3.9/site-packages/proplot/axes/base.py:718: MatplotlibDeprecationWarning: Axes3D(fig) adding itself to the figure is deprecated since 3.4. Pass the keyword argument auto_add_to_figure=False and use fig.add_axes(ax) to suppress this warning. The default value of auto_add_to_figure will change to False in mpl3.5 and True values will no longer work in 3.6.  This is consistent with other Axes classes.
+:   super().__init__(*args, **kwargs)
+: virtual void QEventDispatcherUNIX::registerSocketNotifier(QSocketNotifier*): Multiple socket notifiers for same socket 11 and type Read
+
+
+
+#+begin_src jupyter-python
+%matplotlib inline
+N = np.unique(d.deg).size
+deg = np.unique(d.deg)
+fig, ax = pplt.subplots(
+                        ncols = N , nrows = 1,
+                        sharey = "all", sharex = 'all')
+
+N = np.unique(d.ms).size
+colors = cmr.pride(np.linspace(0, 1, N, 0))
+
+cdict = {round(float(k),2): c for k, c in zip(half_imi, colors)}
+print(cdict.keys())
+print(ax, deg.size)
+for zdx, (idx, i) in enumerate(d.groupby("deg")):
+    c = [cdict[j] for j in i.ms.values]
+    # zdx = 0
+    ax[zdx].scatter(i.e1, i.e2, color = c,
+                    s = 5)
+    ax[zdx].set_xscale("log")
+    ax[zdx].set_yscale('log')
+    ax[zdx].set_title(idx)
+    ax[zdx].format(xlocator='log', xminorlocator='logminor')
+
+handles = [
+    plt.Line2D([], [],
+               color = c, marker = 'o',
+               linestyle = 'none',
+               label = round(float(k), 2)) for k, c in zip(mis, colors)
+
+]
+ax[0, -1].legend(loc = 'r', handles = handles)
+fig.savefig(f"./figures/exponent_plot_colored_{data['file']}.png")
+fig.show()
+print("done")
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: dict_keys([0.0, 0.06, 0.11, 0.17, 0.22, 0.28, 0.33, 0.39, 0.44, 0.5, 0.55, 0.61, 0.66, 0.72, 0.77, 0.83, 0.88, 0.94, 0.99])
+: SubplotGrid(nrows=1, ncols=4, length=4) 4
+: /tmp/ipykernel_275079/2514455890.py:33: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+: done
+#+attr_org: :width 1417 :height 318
+[[file:./.ob-jupyter/53b29f32016119dbd83b7920c904539fc9a3ca02.png]]
+:END:
+
+#+begin_src jupyter-python
+c = [cdict[j] for j in d.ms.values]
+fig, ax = plt.subplots()
+ax.scatter(d.e1, d.e2, color = c)
+ax.set_xscale("log")
+ax.set_yscale("log")
+handles = [
+    plt.Line2D([], [],
+               color = c, marker = 'o',
+               linestyle = 'none',
+               label = round(float(k), 2)) for k, c in zip(mis, colors)
+
+]
+
+ax.legend(handles = handles)
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+attr_org: :width 640 :height 480
+[[file:./.ob-jupyter/a28ff8db35022085a9db89890636f3cfff907b48.png]]
+:END:
+
+
+#+begin_src jupyter-python
+
+g = lambda x, a, b, c, d, e: a * np.exp(-b * x) + c * np.exp(- d * x) + e
+h = lambda x, a, b, c: a * np.exp(-b * x) + c
+
+e1 = 0.2
+e2 = 0.2
+
+x = np.linspace(0, 30, 100)
+
+fig, ax = plt.subplots()
+ax.plot(x, g(x, 0.5, e1, 0.5, e2, 0), label = "double",
+        zorder = 10)
+ax.plot(x, h(x, 1, e2, 0), label = "single")
+ax.legend()
+fig.show()
+
+#+end_src
+
+#+begin_src jupyter-python
+from utils import show_fit_mse
+show_fit_mse(data).show()
+#+end_src
+
+
+
+Recompute halftime
+#+begin_src jupyter-python
+from utils import do_halfimi, do_fit
+f = lambda x, a,b,c,d,e,f,g: a * np.exp(-b * x) + c * np.exp(- d * x) + e * np.exp(- f * x) + g
+
+f = lambda x, a, b, c, d, g: a * np.exp(-b * x) + c * np.exp(-d * x) + g
+# f = lambda x, a, b, c, d, e, f, g: a * np.exp(-b * (x - c)) + d * np.exp(-e * (x - f)) + g
+f = lambda x, a, b, c: a * np.exp(-b * x) + c
+
+half_imi = do_fit(data, f = f, redo = True)
+half_imi = do_halfimi(data, f = f, redo = True)
+#+end_src
+
+#+RESULTS:
+: 100% 19/19 [00:03<00:00,  4.90it/s]
+: 100% 19/19 [00:03<00:00,  5.29it/s]
+
+show halftime versus asymp
+#+begin_src jupyter-python
+%load_ext autoreload
+%autoreload 2
+%matplotlib inline
+from utils import ccolors, get_binds
+colors = ccolors(len(half_imi))
+binds = get_binds(data)
+fig, ax = pplt.subplots()
+for idx, (k, v) in enumerate(half_imi.items()):
+    imi, half, asymp = v["halfimi"]
+    # print(k, asymp[0], half[0])
+    ax.scatter(asymp, half, label = k, color = colors[idx])
+
+ax.set_xlabel("Asymp")
+ax.set_ylabel("Halftime")
+# ax.set_xscale("log")
+ax.set_yscale("log")
+# ax.set_ylim(0, 200)
+ax.legend(loc = 'r')
+fig.savefig(f"./figures/asymp_half_{data['file']}.png")
+half_imi.keys()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: The autoreload extension is already loaded. To reload it, use:
+:   %reload_ext autoreload
+: dict_keys(['0.0', '0.05526315789473685', '0.1105263157894737', '0.16578947368421054', '0.2210526315789474', '0.27631578947368424', '0.3315789473684211', '0.38684210526315793', '0.4421052631578948', '0.4973684210526316', '0.5526315789473685', '0.6078947368421053', '0.6631578947368422', '0.7184210526315791', '0.7736842105263159', '0.8289473684210527', '0.8842105263157896', '0.9394736842105265', '0.9947368421052633'])
+#+attr_org: :width 851 :height 300
+[[file:./.ob-jupyter/9871d3dc2fdd9994521b96ad1e4accb29e0081a1.png]]
+:END:
+
+
+#+begin_src jupyter-python
+colors = ccolors(len(half_imi))
+binds = get_binds(data)
+fig, ax = pplt.subplots()
+for idx, (k, v) in enumerate(half_imi.items()):
+    imi, half, asymp = v["halfimi"]
+    for deg, nodes in binds.items():
+        x = asymp[nodes].mean()
+        y = half[nodes].mean()
+        ax.scatter(x, y, color = colors[idx],
+                   marker = deg)
+
+
+ax.set_xlabel("Asymp")
+ax.set_ylabel("Halftime")
+# ax.set_xscale("log")
+ax.set_yscale("log")
+h = [
+    plt.Line2D([], [], color = c, label = l, linestyle = 'none', marker = 'o') for c, l in zip(colors, half_imi)
+]
+for deg in binds:
+    h.append(plt.Line2D([], [], label = deg, marker = deg, color = 'k', linestyle = 'none'))
+
+ax.legend(loc = 'r', handles = h, ncols = 2)
+fig.savefig(f"./figures/asymp_half_binds_{data['file']}.png")
+half_imi.keys()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: dict_keys(['0.0', '0.05526315789473685', '0.1105263157894737', '0.16578947368421054', '0.2210526315789474', '0.27631578947368424', '0.3315789473684211', '0.38684210526315793', '0.4421052631578948', '0.4973684210526316', '0.5526315789473685', '0.6078947368421053', '0.6631578947368422', '0.7184210526315791', '0.7736842105263159', '0.8289473684210527', '0.8842105263157896', '0.9394736842105265', '0.9947368421052633'])
+#+attr_org: :width 664 :height 300
+[[file:./.ob-jupyter/5f4043cc00b77d6d163419974bfbe1601449b715.png]]
+:END:
+
+Show tipping points interval
+#+begin_src jupyter-python
+tips = data["tips"]
+isi = []
+for k, v in tips.items():
+    [isi.append(vi) for vi in v]
+isi = np.array(isi)
+fig, ax = plt.subplots()
+ax.hist(isi, density = 1, bins = 100)
+ax.set_xlabel("Inter stimulus interval")
+ax.set_ylabel("PMF")
+fig.savefig(f"./figures/isi_{data['file']}.png")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+# [goto error]
+: ---------------------------------------------------------------------------
+: KeyError                                  Traceback (most recent call last)
+: Input In [52], in <module>
+: ----> 1 tips = data["tips"]
+:       2 isi = []
+:       3 for k, v in tips.items():
+:
+: KeyError: 'tips'
+:END:
+
+#+begin_src jupyter-python
+from utils import get_binds, fit_curve
+
+mis = data["new_mis"]
+print(mis.keys())
+t = 0.4833333333333333
+t = 0.01666666666666665
+# t = 0.1333333333333333
+# t = 0.6
+mi = mis[t]
+binds = get_binds(data)
+coeffs = half_imi[t]["coeffs"]
+fig, ax = plt.subplots()
+xr = np.arange(100)
+colors = len(binds)
+colors = np.linspace(0, 1, colors, 0)
+colors = cmr.pride(colors)
+for idx, (deg, nodes) in enumerate(binds.items()):
+    c = colors[idx]
+    for node in nodes:
+        y = f(xr, *coeffs[node])
+        ax.plot(mi[:, node], label = deg, color = c)
+        ax.plot(xr, y, linestyle = 'dashed', color = c)
+ax.set_title(t)
+ax.legend()
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: dict_keys([0.01666666666666665, 0.1333333333333333, 0.24999999999999997, 0.3666666666666666, 0.4833333333333333, 0.6])
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/b6f44de7a2759d6f0952e4ace0c5db6aa5fd5cc1.png]]
+:END:
+
+
+
+#+RESULTS:
+: 100% 6/6 [00:01<00:00,  4.82it/s]
+
+
+#+begin_src jupyter-python
+import proplot as pplt
+import matplotlib as mpl
+fig, ax = pplt.subplots()
+coeffs = half_imi[t]["coeffs"]
+halfimi = half_imi[t]["halfimi"]
+print(halfimi.shape)
+for deg, nodes in binds.items():
+    x, y = halfimi[:, nodes].mean(1)[[1, 2]]
+    ax.scatter(x, y, label = deg)
+ax.set_title(t)
+ax.legend(loc = 'r')
+ax.set_yscale("log")
+ax.set_xscale("log")
+# ax.set_xlabel("Exponent")
+# ax.set_ylabel("Asymptotic")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: (3, 20)
+#+attr_org: :width 469 :height 300
+[[file:./.ob-jupyter/a95cda00e8a5bf3d0bd8f5df3b32a539749b2394.png]]
+:END:
+
+* protect
+#+begin_src jupyter-python
+import proplot as pplt
+import scprep
+
+# fig, axs = pplt.subplots(ncols = len(mis))
+
+layout = [
+    [1,   2,  3,  4,  5,  6,  7, 8,],
+    [0,   0,   0,  9,  0,  0, 0, 0],
+    [16, 15, 14, 13, 12, 11, 10, 0]
+]
+
+layout = [
+    [1, 2, 3, 4],
+    [5, 6, 7, 8],
+    [0, 9, 9, 0],
+    [10, 11, 12, 13],
+    [14, 15, 16,0]
+]
+
+binds = {}
+m = models.Potts(**data["model_settings"])
+for k, v in m.graph.degree():
+    binds[v] = binds.get(v, []) + [m.adj.mapping[k]]
+fig = pplt.figure()
+axs = fig.subplots(layout)
+print(axs)
+for kdx, (k, v) in enumerate(half_imi.items()):
+    m = np.linspace(0, 1, len(mis), 0)
+    colors = scprep.plot.colors.tab40()(m)
+
+    # show_fit(mis[k], v["coeffs"])
+    k = float(k)
+    try:
+        ax = axs[kdx]
+    except Exception as e:
+        print(e, kdx, axs)
+        continue
+    if k <= 1:
+    # if 0.1 < k <= 0.7:
+        halfimi = v["halfimi"]
+        s = np.zeros(len(halfimi.T))
+        for deg, nodes in binds.items():
+            for node in nodes:
+                s[node] = deg
+        s = (s - s.min()) / (s.max() - s.min())
+        s = np.clip(s, .1, 1)
+        s *= 100
+        m, n = halfimi.min(1), halfimi.max(1)
+        m, n = m[:, None], n[:, None]
+
+        halfimi = (halfimi - m) / (n - m)
+        title = np.round(float(k), 2)
+        x, y = halfimi[ [0, 1] ]
+        # x, y = halfimi[ [2, 1] ]
+        ax.scatter(x, y,
+                   color = colors[kdx],
+                   label = title,
+                   markersize = s)
+        ax.set_title(title)
+        # ax.set_xlim(0, 1)
+        # ax.set_ylim(0, 1)
+        if kdx in [1, 5, 9, 10, 14]:
+            pass
+            # ax.set_ylabel(ylabel)
+
+# axs.format()
+m = models.Potts(**data["model_settings"])
+fig.format(figtitle = "Tipping behavior")
+
+xlabel = "Integrated mutual information ($\mu(s_i)$)"
+ylabel = "Half-time ($\lambda(s_i)$)"
+fig.supxlabel(xlabel, va = "top", y = 0.009)
+fig.supylabel(ylabel, ha = "right")
+
+fig.savefig(f"./figures/half_time_imi_{m.graph}.png", dpi = 300)
+# ax.set_xlim(0, 20)
+# ax.set_yscale("log")
+# ax.set_xscale("log")
+print("Done")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: SubplotGrid(nrows=5, ncols=4, length=16)
+# [goto error]
+: ---------------------------------------------------------------------------
+: NameError                                 Traceback (most recent call last)
+: Input In [6], in <module>
+:      26 print(axs)
+:      27 for kdx, (k, v) in enumerate(half_imi.items()):
+: ---> 28     m = np.linspace(0, 1, len(mis), 0)
+:      29     colors = scprep.plot.colors.tab40()(m)
+:      31     # show_fit(mis[k], v["coeffs"])
+:
+: NameError: name 'mis' is not defined
+#+attr_org: :width 1102 :height 1391
+[[file:./.ob-jupyter/00b194ef0bdcdd3213cc1ebcd55dcadeb5356e77.png]]
+:END:
+
+
+
+Plot cumulative imi
+
+#+begin_src jupyter-python
+from utils import show_cumulative_halfimi
+show_cumulative_halfimi(data).show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+attr_org: :width 935 :height 353
+[[file:./.ob-jupyter/c34344e9245bd22d7b833f6f056b5880e9230f6c.png]]
+:END:
+
+
+
+#+begin_src jupyter-python
+%matplotlib qt5
+fig, ax = pplt.subplots(subplot_kw = dict(projection = '3d'))
+print(tmp.head(1))
+tmp.sort_values(by = "ms")
+for idx, i in tmp.groupby("deg"):
+    ax.scatter(i.halftime, i.asymp, i.imi, label = idx)
+ax.legend(loc = 't', ncol = len(colors))
+xl, yl, zl = "halftime", "asymp", "imi"
+ax.set_xlabel(xl)
+ax.set_ylabel(yl)
+ax.set_zlabel(zl)
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+# [goto error]
+#+begin_example
+---------------------------------------------------------------------------
+NameError                                 Traceback (most recent call last)
+Input In [44], in <module>
+      1 get_ipython().run_line_magic('matplotlib', 'qt5')
+      2 fig, ax = pplt.subplots(subplot_kw = dict(projection = '3d'))
+----> 3 print(tmp.head(1))
+      4 tmp.sort_values(by = "ms")
+      5 for idx, i in tmp.groupby("deg"):
+
+NameError: name 'tmp' is not defined
+virtual void QEventDispatcherUNIX::registerSocketNotifier(QSocketNotifier*): Multiple socket notifiers for same socket 11 and type Read
+#+end_example
+:END:
+
+
+#
+# make imi plot as function of degree
+#+begin_src jupyter-python
+from utils import get_binds
+import scprep, proplot as pplt
+colors = np.linspace(0, 1, len(half_imi), 0)
+colors = scprep.plot.colors.tab40()(colors)
+# colors = cmr.pride(colors)
+
+binds = get_binds(data)
+fig, ax = pplt.subplots()
+for idx, (k, v) in enumerate(half_imi.items()):
+    halfimi = v["halfimi"]
+    for deg, nodes in binds.items():
+        y = halfimi[0, [nodes]].mean(1)
+        ax.scatter(deg, y,
+                   color = colors[idx])
+handles = [
+    plt.Line2D([], [], linestyle = 'none',
+               label = round(float(l),2), marker = 'o', color = c) for c, l in zip(colors, half_imi)
+]
+ax.legend(loc = 'r', ncol = 2,
+          handles = handles)
+ax.set_yscale("symlog")
+xl = "Degree (k)"
+yl = "IMI"
+ax.format(xlabel = xl,
+          ylabel = yl)
+fig.show()
+#+end_src
+
+#+RESULTS:
+: virtual void QEventDispatcherUNIX::registerSocketNotifier(QSocketNotifier*): Multiple socket notifiers for same socket 11 and type Read
+
+#+begin_src jupyter-python
+import scprep
+colors = np.linspace(0, 1, len(half_imi), 0)
+# colors = scprep.plot.colors.tab40()(colors)
+colors = cmr.pride(colors)
+
+fig, ax = pplt.subplots()
+for idx, (k, v) in enumerate(half_imi.items()):
+    halfimi = v["halfimi"]
+    x, y = halfimi[[1, 2]]
+    ax.scatter(x, y, color = colors[idx],
+               s = 5)
+
+    # for deg, nodes in binds.items():
+    #     y = halfimi[2, [nodes]].mean(1)
+    #     ax.scatter(deg, y,
+    #                color = colors[idx])
+
+handles = [
+    plt.Line2D([], [], linestyle = 'none',
+               label = round(float(l),2), marker = 'o', color = c) for c, l in zip(colors, half_imi)
+]
+
+ax.legend(loc = 'r', ncol = 2,
+          handles = handles)
+# ax.set_xscale("symlog")
+# ax.set_yscale("symlog")
+
+# xl = "Degree (k)"
+# yl = "IMI"
+# ax.format(xlabel = xl,
+#           ylabel = yl)
+
+fig.show()
+#+end_src
+
+#+RESULTS:
+: virtual void QEventDispatcherUNIX::registerSocketNotifier(QSocketNotifier*): Multiple socket notifiers for same socket 11 and type Read
+
+* Test waiting for tipping
+#+begin_src jupyter-python
+from imi.signal import wait_tipping
+from plexsim.utils.graph import recursive_tree
+g = recursive_tree(6, jump = 3)
+nx.draw(g)
+m = models.Potts(g)
+m = models.Potts(**data["model_settings"])
+print(m.t)
+# m.t = 3.0
+# print(m.sampleSize)
+# m.sampleSize = m.nNodes
+# m.t = 1
+bins = np.linspace(0, 1.05, 20)
+n_window = 1000
+n_tipping = 10_000
+snapshots, samples_needed = wait_tipping(m,
+                                         bins,
+                                         n_window,
+                                         n_tipping,
+                                         allowance = 1)
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: 2.9080031249999996
+: Looking for tipping with threshold=0.5 and allowance=0.03125
+: Found 6959
+# [goto error]
+#+begin_example
+---------------------------------------------------------------------------
+KeyboardInterrupt                         Traceback (most recent call last)
+Input In [35], in <module>
+     13 n_window = 1000
+     14 n_tipping = 10_000
+---> 15 snapshots, samples_needed = wait_tipping(m,
+     16                                          bins,
+     17                                          n_window,
+     18                                          n_tipping,
+     19                                          allowance = 1)
+
+File ~/miniconda3/lib/python3.9/site-packages/imi-2.0-py3.9-linux-x86_64.egg/imi/signal.pyx:159, in imi.signal.wait_tipping()
+
+File ~/miniconda3/lib/python3.9/site-packages/imi-2.0-py3.9-linux-x86_64.egg/imi/signal.pyx:188, in imi.signal.wait_tipping()
+
+KeyboardInterrupt:
+#+end_example
+[[file:./.ob-jupyter/73928810bf5c67ea348cd13b07e0d8e9ad7cfb3a.png]]
+:END:
+
+
+#+begin_src jupyter-python
+print(len(snapshots))
+%matplotlib inline
+fig, ax = plt.subplots()
+counts = np.zeros(bins.size)
+for k, v in snapshots.items():
+    idx = np.digitize(np.mean(k), bins)
+    counts[idx] += v
+counts /= counts.sum()
+ax.bar(bins, counts, width = np.diff(bins)[0] * .8)
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: 1690
+[[file:./.ob-jupyter/4abbdbb614bfa945059796a2eb02f4122de1d247.png]]
+:END:
+
+#+begin_src jupyter-python
+#+end_src
+
+#+RESULTS:
+: 100
+
+
+#+begin_src jupyter-python
+from fa2 import ForceAtlas2
+import networkx as nx
+from plexsim.utils.graph import make_connected
+from utils import plot_degree
+import matplotlib.pyplot as plt
+#+end_src
+
+#+begin_src jupyter-python
+%load_ext autoreload
+%autoreload 2
+from plexsim.utils.graph import make_hyperbolic
+g = make_hyperbolic(30, k = 3, gamma = 2.3)
+from utils import kshell_layout
+pos = kshell_layout(gi, rotate = 0)
+pos = ForceAtlas2(verbose = 0).forceatlas2_networkx_layout(g, pos = pos, iterations = 200)
+pos = ForceAtlas2(verbose = 0).forceatlas2_networkx_layout(g, iterations = 200)
+# pos = nx.circular_layout(g)
+s = list(dict(g.degree()).values())
+sfig1 = plot_degree(g, density = 1)
+sfig2 = sfig2, ax = plt.subplots()
+
+nx.draw_networkx_nodes(g, pos, ax = ax,
+                       node_size = s)
+nx.draw_networkx_edges(g, pos, ax = ax)
+# nx.draw_networkx_labels(g, pos, ax = ax, labels = {node: node for node in g.nodes()} )
+# nx.draw(gi, pos = pos, ax = ax,
+        # edge_color = "lightgray",
+        # node_size = 10)
+
+fig = plt.figure()
+gs1 = sfig1.axes[0].get_subplotspec()
+gs2 = sfig2.axes[0].get_subplotspec()
+print(gs1.get_gridspec(), gs2)
+
+fig.add_subfigure(gs1)
+fig.add_subfigure(gs2)
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: The autoreload extension is already loaded. To reload it, use:
+:   %reload_ext autoreload
+: GridSpec(1, 1) GridSpec(1, 1)[0:1, 0:1]
+: /tmp/ipykernel_654000/2008474412.py:29: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/fda50d9f321209bfce85ad267e9b84820995b3fb.png]]
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/80b98ea381b24b7401a40bec8ed17595c5a9b16f.png]]
+: <Figure size 400x400 with 0 Axes>
+:END:
+
+
+#+begin_src jupyter-python
+
+g.degree()
+print(list(g.neighbors(22)))
+#+end_src
+
+#+RESULTS:
+: [1, 3, 5, 7, 9, 10, 18, 19, 20, 21, 24, 25, 26, 27, 28, 29, 23]
+
+#+begin_src jupyter-python
+import numpy as np
+from plexsim import models
+from plexsim.utils.graph import recursive_tree
+g = recursive_tree(4)
+t = np.linspace(0, 20, 10)
+mag, sus = m.magnetize(t, n = 1e4)
+fig, ax = plt.subplots()
+ax.plot(t, mag)
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+begin_src jupyter-python
+def sig(x, a, b, c, d):
+    return a / (1 + b * np.exp(c * (x - d)))
+
+def find_min(x, y, theta):
+    from scipy import optimize, interpolate
+    bounds = ((x.min(), x.max()),)
+    g = interpolate.interp1d(x, y)
+    f = lambda x, theta: np.abs(g(x) - theta)
+    theta = x.max() * theta
+    res = optimize.minimize(f, x.min(), args = (theta,),
+                            bounds = bounds)
+    return res.x
+
+def match_temp(model, theta,
+               temps = np.linspace(0, 20, 10),
+               n_magnetize = 10000,
+               ,**kwargs):
+    from scipy import optimize
+    mag, sus = model.magnetize(temps, n=n_magnetize)
+
+    # paper 1 approach
+    # fit phase transition
+    opts, cov = optimize.curve_fit(
+        sig, xdata=temps, ydata=mag, **kwargs)
+    res = optimize.minimize(
+        lambda x: abs(sig(x, *opts) - theta),
+        x0=0,
+        method="COBYLA",
+        bounds = ((0, np.inf),)
+    )
+
+    t = res.x
+
+    # tipping point approach
+    # force ordering to prevent noise
+    # mag = np.sort(mag)[::-1]
+    # t = find_min(temps, mag, theta)
+
+    # setup model
+    print(f"setting temperature to {t}")
+    model.t = t
+    return opts, cov, temps, mag
+g = nx.erdos_renyi_graph(20, 1/2)
+# g = recursive_tree(5)
+m = models.Potts(g, sampleSize = 1)
+temps = np.linspace(0, 10, 30)
+
+theta = 0.8
+
+opts, cov, temps, mag = match_temp(m, theta, temps = temps,
+                                   maxfev = int(1e3))
+print(m.t)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Spawning threads
+Magnetizing temperatures
+/tmp/ipykernel_654000/2244664197.py:19: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  mag, sus = model.magnetize(temps, n=n_magnetize)
+0% [##############################] 100% | ETA: 00:00:00setting temperature to 6.6550734375000005
+6.6550734375000005
+
+Total time elapsed: 00:00:09
+Total time elapsed: 00:00:09
+
+Total time elapsed: 00:00:09
+
+Total time elapsed: 00:00:09
+
+Total time elapsed: 00:00:09
+
+
+Total time elapsed: 00:00:09
+
+Total time elapsed: 00:00:09
+Total time elapsed: 00:00:09
+
+/home/casper/.local/lib/python3.9/site-packages/scipy/optimize/_minimize.py:541: RuntimeWarning: Method COBYLA cannot handle bounds.
+  warn('Method %s cannot handle bounds.' % method,
+#+end_example
+
+#+begin_src jupyter-python
+x = np.linspace(-2, 10, 100)
+y = sig(temps, *opts)
+yy = np.interp(x, temps, mag)
+fig, ax = plt.subplots()
+ax.scatter(temps, mag)
+ax.axvline(m.t)
+ax.plot(x, yy)
+ax.plot(temps, y)
+fig.show()
+print(m.t, K)
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: 6.6550734375000005 [3.37192816]
+: /tmp/ipykernel_654000/929117203.py:9: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/85cc7f20123bcf27a44decee20e5d7de5914d022.png]]
+:END:
+
+
+#+begin_src jupyter-python
+m.sampleSize = 1 #m.nNodes
+s = m.simulate(100000).mean(1)
+fig, ax = plt.subplots()
+ax.plot(s)
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_654000/2462999679.py:5: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/da2e5f8836bc1f1a7d0202637ec22a6658d02dc9.png]]
+:END:
+
+
+* Look at time plots
+#+begin_src jupyter-python
+from plexsim.utils.graph import make_hyperbolic
+g = make_hyperbolic(30, k = 2, gamma = 3.3)
+m = models.Potts(**data["model_settings"])
+m = models.Potts(g, t = 0.8)
+print(m.graph)
+# m.sampleSize = m.nNodes
+m.sampleSize = 1
+# m.t = .4
+temps = np.linspace(0, 5, 50)
+mag, sus = m.magnetize(temps, n = 2e4)
+# m.states = 1
+# d = m.simulate(100000).mean(1)
+#+end_src
+
+#+RESULTS:
+: Graph with 30 nodes and 33 edges
+: Spawning threads
+: Magnetizing temperatures
+: 0% [##############################] 100% | ETA: 00:00:00
+: Total time elapsed: 00:00:43
+:
+: Total time elapsed: 00:00:43
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+ax.scatter(temps, mag)
+tax = ax.twinx()
+tax.scatter(temps, sus, color = 'k')
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/9d6c129b8cbbd98fa64333d8014fbe3071b66d76.png]]
+:END:
+
+
+#+begin_src jupyter-python
+import proplot as pplt
+print(m.graph, 1/m.nNodes)
+fig, ax = pplt.subplots()
+ax.plot(d, marker = 'o')
+ax.axhline(0.5 + 1/m.nNodes, color = 'k')
+ax.axhline(0.5 - 1/m.nNodes, color = 'k')
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: Graph with 20 nodes and 20 edges 0.05
+#+attr_org: :width 290 :height 283
+[[file:./.ob-jupyter/091b45367fbded81a054f3246cc7cd7eef51791f.png]]
+:END:
+
+#+begin_src jupyter-python
+t = np.linspace(0, 5)
+mags = {}
+for i in range(3, 7):
+    n = 10**i
+    mag, sus = m.magnetize(t, n=n)
+    mags[n] = mag
+print("done")
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Spawning threads
+Magnetizing temperatures
+0% [##############################] 100% | ETA: 00:00:00
+0% [##############################] 100% | ETA: 00:00:00Spawning threads
+Magnetizing temperatures
+
+
+Total time elapsed: 00:00:01
+0% [##############################] 100% | ETA: 00:00:00Spawning threads
+Magnetizing temperatures
+
+Total time elapsed: 00:00:09
+0% [##############################] 100% | ETA: 00:00:00Spawning threads
+Magnetizing temperatures
+
+Total time elapsed: 00:01:28
+0% [##############################] 100% | ETA: 00:00:00done
+
+Total time elapsed: 00:14:53
+#+end_example
+
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+for idx, mag in mags.items():
+    ax.scatter(t, mag, label = idx)
+ax.legend()
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/d2a2132edcab8bc056170b57d0a008e8cd9c866f.png]]
+:END:
+
+
+#+begin_src jupyter-python
+import proplot as pplt
+states = np.asarray([i for i in data["df"].bin])
+fig, ax = pplt.subplots()
+ax.hist(states, density = 1, bins = 12)
+ax.set_xlabel("System magnetization ($M(S)$)")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+attr_org: :width 288 :height 304
+[[file:./.ob-jupyter/8cec11072797a8d05ea3c9c9e57d0105a6629b20.png]]
+:END:
+
+#+begin_src jupyter-python
+print(data['df'].shape)
+print(1/data['model_settings']['beta'])
+#+end_src
+
+#+RESULTS:
+: (1968, 4)
+: 1.35518046875
+* Louvain
+#+name: louvain clustering
+#+begin_src jupyter-python
+from community import community_louvain
+louvain = community_louvain.best_partition(g)
+
+clab = list(louvain.values())
+color = np.linspace(0, 1, len(set(clab)), 1)
+color = cmr.pride(color)
+
+deg = dict(g.degree())
+
+clab = list(deg.values())
+color = np.linspace(0, 1, len(set(clab)), 1)
+color = cmr.pride(color)
+
+clabs = {c: idx for idx, c in enumerate(set(clab))}
+print(len(set(clab)))
+print(color.shape)
+
+fig, ax = plt.subplots()
+nx.draw(g, node_color = [color[clabs[c]] for c in clab])
+fig.show()
+#+end_src
+
+* Tipping
+#+begin_src jupyter-python
+tips = data["tips"]
+
+fig, ax = plt.subplots()
+for k, v in tips.items():
+    print(v)
+    ax.hist(np.diff(v))
+
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+attr_org: :width 400 :height 400
+[[file:./.ob-jupyter/591442a2a28d66c506ab56f1d1789d99690a3b93.png]]
+:END:
+* tmp
+#+begin_src jupyter-python
+import matplotlib.pyplot as plt, cmasher as cmr, pandas as pd
+import numpy as np, os, sys, networkx as nx, warnings
+from plexsim import models
+from imi import infcy
+warnings.simplefilter("ignore"); plt.style.use("fivethirtyeight spooky".split())
+from plexsim.models.potts import match_temp
+
+from plexsim.utils.graph import *
+g = make_hyperbolic(10, 3, 2.3)
+m = models.Potts(g)
+theta = 0.8
+temps = np.linspace(0, 10, 100)
+n_magnetize = 1e4
+opts, cov, temps, mag, sus = match_temp(
+    m, theta, temps, n_magnetize=n_magnetize, maxfev=int(1e4)
+)
+#+end_src
+
+#+RESULTS:
+: Spawning threads
+: Magnetizing temperatures
+: 0% [##############################] 100% | ETA: 00:00:00setting temperature to [0.63759531]
+:
+: Total time elapsed: 00:00:21
+: Total time elapsed: 00:00:21
+:
+
+#+begin_src jupyter-python
+from imi.signal import wait_tipping
+
+help(wait_tipping, )
+bins = np.linspace(0.05, 1.05, 10)
+n_tipping = 10000
+snaps, tips = wait_tipping(m, bins = bins, n_tipping = n_tipping, n_equilibrate = 1e5)
+#+end_src
+
+#+RESULTS:
+: Help on cython_function_or_method in module imi.signal:
+:
+: wait_tipping(m, bins, n_window=500, n_tipping=100, allowance=1.0, n_equilibrate=1000000)
+:
+: Looking for tipping with threshold=0.5 and allowance=0.1
+: Equilibrating models
+: Starting to find tipping points
+
+#+begin_src jupyter-python
+vals = np.zeros(bins.size)
+vals = np.zeros(len(snaps))
+for idx,(k, v) in enumerate(snaps.items()):
+    idx = np.digitize(np.mean(k), bins)
+    vals[idx] = np.mean(k)
+fig, ax = plt.subplots()
+ax.scatter(vals, snaps.values())
+ax.set_yscale("log")
+fig.show()
+#+end_src
+
+#+RESULTS:
+[[file:./.ob-jupyter/ef2f5d22de6fd4b7923e8d7fb9a55191dfb66ad9.png]]
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+ax.plot(snaps.values())
+fig.show()
+
+#+end_src
+
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+ax.plot(m.simulate(100000).mean(1), marker = 'o')
+ax.axhline(0.5)
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+[[file:./.ob-jupyter/0053463f2ed56d666628e634d96c87103ef78b9a.png]]
