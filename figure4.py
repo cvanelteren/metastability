@@ -1,3 +1,5 @@
+#import matplotlib as mpl
+#mpl.use("TkAgg")  # or whatever other backend that you want
 import proplot as plt, cmasher as cmr, pandas as pd, numpy as np, os, sys, networkx as nx, warnings
 from plexsim import models
 from imi import infcy
@@ -74,12 +76,12 @@ def system_trajectory(df, ax, seed=1234):
         ylabel="Fraction of nodes +1",
         # ylim = (-0.05, 1.05)
     )
-    ax.figure.legend(
-        loc="r",
-        handles=h,
-        ncols=1,
-        title="Pinning\nintervention\non",
-    )
+    # ax.figure.legend(
+    #     loc="r",
+    #     handles=h,
+    #     ncols=1,
+    #     title="Pinning\nintervention\non",
+    # )
 
     yl = []
     for s in starts:
@@ -104,58 +106,74 @@ def estimate_white_noise(row, tipping=0.5):
 
     macrostate = row.system
     output = {}
+    # print(row.label, np.where(macrostate > tipping)[0].size / macrostate.size)
     for idx, op in enumerate((np.greater, np.less)):
         where = np.where(op(macrostate, tipping))[0]
 
         other_name = op.__name__ + "_n"
         name = op.__name__ + "_w"
+        num_tips = op.__name__ + "_t"
 
-        output[other_name] = len(where)
+        output[other_name] = where.size / macrostate.size
+        # output[other_name] = (macrostate.size - len(where)) / (macrostate.size)
         # output[op.__name__ + "_w"] = (tmp**2).sum()
 
-        tmp = macrostate[where]
-        if op == np.greater:
-            tmp -= 0.5
         output[name] = 0
-        output[other_name] = 0
+        # output[other_name] = 0
         windows = make_windows(where)
+        output[num_tips] = len(windows)
         for window in windows:
-            try:
-                d = tmp[where[window]]
-                if tmp.size <= 1:
-                    continue
-
-                # d = sem(d, nan_policy="omit")
-                d = np.nanmean((d - np.nanmean(d)) ** 2) / len(windows)
-                # d = (d**2).sum() / len(windows)
-                output[name] += d
-                output[other_name] += len(window) / len(windows)
-            except:
-                continue
+            d = macrostate[where[window]]
+            # d = sem(d, nan_policy="omit")
+            a = 1
+            if op == np.greater:
+                d -= 0.5
+            if row.label != "control" and op == np.greater:
+                a = 4 / 5
+            # p = {}
+            # for di in d:
+            # p[di] = p.get(di, 0) + 1 / len(window)
+            # l = 0
+            # for k, v in p.items():
+            # l += k**2 * v
+            d = np.var(d)
+            # d = a**2 * np.mean(d**2)  # / len(windows)
+            # d = np.var(d)
+            # d = np.nanmean((d - np.nanmean(d)) ** 2)  # / len(window)
+            # d = a**2 * l
+            # d = a**2 * (d**2).sum() / len(window)
+            output[name] += d  # / macrostate.size
+            # output[other_name] += len(window) / len(windows)
     output["label"] = row.label
     output["seed"] = row.seed
     return output
 
 
-def show_wn(df, X, Y, ax):
+def show_wn(df, X, Y, ax, Z=None, marker="o"):
     from utils import ccolors
     from scipy.stats import sem
 
     c = ccolors(df.label.unique().size - 1)
-    print(df.columns, df.shape)
+    N = 2
     for intervention, dfi in df.groupby("label"):
         x = dfi[X]
         y = dfi[Y]
 
+        s = 10  # size of the nodes
+        if Z is not None:
+            s = 100 * np.nanmean(dfi[Z])
+            print(X, intervention, s)
+
         mux = np.nanmean(x)
         muy = np.nanmean(y)
 
-        sx = sem(x, nan_policy="omit") * 2
-        sy = sem(y, nan_policy="omit") * 2
+        sx = sem(x, nan_policy="omit") * N
+        sy = sem(y, nan_policy="omit") * N
 
-        # sx = x.std()
-        # sy = y.std()
-        print(f"{intervention=}\n\t{mux=}\t{muy=}\t{sx=}\t{sy=}")
+        sx = x.std(ddof=0) * N
+        sy = y.std(ddof=0) * N
+
+        # print(f"{intervention=}\n\t{mux=}\t{muy=}\t{sx=}\t{sy=}")
         if intervention != "control":
             color = c[intervention]
         else:
@@ -176,40 +194,152 @@ def show_wn(df, X, Y, ax):
                 alpha=alpha,
             )
 
+        yerr = np.array((y.min(), y.min()))[:, None]
+        # ax.scatter(mux, muy)
+
         ax.errorbar(
             mux,
             muy,
             xerr=sx,
             yerr=sy,
+            # yerr=yerr,
             color=color,
-            marker="o",
+            markersize=0,
+            marker=marker if intervention != "control" else "",
         )
+
+        # ax.scatter(
+        #     mux,
+        #     muy,
+        #     s=s,
+        #     color=color,
+        #     marker=marker if intervention != "control" else "",
+        # )
 
 
 fp = "kite_isi_beta=0.5732374683235916.pkl"
 # fp = "kite_intervention_beta=0.5732374683235916.pkl"
 df = pd.read_pickle(fp)
-
+print(df.seed.unique())
+print("Loaded data")
 tmp = df.apply(estimate_white_noise, axis=1)
 errors = []
 for idx, row in tmp.reset_index().iterrows():
     errors.append(row.iloc[1])
 errors = pd.DataFrame(errors)
 
+print(errors.columns)
 # plt.config.use_style("seaborn-poster")
 # tmp = df.groupby("label").apply(get_var)
+# mu = errors[errors.label == "control"]["less_n greater_n".split()].mean()
+# errors[errors.label == "control"]["less_n"] = mu
+# errors[errors.label == "control"]["greater_n"] = mu
+
+# mu = errors[errors.label == "control"]["less_w greater_w".split()]
+
+idx = np.where(errors.label == "control")[0]
+jdx = np.where(errors.columns == "less_w")[0]
+kdx = np.where(errors.columns == "greater_w")[0]
+errors.iloc[idx, jdx] = (errors.iloc[idx, jdx] + errors.iloc[idx, kdx]) / 2
+idx = np.where(errors.label == "control")[0]
+jdx = np.where(errors.columns == "less_n")[0]
+kdx = np.where(errors.columns == "greater_n")[0]
+errors.iloc[idx, jdx] = (errors.iloc[idx, jdx] + errors.iloc[idx, kdx]) / 2
+
+# errors[errors.label == "control"]["greater_w"] = mu
+
+errors["greater_t"] /= errors["greater_t"].max()
+errors["less_t"] /= errors["less_t"].max()
+
+print("making figure")
 fig, ax = plt.subplots(ncols=3, share=0)
-show_wn(errors, "less_n", "less_w", ax[0])
-show_wn(errors, "greater_n", "greater_w", ax[1])
-system_trajectory(df, ax[2])
+show_wn(
+    errors,
+    "less_n",
+    "less_w",
+    ax[2],
+    Z="less_t",
+)
+show_wn(
+    errors,
+    "greater_n",
+    "greater_w",
+    ax[2],
+    Z="greater_t",
+    marker="s",
+)
+system_trajectory(df, ax[1])
+g = nx.krackhardt_kite_graph()
+from fa2 import ForceAtlas2 as fa2
+
+pos = nx.kamada_kawai_layout(g)
+from utils import ccolors
+
+c = ccolors(len(g))
+nx.draw(g, pos=pos, ax=ax[0], node_color=c)
 
 
-ax.format(abc=True)
-ax[0].format(title="Fraction of nodes < 0.5")
-ax[1].format(title="Fraction of nodes > 0.5")
-ax[:2].format(
-    xlabel="Average time spent",
-    ylabel="White noise",
+fig.suptitle("Effect of pinning intervention to state +0")
+ax[1].set_title("System trajectory under intervention")
+ax[2].set_title("")
+
+# ax[1].format(title="Fraction of nodes < 0.5")
+# ax[2].format(title="Fraction of nodes > 0.5")
+ax[2].format(
+    xlabel="Fraction time spent <S> < 0.5",
+    ylabel=r"Variance ($\frac{1}{N} \sum_i (s_{w_i} - \overline{s_{w_i}})$)",
 )
 
-fig.savefig("test")
+from matplotlib.pyplot import Line2D
+
+handles = [
+    Line2D(
+        [],
+        [],
+        color="k",
+        marker="o",
+        label="<S> < 0.5",
+        linestyle="none",
+    ),
+    Line2D(
+        [],
+        [],
+        color="k",
+        marker="s",
+        label="<S> > 0.5",
+        linestyle="none",
+    ),
+]
+
+ax[2].legend(
+    handles=handles,
+    loc="ul",
+    # pad=0,
+    # space=0,
+    ncols=1,
+    fontsize=6,
+)
+ax[2].set_title("Asymmetry in system fluctuations")
+
+labels = np.array(df.label.unique())
+h = []
+for l in labels:
+    if l == "control":
+        C = "tab:blue"
+    else:
+        C = c[l]
+    h.append(
+        Line2D(
+            [],
+            [],
+            linestyle="none",
+            marker="o",
+            label=str(l).capitalize(),
+            color=C,
+        )
+    )
+
+fig.legend(h, loc="r", title="Pinning\nintervention\non", ncols=1)
+
+ax.format(abc=True)
+fig.savefig("./figures/figure4")

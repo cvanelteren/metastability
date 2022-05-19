@@ -1,5 +1,7 @@
 #+begin_src jupyter-python
-#+begin_src jupyter-python
+,#+begin_src jupyter-python
+import warnings
+warnings.filterwarnings('ignore')
 import proplot as plt, cmasher as cmr, pandas as pd,\
     numpy as np, os, sys, networkx as nx, warnings
 from plexsim import models
@@ -14,9 +16,13 @@ fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=200.pkl"
 # fp = "exact_kite_dyn=bornholdt_beta=0.23708107265108683_T=200.pkl"
 fp = "exact_kite_dyn=sis_beta=9.122104355448496_T=200.pkl"
 fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=200.pkl"
-# fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=1000.pkl"
-# fp = "exact_small_tree_dyn=ising_beta=0.9001444450539172_T=200.pkl"
-
+fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=30000.pkl"
+fp = "exact_kite_dyn=ising_beta=0.6989738190618898_T=310_g.is_directed()=False.pkl"
+# fp ="exact_kite_dyn=ising_beta=1.2264906652562024_T=300_g.is_directed()=True.pkl"
+fp='exact_kite_dyn=ising_beta=0.2626984964205277_T=310_g.is_directed()=False.pkl'
+fp='exact_kite_dyn=ising_beta=0.6989738190618898_T=310_g.is_directed()=False.pkl'
+fp='exact_kite_dyn=ising_beta=0.5732374683235916_T=310_g.is_directed()=False.pkl'
+fp='exact_kite_dyn=ising_beta=0.8333333333333334_T=310_g.is_directed()=False.pkl'
 n_samples = int(re.findall("T=\d+", fp)[0].split("=")[1])
 
 
@@ -32,6 +38,23 @@ ndf = fit_curve(df, f, offset = True)
 
 #+RESULTS:
 : 1.05
+
+
+#+begin_src jupyter-python
+g = ndf.attrs["settings"].g
+fig, ax = plt.subplots()
+nx.draw(g, pos = nx.kamada_kawai_layout(g), ax = ax)
+ax.axis("equal")
+ax.format()
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+attr_org: :width 262 :height 411
+[[file:./.ob-jupyter/ec69192c83f389a87e63f6d33a9f3ef3c3c6e5c3.png]]
+:END:
 
 #+begin_src jupyter-python
 import proplot as plt, cmasher as cmr, pandas as pd,\
@@ -52,7 +75,8 @@ imi = imi[:-1]
 # imi = (imi - imi.min(1)[:, None]) / (imi.max(1)[:, None] - imi.min(1)[:, None])
 g = df.attrs["settings"].g
 
-targets = [0.1, 0.2, 0.3, 0.4, 0.5]
+targets = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
+# targets =  [ 0.0125,  0.1375,  0.2625,  0.3875,  0.5125, 0.6375 ]
 pos = nx.kamada_kawai_layout(g)
 
 n = len(targets)
@@ -91,7 +115,8 @@ for ax, axj, axk,  t in zip(axs[0,:], axs[1,:], axs[2,:], targets):
     axj.axis("off")
     axj.axis("equal")
 
-    idx = np.where(mag.round(1) == t)[0][0]
+    print(t, np.where(mag == t), mag == t, mag)
+    idx = np.where(mag.round(2) == round(t, 2))[0][0]
     f = mag[idx]
     tit = f# - np.nansum((f * np.log2(f), (1 - f) * np.log2( 1 - f)))
     tits.append(tit)
@@ -100,7 +125,7 @@ for ax, axj, axk,  t in zip(axs[0,:], axs[1,:], axs[2,:], targets):
                  # fontsize = 8,
                  # )
 
-    for node, (ci, x, si) in enumerate(zip(c, pos.values(), s)):
+    for node, (ci, x) in enumerate(zip(c, pos.values())):
         s = imi[idx]
         s /= s.max()
         ax.scatter(*x, s = s[node]*600, color = ci)
@@ -108,7 +133,6 @@ for ax, axj, axk,  t in zip(axs[0,:], axs[1,:], axs[2,:], targets):
         s = asy[idx]
         s /= s.max()
         axj.scatter(*x, s = s[node]*600, color = ci)
-
 
         # axk.scatter(asy[idx], imi[idx], color = c)
         axk.plot(mi[idx, :, node], color = ci)
@@ -120,6 +144,7 @@ for ax, axj, axk,  t in zip(axs[0,:], axs[1,:], axs[2,:], targets):
 # axs.axis('off')
 axs[2, :].set_xlabel("Time(t)")
 axs[2, :].format(xlim = (0, 100))
+# axs[2, :].format(yscale = "log", xscale = "log")
 axk.set_ylabel("$I(s_i : S'^t)$")
 
 # axs[2,:].set_xlabel("Asymptotic information")
@@ -152,10 +177,21 @@ fig.savefig("./figures/figure2.pdf")
 #+RESULTS:
 :RESULTS:
 : Index(['mi', 'h', 'hc', 'mag', 'p0', 'coeffs', 'half', 'asymp', 'imi', 'rmse'], dtype='object')
-#+attr_org: :width 1747 :height 1466
-[[file:./.ob-jupyter/73dc3707911fe9eec95702995d05bf80a5b6cf4e.png]]
+: 0.1 (array([], dtype=int64),) [False False False False False False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.2 (array([2]),) [False False  True False False False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.3 (array([], dtype=int64),) [False False False False False False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.4 (array([4]),) [False False False False  True False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.5 (array([5]),) [False False False False False  True False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.6 (array([6]),) [False False False False False False  True False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.7 (array([7]),) [False False False False False False False  True False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+#+attr_org: :width 2121 :height 1400
+[[file:./.ob-jupyter/a6b9bfc62581e7bb3bd63bfe25083ea544e95596.png]]
 :END:
 
+
+kalsdfjsl
+#+RESULTS:
+:RESULTS:
 #+begin_src jupyter-python
 fig, ax = pplt.subplots(ncols = 3)
 for axi in ax:
@@ -163,18 +199,28 @@ for axi in ax:
     axi.axis('equal')
     axi.axis('off')
 fig.show()
-
 #+end_src
 
-#+RESULTS:
-:RESULTS:
-: /tmp/ipykernel_224402/473138156.py:6: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
-:   fig.show()
-#+attr_org: :width 400 :height 400
-[[file:./.ob-jupyter/c190332e053880faab2204f03654560891d1e76d.png]]
-:END:
 
 
+#+begin_src jupyter-python
+dfi = df[df.mag.round(1) == -1]
+mi = np.stack(dfi.mi).squeeze()
+fig, ax = plt.subplots()
+for mii, ci in zip(mi.T, c):
+    ax.plot(mii + 1e-3 * np.random.randn(len(mii)), color = ci)
+# ax.set_yscale("log")
+# ax.set_xscale("log")
+fig.savefig("test")
+fig.show()
+#+end_src
+
+
+
+
+
+
+[adklfajlkfjj]
 for appendix
 #+begin_src jupyter-python
 import proplot as plt, cmasher as cmr, pandas as pd,\
@@ -291,3 +337,20 @@ for idx, axi in enumerate(axs[1, :]):
 #+attr_org: :width 400 :height 400
 [[file:./.ob-jupyter/0f45df024ba68dd1040f6b202c3521e679fbc5f1.png]]
 :END:
+
+
+#+begin_src jupyter-python
+nx.adjacency_matrix(g).todense()
+#+end_src
+
+#+RESULTS:
+: matrix([[0, 1, 1, 1, 0, 1, 0, 0, 0, 0],
+:         [1, 0, 0, 1, 1, 0, 1, 0, 0, 0],
+:         [1, 0, 0, 1, 0, 1, 0, 0, 0, 0],
+:         [1, 1, 1, 0, 1, 1, 1, 0, 0, 0],
+:         [0, 1, 0, 1, 0, 0, 1, 0, 0, 0],
+:         [1, 0, 1, 1, 0, 0, 1, 1, 0, 0],
+:         [0, 1, 0, 1, 1, 1, 0, 1, 0, 0],
+:         [0, 0, 0, 0, 0, 1, 1, 0, 1, 0],
+:         [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+:         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])

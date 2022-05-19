@@ -48,7 +48,7 @@ def gen_states(n) -> tuple:
     return states, allowed
 
 
-def get_transfer(n, E, beta, allowed) -> tuple:
+def get_transfer(n, E, beta, allowed, states, node, eta) -> tuple:
     """
     Construct transfer matrix based on energy and temperature
     """
@@ -58,20 +58,44 @@ def get_transfer(n, E, beta, allowed) -> tuple:
     # sanity checks
     assert len(allowed) == 2**n
     pairs = []
-    for state, trans in tqdm(allowed.items()):
+    for state, trans in allowed.items():
         e1 = E[state]
         p0[state] = np.exp(-beta * e1.sum())
 
         # sanity checks
-        assert p0[state] >= 0
+        assert np.isnan(p0[state]) == False, (p0[state], np.exp(-beta * e1.sum()))
+        assert p0[state] >= 0, f"{p0[state]} {e1.sum()} {e1}"
         for other in trans:
-            e2 = E[other]
-            # kdx = ntrans[(state, other)]
-            #
-            delta = e2.sum() - e1.sum()
+            cidx = np.where(states[state] - states[other] != 0)[0]
+            assert len(cidx) == 1
+
+            e1 = E[state, cidx]
+            e2 = E[other, cidx]
+
+            # if abs(eta) > 0 and node == cidx:
+            #     if states[state, cidx] == 0:
+            #         e1 = -np.inf
+            #         if states[other, cidx] == 1:
+            #             e2 = np.inf
+            #         else:
+            #             e2 = e1
+            #     elif states[state, cidx] == 1:
+            #         e1 = np.inf
+            #         if states[other, cidx] == 0:
+            #             e2 = -np.inf
+            #         else:
+            #             e2 = e1
+
+            delta = e2 - e1
+            # if np.isnan(delta):
+            # pi = 0
+            # else:
+            # pi = 1 / n * 1 / (1 + np.exp(beta * delta))
+
             pi = 1 / n * 1 / (1 + np.exp(beta * delta))
+
             # sanity checks
-            assert 0 <= pi <= 1
+            assert 0 <= pi <= 1, f"{delta=} {e2.sum()=} {e1.sum()=}"
             p[state, other] = pi
             if (state, other) in pairs:
                 assert False, pairs
@@ -82,21 +106,17 @@ def get_transfer(n, E, beta, allowed) -> tuple:
 
     np.fill_diagonal(p, 1 - p.sum(1))
     assert np.any(np.isnan(p)) == False, p
-    p0 /= p0.sum()
-    # assert np.allclose(p.diagonal(), 1), p.diagonal()
-    # n = p0.size // 2
-    # y = p0[n:][::-1]
-    # x = p0[:n]
-    # fig, ax = plt.subplots()
-    # ax.scatter(p0)
-    # ax.scatter(((x - y) ** 2))
-    # fig.show()
-    # plt.show(block=1)
+    from scipy import linalg
+    from numpy import argmax
 
-    # print(n, x.size, y.size)
-    # assert np.allclose(x, y), sum((x - y) ** 2)
-    # assert np.allclose(p0.sum(), 1)
-    # assert np.all(np.allclose(p.sum(1), 1))
+    # e, v = linalg.eig(p.get().T)
+    # idx = argmax(e)
+    # p0 = v[:, idx]
+    p0 /= p0.sum()
+    # p0 = np.array(p0)
+    # p0[p0 == np.inf] = 1
+    # for pi in p0:
+    # print(pi)
     return p, p0
 
 
@@ -179,6 +199,7 @@ class AbstractSimulator:
 
             # prevent zero division in magnetization match case
             self.p_state[np.isnan(self.p_state)] = 0
+            assert np.allclose(np.sum(self.p_state), 1)
             print(f"Removed {2**n - idx.size} states")
 
         self.evolve_states /= self.evolve_states.sum(0)
@@ -200,6 +221,7 @@ class NodeToSystem(AbstractSimulator):
         for idx, s in enumerate(self.states):
             for node, si in enumerate(s):
                 self.evolve_states[idx, node, int(si)] += self.p_state[idx]
+
         self.adjust_allowed()
         self.p_node = np.zeros((n, 2))
         self.p_node[..., 1] = self.p_state @ self.states
@@ -316,7 +338,7 @@ class MetaDataFrame(pd.DataFrame):
             tmp.__dict__[prop] = getattr(self, prop)
 
 
-def ising(states, A):
+def ising(states, A, node=None, eta=None):
     return -np.einsum("ij, ij->ij", (states * 2 - 1), (states * 2 - 1).dot(A))
 
 
@@ -335,23 +357,84 @@ def bornholdt(states, A, alpha=1.0):
     return E + system
 
 
-def node_involved_in(node, eta, p, states):
-    for idx, s in enumerate(states):
-        state = s.copy()
-        if state[node] == 0:
-            state[node] = 1
-        else:
-            state[node] = 0
-        kdx = to_binary(state)
-        p[idx, kdx] += eta
-        p[kdx, idx] -= eta
-        p[idx, kdx] = np.clip(p[idx, kdx], 0, 1)
-        p[kdx, idx] = np.clip(p[kdx, idx], 0, 1)
-    np.fill_diagonal(p, 0)
-    np.fill_diagonal(p, 1 - p.sum(1))
+def node_involved_in(node, eta, p, states, allowed):
+    n = states.shape[1]
+
+    for xi in allowed:
+        for xj in allowed[xi]:
+            if states[xi, node] != states[xj, node]:
+                sign = 1
+                if states[xi, node] == 0:
+                    sign = -1
+
+                # r = p[xi, xj] - eta / n
+                # r = np.clip(r, 0, 1 / n)
+                p[xi, xj] += sign * eta / n
+                p[xi, xj] = np.clip(p[xi, xj], 0, 1)
+
+                p[xi, xi] += -sign * eta / n
+                p[xi, xi] = np.clip(p[xi, xi], 0, 1)
+
+                # p[kdx, idx] += -sign * eta / n
+                # p[kdx, idx] = np.clip(p[kdx, idx], 0, 1)
+
+                # p[kdx, kdx] -= -sign * eta / n
+                # p[kdx, kdx] = np.clip(p[kdx, kdx], 0, 1)
+
+                # p[kdx, idx] += eta / n
+                # p[kdx, idx] = np.clip(p[kdx, idx], 0, 1)
+    # np.fill_diagonal(p, 0)
+    # np.fill_diagonal(p, 1 - p.sum(1))
+    p /= p.sum(1)[:, None]
+    assert np.all(np.allclose(p.sum(1), 1)), p.sum(1)
 
 
-def sim2(settings, structure=None, e_func=ising, intervention=dict()):
+def intervene(node, eta, p, p0, states, settings, allowed, reduction):
+    n = len(settings.g)
+    m = settings.model(p, p0, states)
+
+    m.setup(reduction)
+
+    if node != -1:
+        node_involved_in(node, eta, m.transfer_matrix, states, allowed)
+
+    from numpy import linalg, log, isnan, argmax
+
+    # produces better numerical results than numpy
+    from scipy import linalg as scalg
+
+    transfer = m.transfer_matrix.get().T
+    # e, v = linalg.eig(transfer)
+    e, v = scalg.eig(transfer)
+    largest_idx = argmax(e)
+    largest = v[:, largest_idx]
+    largest = abs(largest)
+    largest /= largest.sum()
+
+    p_states = np.zeros((settings.steps, len(states)))
+    print(node, eta)
+    for ti in range(settings.steps):
+        p_states[ti] = m.p_state @ m.evolve_states
+        if ti < 10:
+            print(ti, p_states[ti])
+        m.evolve()
+
+    return dict(
+        node=node,
+        eta=float(eta),
+        ps=p_states.get().copy(),
+        p0=p0.get(),
+        largest=largest,
+    )
+
+
+def sim2(
+    settings,
+    structure=None,
+    e_func=ising,
+    interventions=[],
+    targets=[],
+):
     # Compute energy and get transer matrix for temperature
     n = len(settings.g)
     if structure is None:
@@ -363,35 +446,52 @@ def sim2(settings, structure=None, e_func=ising, intervention=dict()):
         )
         states, allowed = gen_states(n)
     else:
-        A, states, alllowed = structure
-
-    E = e_func(states, A)
-    p, p0 = get_transfer(n, E, settings.beta, allowed)
-    out = np.zeros((settings.steps, n))
+        A, states, allowed = structure
 
     # m.evolve_states = m.evolve_states[[0], :]
+    E = e_func(states, A)
+    p, p0 = get_transfer(n, E, settings.beta, allowed, states, -1, 0)
     allowed_starting, mags, p_mag = get_allowed_per_mag(states, p0)
+    # extract allowed states
+    #
+    print(states)
 
     df = []
     from copy import deepcopy
 
-    for node, eta in tqdm(intervention.items()):
-        m = settings.model(deepcopy(p), deepcopy(p0), states)
-        m.setup(allowed=[])
-        if node != -1:
-            node_involved_in(node, eta, m.transfer_matrix, states)
-        m.evolve_states.fill(0)
-        m.evolve_states[0, 0] = 1
-        for ti in range(settings.steps):
-            tmp = (m.evolve_states @ states).sum(0)
-            out[ti] = tmp
-            m.evolve()
-        row = dict(
-            sim=out.get().copy(),
-            node=node,
-            eta=eta,
+    reduction = []
+    for idx, s in enumerate(states):
+        for prop in targets:
+            if np.mean(s) == prop:
+                reduction.append(idx)
+
+    n = states.shape[1]
+
+    from copy import deepcopy
+
+    for intervention in interventions:
+        intervention = {node: intervention for node in settings.g.nodes()}
+        for idx, (node, eta) in enumerate(tqdm(intervention.items())):
+            # p, p0 = get_transfer(n, E, settings.beta, allowed, states, node, eta)
+            row = intervene(
+                node,
+                eta,
+                deepcopy(p),
+                deepcopy(p0),
+                states,
+                settings,
+                allowed,
+                reduction,
+            )
+            df.append(row)
+
+    # control condition
+    # p, p0 = get_transfer(n, E, settings.beta, allowed, state -1, 0)
+    df.append(
+        intervene(
+            -1, 0, deepcopy(p), deepcopy(p0), states, settings, allowed, reduction
         )
-        df.append(row)
+    )
     return pd.DataFrame(df)
 
 
@@ -410,7 +510,7 @@ def simulate(settings, structure=None, e_func=ising):
         A, states, alllowed = structure
 
     E = e_func(states, A)
-    p, p0 = get_transfer(n, E, settings.beta, allowed)
+    p, p0 = get_transfer(n, E, settings.beta, allowed, states, -1, 0)
 
     allowed_starting, mags, p_mag = get_allowed_per_mag(states, p0)
     # add equilibrium case
