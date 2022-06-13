@@ -20,6 +20,8 @@ def show_energy_graph(g, pos, ax, seed=0):
 
     c = ccolors(len(g))
 
+    inax = ax.inset_axes((0, 0, 1, 1), zoom=0)
+    # nx.draw(g, pos=pos, ax=inax, node_color=c)
     for ci, (node, p) in zip(c, pos.items()):
         h = np.random.rand()
         # add emulated distribution
@@ -27,20 +29,20 @@ def show_energy_graph(g, pos, ax, seed=0):
             x = deepcopy(p[:, None])
             x[0] -= rec_width
             x[1] -= rec_width / 2
-            x[0] += rec_width * idx * 1.1
+            x[0] += rec_width * idx * 1
             a = Rectangle(
                 deepcopy(x),
-                width=rec_width,
+                width=rec_width * 0.8,
                 height=hi * 0.15,
-                zorder=1,
-                # color="lightgray",
+                zorder=10,
+                color="tab:blue",
             )
-            ax.add_artist(a)
+            inax.add_artist(a)
 
             # add state labels
             x[1] -= 1 / 4 * rec_width
             x[0] += 0.5 * rec_width
-            ax.annotate(
+            inax.annotate(
                 idx,
                 x,
                 va="top",
@@ -52,23 +54,27 @@ def show_energy_graph(g, pos, ax, seed=0):
 
     p = np.array(list(pos.values()))
     # plot the nodes
-    ax.scatter(*p.T, color=c, zorder=1, s=radius, edgecolor="k")
+
+    inax.scatter(*p.T, color=c, zorder=1, s=radius, edgecolor="k")
     # plot the edges
     edges = np.array([[pos[x], pos[y]] for x, y in g.edges()])
     lc = LC(edges, edgecolor="k", zorder=0)
-    ax.add_artist(lc)
+    inax.add_artist(lc)
     # ax.axis("equal")
     ax.margins(0.1)
+    inax.margins(0.1)
     # ax.set_ylim(-1.2, 0.8)
     # ax.set_xlim(-576.8, -575.4)
     ax.axis("off")
+    inax.axis("off")
+    inax.axis("equal")
     # ax.margins(0)
 
 
 def show_bistability(x, p, ax, large=200):
     # plot the distribution
     ax.bar(x, p, zorder=0)
-    ax.format(xlabel="System macrostate", ylabel="P(S)")
+    ax.format(xlabel="System macrostate (S)", ylabel="P(S)")
 
     # annotate the graph with transitions
     # plot markers
@@ -98,8 +104,12 @@ def show_system_time(s, ax):
     x = np.arange(0, s.shape[0])
     from scipy.ndimage import gaussian_filter as gf
 
-    ax.plot(x, mu, zorder=0)
+    # inax = ax.inset_axes((0, 0, 1, 1), zoom=0)
+    # inax.plot(x, mu, zorder=0)
     ax.format(xlabel="Time (t)", ylabel="System\nmacrostate")
+    ax.plot(x, mu, zorder=0)
+    # inax.axis("equal")
+    # ax.axis("off")
     limit = 3000
 
     markers = dict(green=0, blue=0.25, red=0.5)
@@ -214,14 +224,19 @@ def show_progression(ax):
         node_size = df.mi.iloc[idx].sum(0)
         node_size = renorm(node_size)
         node_size *= 200
+        inax = ax.inset_axes((0, 0, 1, 1), zoom=0)
+
         nx.draw(
             g,
             pos=shifted,
-            ax=ax,
+            ax=inax,
             node_size=node_size,
             node_color=c,
             # with_labels=1,
         )
+        ax.axis("off")
+        inax.axis("off")
+        inax.axis("equal")
         # compute the dot location
         # relative to the 0 node
         label = shifted[3]
@@ -324,3 +339,4 @@ def show_progression_restricted(level, level_color, ax, annotate=False):
             loc="b",
             ncols=2,
         )
+    # ax.axis("image")
