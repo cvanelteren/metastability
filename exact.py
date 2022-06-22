@@ -1,5 +1,4 @@
-import proplot as plt, cmasher as cmr, pandas as pd
-import os, sys, networkx as nx, warnings
+import cmasher as cmr, pandas as pd, os, sys, networkx as nx, warnings
 from plexsim import models
 from imi import infcy
 from tqdm import tqdm
@@ -13,6 +12,7 @@ try:
 except:
     print("Using numpy")
     import numpy as np
+# import numpy as np
 
 
 def gen_binary(idx, n):
@@ -203,7 +203,7 @@ class AbstractSimulator:
             assert np.allclose(np.sum(self.p_state), 1)
             print(f"Removed {2**n - idx.size} states")
 
-        self.evolve_states /= self.evolve_states.sum(0)
+        self.evolve_states /= self.evolve_states.sum(0)[None]
         self.evolve_states[np.isnan(self.evolve_states)] = 0
 
 
@@ -232,16 +232,17 @@ class NodeToSystem(AbstractSimulator):
 
     def update(self):
         # H(S^t)
-        H = entropy(
-            np.einsum("ij, kij -> ki", self.p_node, self.evolve_states).T,
-        )
+        pst = np.einsum("ij, kij -> ki", self.p_node, self.evolve_states)
+        H = entropy(pst.T)
         # conditional entropy
         # H(S^t | s_i) = - \sum p(s_i ) \sum_S^t p(S^t | s ,_i) log2(p(S^t | s_i))
         tmp = entropy(self.evolve_states.T).T
+        pc = self.evolve_states.copy()
         tmp[np.isnan(tmp)] = 0
         HC = np.einsum("ij, ij-> i", self.p_node, tmp)
         self.evolve()
-        return H, HC, H - HC
+        # return H, HC, H - HC
+        return H, HC, H - HC, pst, pc
 
     def evolve(self):
         self.evolve_states = np.einsum(
@@ -253,51 +254,64 @@ class NodeToSystem(AbstractSimulator):
 
 
 class NodeToMacroBit(NodeToSystem):
-    """
-    Computes I(s_i : S_macro) where S_macro is the
-    sign of the system magnetization
-    """
+    def setup(self, allowed=[]):
+        # setup parent class
+        super(NodeToMacroBit, self).setup(allowed)
 
-    def setup(self, allowed=[], ss=[]):
-        self.allowed = allowed
-        n = self.states.shape[1]
-        # macrobit setup
-        # need to make p(S_macro | s_i)
-        mapper = {-1: 0, 0: 1, 1: 2}  # macrobit state mapper
-        N = len(mapper)
-        self.evolve_states = np.zeros((N, n, 2))
+        # add functionality of the macrobit
+        # find those states that fall within -1, 0, 1 sign
+        state_signs = {}
+        for idx, s in enumerate(self.states):
+            sign = int(np.sign(s.mean() - 0.5))
+            state_signs[sign] = state_signs.get(sign, []) + [idx]
+        self.state_signs = state_signs  # maps sign to state_idx
+        print(f"Found signs {state_signs.keys()}")
 
-        # make new transfer matrix on the macrobit level
-        p = np.zeros((N, N))
-        for idx, si in enumerate(self.states):
-            sign_i = int(np.sign(si.mean() - 0.5).astype(int))
-            for jdx, sj in enumerate(si):
-                macrobit_idx = mapper[sign_i]
-                self.evolve_states[macrobit_idx, jdx, int(sj)] = self.p_state[idx]
+        # shorthands for clarity
+        n_states_macrobit = len(state_signs)
+        n_nodes = self.states.shape[1]
 
-        counts = np.zeros((N, N))
-        for idx in ss:
-            si = self.states[idx]
-            sign_i = int(np.sign(si.mean() - 0.5))
-            for jdx in ss[idx]:
-                sj = self.states[jdx]
-                pij = self.transfer_matrix[idx, jdx]
-                sign_j = int(np.sign(sj.mean() - 0.5))
-                x, y = mapper[sign_i], mapper[sign_j]
-                p[x, y] += pij
-                counts[x, y] += 1
+        self.p_macrobit = np.zeros((n_states_macrobit, n_nodes))
+        self.p_macrobit_node = np.zeros(
+            (n_states_macrobit, n_nodes, 2)
+        )  # p(macrobit | node state) 3xnx2
 
-        # p /= counts
-        p /= p.sum(1)
-        np.fill_diagonal(p, 0)
-        np.fill_diagonal(p, 1 - p.sum(1))
-        self.transfer_matrix = p
+    def update(self):
+        # p(S^t)
+        p_st = np.einsum("ij, kij -> ki", self.p_node, self.evolve_states)
+        # convert to macrobit
+        self.p_macrobit.fill(0)
+        self.p_macrobit_node.fill(0)
+        for idx, (sign, idxs) in enumerate(self.state_signs.items()):
+            idxs = np.array(idxs, dtype=int)
+            self.p_macrobit[idx] = p_st[idxs].sum(0)
+            self.p_macrobit_node[idx] = self.evolve_states[idxs].sum(0)
+        # renormalize conditional distribution
+        self.p_macrobit /= self.p_macrobit.sum(0)[None]
+        # self.p_macrobit_node /= self.p_macrobit_node.sum(0)[None]
+        print(self.p_macrobit_node[:, 0, 1])
+        print(self.evolve_states[:, 0, 0])
+        print(self.evolve_states[:, 0, 1])
+        print(self.evolve_states.sum(0))
 
-        self.adjust_allowed()
-        # setup p(s_i)
-        self.p_node = np.zeros((n, 2))
-        self.p_node[..., 1] = self.p_state @ self.states
-        self.p_node[..., 0] = 1 - self.p_node[..., 1]
+        # convert 0 division to 0
+        self.p_macrobit = np.nan_to_num(self.p_macrobit)
+        self.p_macrobit_node = np.nan_to_num(self.p_macrobit_node)
+        assert np.allclose(self.p_macrobit.sum(0), 1), self.p_macrobit.sum()
+        assert np.allclose(
+            self.p_macrobit_node.sum(0)[..., 0], 1
+        ), self.p_macrobit_node.sum(0)[..., 0]
+
+        assert np.allclose(
+            self.p_macrobit_node.sum(0)[..., 1], 1
+        ), self.p_macrobit_node.sum(0)[..., 1]
+
+        H = entropy(self.p_macrobit.T)
+        tmp = entropy(self.p_macrobit_node.T).T
+        tmp = np.nan_to_num(tmp)
+        HC = np.einsum("ij, ij-> i", self.p_node, tmp)
+        self.evolve()
+        return H, HC, H - HC
 
 
 class SystemToNode(AbstractSimulator):
@@ -773,7 +787,24 @@ def simulate(settings, structure=None, e_func=ising):
     df = []
     for mag, mag_allowed in allowed_starting.items():
         # init model and setup
+        # test = True
+        # if test and mag - 0.05 == 0.5:
+        # print("using other p0")
+        # p0_ = np.asarray(pd.read_pickle("numerical_p0.pkl"))
+
+        # import proplot as plt
+        # fig, ax = plt.subplots()
+        # for idx in mag_allowed:
+        #     ax.axvline(idx)
+        # ax.plot(p0.get())
+        # fig.show()
+        # plt.show(block=1)
+        # print(p0.sum())
+        # m = settings.model(p.copy(), p0_.copy(), states)
+
+        # else:
         m = settings.model(p.copy(), p0.copy(), states)
+
         # print(f"{mag=} {mag_allowed=}")
         m.setup(allowed=mag_allowed)
         # can be differently shaped
@@ -781,21 +812,28 @@ def simulate(settings, structure=None, e_func=ising):
         H = []
         HC = []
         MI = []
+        ps = []
+        psc = []
         for step in tqdm(range(settings.steps)):
-            h, hc, mi = m.update()
+            h, hc, mi, pi, pj = m.update()
+            # h, hc, mi = m.update()
             H.append(h)
             HC.append(hc)
             MI.append(mi)
+            ps.append(pi)
+            psc.append(pj)
         row = dict(
             mi=np.asarray(MI).copy(),
             h=np.asarray(H).copy(),
             hc=np.asarray(HC).copy(),
             mag=mag,
             p0=m.p_state.copy(),
+            pst=np.asarray(ps),
+            psc=np.asarray(psc),
         )
         # convert cupy back to numpy
         if hasattr(h, "get"):
-            for k in "mi h hc mag p0".split():
+            for k in "mi h hc mag p0 pst psc".split():
                 try:
                     row[k] = row[k].get()
                 except:
@@ -818,9 +856,6 @@ def simulate(settings, structure=None, e_func=ising):
         p_state=p0,
     )
     return df
-
-
-import proplot as pplt
 
 
 # fig, ax = plt.subplots()

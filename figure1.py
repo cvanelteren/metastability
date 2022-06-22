@@ -71,32 +71,37 @@ def show_energy_graph(g, pos, ax, seed=0):
     # ax.margins(0)
 
 
-def show_bistability(x, p, ax, large=200):
+def show_bistability(x, p, ax, large=200, annotate=False):
     # plot the distribution
     ax.bar(x, p, zorder=0)
-    ax.format(xlabel="System macrostate (S)", ylabel="P(S)")
+    ax.format(
+        xlabel=r"System macrostate ($\langle S \rangle$)",
+        ylabel=r"$P(\langle S \rangle)$",
+    )
 
     # annotate the graph with transitions
     # plot markers
     markers = dict(green=100, blue=50, red=1)
     levels = []
-    for color, level in markers.items():
-        idx = np.argmin(abs(p - np.percentile(p, level)))
-        xy = (x[idx], p[idx] + 0.02)
-        levels.append(xy)
-        ax.scatter(*xy, color=color, s=large, zorder=1)
 
-    for start, stop in zip(levels[:-1], levels[1:]):
-        ax.annotate(
-            "",
-            xytext=start,
-            xy=stop,
-            arrowprops=dict(
-                fc="black",
-                shrink=0.14,
-                connectionstyle="arc3, rad=-0.3",
-            ),
-        )
+    if annotate:
+        for color, level in markers.items():
+            idx = np.argmin(abs(p - np.percentile(p, level)))
+            xy = (x[idx], p[idx] + 0.02)
+            levels.append(xy)
+            ax.scatter(*xy, color=color, s=large, zorder=1)
+
+        for start, stop in zip(levels[:-1], levels[1:]):
+            ax.annotate(
+                "",
+                xytext=start,
+                xy=stop,
+                arrowprops=dict(
+                    fc="black",
+                    shrink=0.14,
+                    connectionstyle="arc3, rad=-0.3",
+                ),
+            )
 
 
 def show_system_time(s, ax):

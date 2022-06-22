@@ -42,28 +42,3 @@ kl = np.zeros(p.shape[:2])
 for idx, pi in enumerate(p):
     s = pi.shape
     kl[idx] = KL(p[-1], pi)
-
-from utils import ccolors
-
-C = ccolors(10)
-fig, ax = plt.subplots()
-for idx, c in enumerate(C):
-    ax.plot(
-        kl[
-            idx,
-        ],
-        color=c,
-        label=idx,
-    )
-ax.format(
-    # xscale = "log",
-    # yscale = "log",
-    ylabel="KL-divergence",
-    xlabel="Time(step)",
-)
-# ax.set_xlim(0, 100)
-# ax.set_ylim(0, 10)
-fig.legend(title="Intervention on", ncols=1)
-fig.savefig("test")
-fig.show()
-plt.show(block=1)

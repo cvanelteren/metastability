@@ -1,5 +1,5 @@
-#import matplotlib as mpl
-#mpl.use("TkAgg")  # or whatever other backend that you want
+# import matplotlib as mpl
+# mpl.use("TkAgg")  # or whatever other backend that you want
 import proplot as plt, cmasher as cmr, pandas as pd, numpy as np, os, sys, networkx as nx, warnings
 from plexsim import models
 from imi import infcy
@@ -7,6 +7,7 @@ from imi import infcy
 
 def make_windows(idx):
     # get where large transitions occur
+    # wdx = idx
     wdx = np.where(np.diff(idx) > 1)[0]
     windows = []
     start = 0
@@ -32,20 +33,21 @@ def get_var(row):
     return rmses
 
 
-def system_trajectory(df, ax, seed=1234):
+def system_trajectory(df, ax, nudge, seed=1234, spacing=0.6, max_t=20000):
     from utils import ccolors
 
     c = ccolors(df.label.unique().size - 1)
-    dfi = df[df.seed == seed]
+    dfi = df.query("nudge == @nudge & seed == @seed")
+    print(dfi.shape)
 
     starts = []
-    spacing = 0.6
     yt = []
 
     up = 0
     from matplotlib.pyplot import Line2D
 
     h = []
+    print(dfi.columns, dfi.shape)
     for adx, (idx, dfj) in enumerate(dfi.iterrows()):
         if dfj.label == "control":
             ci = "tab:blue"
@@ -53,7 +55,7 @@ def system_trajectory(df, ax, seed=1234):
             ci = c[dfj.label]
         yt.append(up)
         yt.append(up + 1)
-        y = dfj.system[:20000] + up
+        y = dfj.system[:max_t] + up
 
         hi = Line2D(
             [],
@@ -127,7 +129,7 @@ def estimate_white_noise(row, tipping=0.5):
             # d = sem(d, nan_policy="omit")
             a = 1
             if op == np.greater:
-                d -= 0.5
+                d = abs(1 - d)
             if row.label != "control" and op == np.greater:
                 a = 4 / 5
             # p = {}
@@ -136,8 +138,8 @@ def estimate_white_noise(row, tipping=0.5):
             # l = 0
             # for k, v in p.items():
             # l += k**2 * v
-            d = np.var(d)
-            # d = a**2 * np.mean(d**2)  # / len(windows)
+            # d = np.var(d)
+            d = np.mean(d**2) / a**2  # / len(windows)
             # d = np.var(d)
             # d = np.nanmean((d - np.nanmean(d)) ** 2)  # / len(window)
             # d = a**2 * l
@@ -146,6 +148,7 @@ def estimate_white_noise(row, tipping=0.5):
             # output[other_name] += len(window) / len(windows)
     output["label"] = row.label
     output["seed"] = row.seed
+    output["nudge"] = row.nudge
     return output
 
 
@@ -153,7 +156,7 @@ def show_wn(df, X, Y, ax, Z=None, marker="o"):
     from utils import ccolors
     from scipy.stats import sem
 
-    c = ccolors(df.label.unique().size - 1)
+    c = ccolors(df.label.unique().size)
     N = 2
     for intervention, dfi in df.groupby("label"):
         x = dfi[X]
@@ -162,7 +165,7 @@ def show_wn(df, X, Y, ax, Z=None, marker="o"):
         s = 10  # size of the nodes
         if Z is not None:
             s = 100 * np.nanmean(dfi[Z])
-            print(X, intervention, s)
+            # print(X, intervention, s)
 
         mux = np.nanmean(x)
         muy = np.nanmean(y)
@@ -170,8 +173,8 @@ def show_wn(df, X, Y, ax, Z=None, marker="o"):
         sx = sem(x, nan_policy="omit") * N
         sy = sem(y, nan_policy="omit") * N
 
-        sx = x.std(ddof=0) * N
-        sy = y.std(ddof=0) * N
+        # sx = x.std(ddof=0) * N
+        # sy = y.std(ddof=0) * N
 
         # print(f"{intervention=}\n\t{mux=}\t{muy=}\t{sx=}\t{sy=}")
         if intervention != "control":
@@ -204,7 +207,7 @@ def show_wn(df, X, Y, ax, Z=None, marker="o"):
             yerr=sy,
             # yerr=yerr,
             color=color,
-            markersize=0,
+            # markersize=0,
             marker=marker if intervention != "control" else "",
         )
 
@@ -220,6 +223,7 @@ def show_wn(df, X, Y, ax, Z=None, marker="o"):
 fp = "kite_isi_beta=0.5732374683235916.pkl"
 # fp = "kite_intervention_beta=0.5732374683235916.pkl"
 df = pd.read_pickle(fp)
+print(df.columns)
 print(df.seed.unique())
 print("Loaded data")
 tmp = df.apply(estimate_white_noise, axis=1)
@@ -252,94 +256,109 @@ errors["greater_t"] /= errors["greater_t"].max()
 errors["less_t"] /= errors["less_t"].max()
 
 print("making figure")
-fig, ax = plt.subplots(ncols=3, share=0)
-show_wn(
-    errors,
-    "less_n",
-    "less_w",
-    ax[2],
-    Z="less_t",
-)
-show_wn(
-    errors,
-    "greater_n",
-    "greater_w",
-    ax[2],
-    Z="greater_t",
-    marker="s",
-)
-system_trajectory(df, ax[1])
-g = nx.krackhardt_kite_graph()
-from fa2 import ForceAtlas2 as fa2
 
-pos = nx.kamada_kawai_layout(g)
-from utils import ccolors
-
-c = ccolors(len(g))
-nx.draw(g, pos=pos, ax=ax[0], node_color=c)
-
-
-fig.suptitle("Effect of pinning intervention to state +0")
-ax[1].set_title("System trajectory under intervention")
-ax[2].set_title("")
-
-# ax[1].format(title="Fraction of nodes < 0.5")
-# ax[2].format(title="Fraction of nodes > 0.5")
-ax[2].format(
-    xlabel="Fraction time spent <S> < 0.5",
-    ylabel=r"Variance ($\frac{1}{N} \sum_i (s_{w_i} - \overline{s_{w_i}})$)",
-)
-
-from matplotlib.pyplot import Line2D
-
-handles = [
-    Line2D(
-        [],
-        [],
-        color="k",
-        marker="o",
-        label="<S> < 0.5",
-        linestyle="none",
-    ),
-    Line2D(
-        [],
-        [],
-        color="k",
+for x, e in errors.groupby("nudge"):
+    nudge = x
+    fig, ax = plt.subplots(ncols=3, share=0)
+    show_wn(
+        e,
+        "less_n",
+        "less_w",
+        ax[2],
+        Z="less_t",
+    )
+    show_wn(
+        e,
+        "greater_n",
+        "greater_w",
+        ax[2],
+        Z="greater_t",
         marker="s",
-        label="<S> > 0.5",
-        linestyle="none",
-    ),
-]
+    )
+    system_trajectory(df, ax[1], x)
+    g = nx.krackhardt_kite_graph()
+    from fa2 import ForceAtlas2 as fa2
 
-ax[2].legend(
-    handles=handles,
-    loc="ul",
-    # pad=0,
-    # space=0,
-    ncols=1,
-    fontsize=6,
-)
-ax[2].set_title("Asymmetry in system fluctuations")
+    pos = nx.kamada_kawai_layout(g)
+    from utils import ccolors
 
-labels = np.array(df.label.unique())
-h = []
-for l in labels:
-    if l == "control":
-        C = "tab:blue"
-    else:
-        C = c[l]
-    h.append(
+    fig.suptitle("Effect of pinning intervention to state +0")
+
+    # ax[1].format(title="Fraction of nodes < 0.5")
+    # ax[2].format(title="Fraction of nodes > 0.5")
+    ax[2].format(
+        xlabel="Fraction time spent <S> < 0.5",
+        # ylabel=r"Variance ($\frac{1}{N} \sum_i (s_{w_i} - \overline{s_{w_i}})$)",
+        # ylabel=r"Second moment ($\frac{1}{n a^2} \sum s_{w_i}^2$)",
+        ylabel="Second moment ($\\frac{1}{\\alpha^2 |S_{w}|}  \sum_{w} {S_{w}^{t}}^2$)",
+    )
+
+    from matplotlib.pyplot import Line2D
+
+    handles = [
         Line2D(
             [],
             [],
-            linestyle="none",
+            color="k",
             marker="o",
-            label=str(l).capitalize(),
-            color=C,
-        )
+            label="<S> < 0.5",
+            linestyle="none",
+        ),
+        Line2D(
+            [],
+            [],
+            color="k",
+            marker="s",
+            label="<S> > 0.5",
+            linestyle="none",
+        ),
+    ]
+
+    ax[2].legend(
+        handles=handles,
+        loc="ur",
+        # pad=0,
+        # space=0,
+        ncols=1,
+        fontsize=6,
     )
+    ax[2].set_title("Noise dependent tipping behavior")
+    ax[1].set_title("System trajectory under intervention")
+    # ax[2].set_title("")
 
-fig.legend(h, loc="r", title="Pinning\nintervention\non", ncols=1)
+    labels = np.array(df.label.unique())
+    h = []
+    c = ccolors(len(g))
+    for l in labels:
+        if l == "control":
+            C = "tab:blue"
+        else:
+            C = c[l]
+        h.append(
+            Line2D(
+                [],
+                [],
+                linestyle="none",
+                marker="o",
+                label=str(l).capitalize(),
+                color=C,
+            )
+        )
 
-ax.format(abc=True)
-fig.savefig("./figures/figure4")
+    fig.legend(h, loc="r", title="Pinning\nintervention\non", ncols=1)
+
+    ax.format(abc=True, abc_kw=dict(fontsize=14))
+
+    inax = ax[0].inset_axes((0.0, 0.0, 1, 1), zoom=0)
+    inax.axis("off")
+    ax[0].axis("off")
+    nx.draw(g, pos=pos, ax=inax, node_color=c)
+    inax.axis("equal")
+    # ax[0].axis(
+    # "equal",
+    # )
+    # ax[2].axis("auto")
+    # ax[1].axis("auto")
+    # ax[1].axis("square")
+    # nudge = "all"
+    fig.savefig(f"./figures/figure4_{nudge=}.pdf")

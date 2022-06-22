@@ -10,7 +10,7 @@ from plexsim import models
 from imi import infcy
 from plexsim.utils.graph import recursive_tree
 # g = recursive_tree(4)
-# g = nx.krackhardt_kite_graph()
+g = nx.krackhardt_kite_graph()
 # g = nx.sedgewick_maze_graph()
 # print(len(g))
 # pos = nx.forceatlas2_layout(g, n_iter = 50)
@@ -35,7 +35,7 @@ seed = 12345
 seed = 8
 t = 1/0.5732374683235916
 np.random.seed(seed)
-m = models.Potts(g, t = t , seed = seed, sampleSize = 1)
+# m = models.Potts(g, t = t , seed = seed, sampleSize = 1)
 m = models.Potts(g, t = t , seed = seed)
 
 #s = m.simulate(100000)#[100:]
@@ -50,16 +50,21 @@ from figure1 import *
 fig, ax = plt.subplots()
 show_system_time(s, ax)
 fig.show()
-
 #+end_src
 #+RESULTS:
 :RESULTS:
-#+attr_org: :width 305 :height 300
-[[file:./.ob-jupyter/12372a9a842397eba4e6522dba249a9400aa91dc.png]]
+: /tmp/ipykernel_3660/3304453955.py:19: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 374 :height 328
+[[file:./.ob-jupyter/7024a0b0124b3fc0bb734451f876647503739de5.png]]
 :END:
+
+
 showing bistability
 #+begin_src jupyter-python
 from exact import ising, gen_states
+import cupy as cp
+from figure1 import *
 states, _ = gen_states(len(g))
 A = nx.adjacency_matrix(g).todense()
 E = ising(states, A).sum(1)
@@ -85,12 +90,18 @@ show_bistability(x, y, ax)
 fig.show()
 #+end_src
 
+
 #+RESULTS:
 :RESULTS:
-: 100% 1024/1024 [00:00<00:00, 7184.96it/s]
-#+attr_org: :width 312 :height 300
-[[file:./.ob-jupyter/92e8dcaaf9b48235365255833ca8b1b3d4b81eba.png]]
+: 100% 1024/1024 [00:00<00:00, 11165.71it/s]
+: /tmp/ipykernel_3660/1546370244.py:5: FutureWarning: adjacency_matrix will return a scipy.sparse array instead of a matrix in Networkx 3.0.
+:   A = nx.adjacency_matrix(g).todense()
+: /tmp/ipykernel_3660/1546370244.py:26: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 337 :height 328
+[[file:./.ob-jupyter/01f6d07f7f91a2e10cfe3cbab23d627d008cb567.png]]
 :END:
+
 
 showing energy per nodes
 #+begin_src jupyter-python
@@ -107,8 +118,10 @@ fig.show()
 
 #+RESULTS:
 :RESULTS:
+: /tmp/ipykernel_3660/1584647286.py:9: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
 #+attr_org: :width 262 :height 262
-[[file:./.ob-jupyter/e46aacd51489b9e52eed032bebe0f04b53d3b25a.png]]
+[[file:./.ob-jupyter/b6a145f432008a03bf2098d3bcfe5ee6c78725a5.png]]
 :END:
 
 show progression of tipping points
@@ -136,7 +149,7 @@ show figure 1 introduction plot
 plt.rc["font.size"] = 16
 # fig, ax = plt.subplots(ncols = 2, sharex = 0, sharey = 0)
 
-# pos = nx.kamada_kawai_layout(g)
+pos = nx.kamada_kawai_layout(g)
 # pos = nx.rescale_layout_dict(pos, 3)
 # pos = {p: np.asarray(pi) for p, pi in pos.items()}
 # left = 5
@@ -156,12 +169,17 @@ from matplotlib.collections import LineCollection as LC
 from matplotlib.patches import Circle
 
 from figure1 import *
+
 layout = [
     [1, 2, 2, 3, 3, 3],
     [1, 2, 2, 4, 5, 6]
 ]
+layout = [[1, 2, 3],
+          [4, 5, 6],]
 
-fig = plt.figure(sharex = 0, sharey = 0,  share = 0,
+fig = plt.figure(sharex = 0,
+                 sharey = 0,
+                 share = 0,
                  )
 ax = fig.add_subplots(layout, abc = True)
 show_energy_graph(g, pos, ax[0])
@@ -176,7 +194,7 @@ show_progression_restricted(level = 0.3,
 show_progression_restricted(level = 0.55, level_color = "red", ax = ax[5],
                  annotate = True)
 
-ax[0].axis("equal")
+# ax[0].axis("equal")
 # ax[0].axis("equal")
 # ax[1].axis("scaled")
 # ax[3].set_xlim(0, 80)
@@ -192,12 +210,25 @@ fig.show()
 
 #+RESULTS:
 :RESULTS:
-: The autoreload extension is already loaded. To reload it, use:
-:   %reload_ext autoreload
-#+attr_org: :width 2049 :height 579
-[[file:./.ob-jupyter/6a2bc8ccdd4ca48075e383bf6e7601b3bb7262dc.png]]
+#+begin_example
+The autoreload extension is already loaded. To reload it, use:
+  %reload_ext autoreload
+/home/casper/orgfiles/roam/papers/Metastability/figure1.py:298: UserWarning: Attempted to set non-positive bottom ylim on a log-scaled axis.
+Invalid limit will be ignored.
+  from matplotlib.patches import Circle
+/home/casper/orgfiles/roam/papers/Metastability/figure1.py:298: UserWarning: Attempted to set non-positive bottom ylim on a log-scaled axis.
+Invalid limit will be ignored.
+  from matplotlib.patches import Circle
+/home/casper/orgfiles/roam/papers/Metastability/figure1.py:298: UserWarning: Attempted to set non-positive bottom ylim on a log-scaled axis.
+Invalid limit will be ignored.
+  from matplotlib.patches import Circle
+/tmp/ipykernel_3660/3841028598.py:65: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+#+end_example
+#+attr_org: :width 1247 :height 782
+[[file:./.ob-jupyter/1789c6599072e1262761e61cb15f06d1da591d05.png]]
 :END:
-
+kaldsjf
 #+begin_src jupyter-python
 fig, ax = plt.subplots(ncols = 2, rows = 2)
 ax.ge

@@ -61,7 +61,14 @@ def fit_curve(mi, f):
         # y.fill(0)
         # y[y < 1e-10] = 0
         # y = np.sort(y)[::-1]
-        popt, pcov = optimize.curve_fit(f, x, y, bounds=(0, np.inf), maxfev=1e5)
+
+        popt, pcov = optimize.curve_fit(
+            f,
+            x,
+            y,
+            bounds=(0, np.inf),
+            maxfev=1e5,
+        )
         opts.append(popt)
     return np.asarray(opts)
 

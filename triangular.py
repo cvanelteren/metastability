@@ -17,12 +17,11 @@ from exact import ising, sis, bornholdt
 # from exact import store_results, gen_information_curves
 
 n = 10
-T = 310
-beta = 0.5
+T = 2000
 
 
 from plexsim.utils.graph import recursive_tree
-from exact import simulate, Settings, NodeToSystem, SystemToNode
+from exact import *
 from exact_utils import get_p_gibbs, match_temp_stc
 
 # lcf graph experiments
@@ -41,10 +40,10 @@ def run(g, name, params={}, e_func=ising):
     # g = nx.random_tree(10)
     t = match_temp_stc(g, e_func=e_func)
     # t = 1
-    t = 1.2
-    print(t)
+    # t = 1.2
+    # t *= 0.95
     beta = 1 / t
-    # beta = 0.1
+    # beta = 1
 
     # make identifier
     s = ""
@@ -54,6 +53,7 @@ def run(g, name, params={}, e_func=ising):
 
     print(f"beta = {beta}")
     settings = Settings(beta, T, g, NodeToSystem)
+    # settings = Settings(beta, T, g, NodeToMacroBit)
     # settings = Settings(beta, T, g, SystemToNode)
     df = simulate(settings, e_func=e_func)
     fp = f"./data/{s}.pkl"
@@ -87,8 +87,10 @@ def lemke_graph():
 # run(nx.krackhardt_kite_graph(), "kite", e_func=f)
 # run(g, "random_tree", e_func=f)
 
+g = nx.florentine_families_graph()
 g = nx.krackhardt_kite_graph()
 # g.remove_edge(7, 8)
+# g.remove_edge(8, 9)
 # g.remove_node(8)
 # g.remove_node(9)
 # g.remove_edge(8, 9)
@@ -98,9 +100,11 @@ g = nx.krackhardt_kite_graph()
 #
 # g.remove_node(8)
 
+# g = nx.path_graph(10)
 # nx.draw(g)
 # plt.show(block=1)
 run(g, "kite", e_func=ising)
+# run(g, "florentine", e_func=ising)
 # run(nx.krackhardt_kite_graph(), "kite", e_func=sis)
 
 from experiment import small_tree

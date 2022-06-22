@@ -1,0 +1,72 @@
+#+begin_src jupyter-python
+import proplot as plt, cmasher as cmr, pandas as pd,\
+    numpy as np, os, sys, networkx as nx, warnings
+from plexsim import models
+from imi import infcy
+
+from dit import pid
+from dit import Distribution as D
+p = {"0": 0.5, "1": 0.5}
+n = 4
+def setup(s):
+    p = np.random.rand(*s)
+    p /= p.sum()
+    return D.from_ndarray(p)
+
+def run(p):
+    return pid.PID_WB(p)
+import time
+def bench(n):
+    timing = np.zeros(n)
+    for i in range(1, n):
+        print(f"on {i}", end = "\r")
+        s = (2, 10, i)
+        p = setup(s)
+        start = time.time()
+        run(p)
+        timing[i] = time.time() - start
+    return timing
+
+timing = bench(1024)
+#+end_src
+
+#+begin_src jupyter-python
+from scipy import optimize
+x = np.arange(len(timing))
+# exp = lambda x, a, b: a * np.exp(b * x)
+exp = lambda x, a, b: a * x**b
+opt, cov = optimize.curve_fit(exp, x, timing)
+fig, ax = plt.subplots()
+ax.plot(timing, label = "data", marzker = 'o')
+ax.plot(x, exp(x, *opt), linestyle = 'dashed',
+        color = 'k', label = "fit")
+
+# ax.scatter(1024, exp(1024, *opt),
+#            label = "extrapolation",
+#            color = "red")
+
+ax.format(xlabel = "shape matrix (2, 10, x)",
+          ylabel = "Run time (sec)",
+          yscale  = "log")
+ax.legend()
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_16344/4186405816.py:19: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show() rr dfs
+#+attr_org: :width 327 :height 300
+[[file:./.ob-jupyter/016d037316c24acf07b8a165248b5e3826143e02.png]]
+:END:
+
+- Patrick Forre
+- Joris Mooij
+
+#+begin_src jupyter-python
+print(l)
+#+end_src
+
+#+RESULTS:
+: b2106604-eff7-40ed-ae4e-db568cb3da0b

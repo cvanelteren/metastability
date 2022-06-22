@@ -54,6 +54,13 @@ complex systems.}
 #+end_src
 
 
+A  complex  adaptive  system often  exhibits  resilience  to
+noise. Failure  of a random  element of the system  does not
+result in the failure of the  system as a whole. For many of
+these system, there is a notion of operating in a particular
+mode. For  example, the  brain can switch  between different
+attentions  modes  to solve  tasks  such  as planning,  motor
+control, and memory.
 
 * Introduction
 Complex dynamical systems such as cell-regulatory processes,

@@ -1,5 +1,6 @@
 #+begin_src jupyter-python
-,#+begin_src jupyter-python
+%load_ext autoreload
+%autoreload 2
 import warnings
 warnings.filterwarnings('ignore')
 import proplot as plt, cmasher as cmr, pandas as pd,\
@@ -16,27 +17,33 @@ fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=200.pkl"
 # fp = "exact_kite_dyn=bornholdt_beta=0.23708107265108683_T=200.pkl"
 fp = "exact_kite_dyn=sis_beta=9.122104355448496_T=200.pkl"
 fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=200.pkl"
-fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=30000.pkl"
-fp = "exact_kite_dyn=ising_beta=0.6989738190618898_T=310_g.is_directed()=False.pkl"
-# fp ="exact_kite_dyn=ising_beta=1.2264906652562024_T=300_g.is_directed()=True.pkl"
-fp='exact_kite_dyn=ising_beta=0.2626984964205277_T=310_g.is_directed()=False.pkl'
-fp='exact_kite_dyn=ising_beta=0.6989738190618898_T=310_g.is_directed()=False.pkl'
-fp='exact_kite_dyn=ising_beta=0.5732374683235916_T=310_g.is_directed()=False.pkl'
-fp='exact_kite_dyn=ising_beta=0.8333333333333334_T=310_g.is_directed()=False.pkl'
-n_samples = int(re.findall("T=\d+", fp)[0].split("=")[1])
-
+fp='exact_kite_dyn=ising_beta=0.5732374683235916_T=300_g.is_directed()=False.pkl'
+fp='exact_kite_dyn=ising_beta=0.5732374683235916_T=300_g.is_directed()=False.pkl'
+# fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=30000.pkl"
+# fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=310.pkl"
+# fp='exact_kite_dyn=ising_beta=0.8333333333333334_T=310_g.is_directed()=False.pkl'
+# n_samples = int(re.findall("T=\d+", fp)[0].split("=")[1])
+# fp='exact_kite_dyn=ising_beta=0.8333333333333334_T=310_g.is_directed()=False.pkl'
+# fp='exact_kite_dyn=ising_beta=0.8333333333333334_T=310_g.is_directed()=False.pkl'
+# fp='exact_kite_dyn=ising_beta=0.5732374683235916_T=310_g.is_directed()=False.pkl'
+# fp='exact_kite_dyn=ising_beta=0.9001444450539172_T=310_g.is_directed()=False.pkl'
 
 # fp = "exact_recursive_tree_4_beta=0.567_T=200.pkl"
 # fp = "exact_LCF_graph_n=10_shift_list=[-2]_repeat=1_matching=0.7_beta=0.4272728243801874_T=200.pkl"
 # fp = "exact_LCF_graph_n=10_shift_list=[-2]_repeat=5_matching=0.9_beta=0.4115334169153415_T=200.pkl"
 # fp = "exact_circle_beta=0.567_T=200.pkl"
+# fp='./exact_kite_dyn=ising_beta=1_T=310_g.is_directed()=False.pkl'
+# fp='./exact_kite_dyn=ising_beta=4_T=310_g.is_directed()=False.pkl'
 from exact_utils import fit_curve
 df = pd.read_pickle(base / Path(fp))
-f = lambda x, a, b, c, d, g: a * np.exp(-b * x) + c * np.exp(-d * x) + g
+f = lambda x, a, b, c, d, g: a * np.exp(-b * x) +  c * np.exp(-d * x) + g
+# f = lambda x, a, b, c, d, g: a * np.exp(-b * x) +  g
 ndf = fit_curve(df, f, offset = True)
 #+end_src
 
 #+RESULTS:
+: The autoreload extension is already loaded. To reload it, use:
+:   %reload_ext autoreload
 : 1.05
 
 
@@ -173,22 +180,6 @@ for idx, t in enumerate(tits):
 fig.savefig(f"./figures/{dyn}_kite_graph.pdf")
 fig.savefig("./figures/figure2.pdf")
 #+end_src
-
-#+RESULTS:
-:RESULTS:
-: Index(['mi', 'h', 'hc', 'mag', 'p0', 'coeffs', 'half', 'asymp', 'imi', 'rmse'], dtype='object')
-: 0.1 (array([], dtype=int64),) [False False False False False False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
-: 0.2 (array([2]),) [False False  True False False False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
-: 0.3 (array([], dtype=int64),) [False False False False False False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
-: 0.4 (array([4]),) [False False False False  True False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
-: 0.5 (array([5]),) [False False False False False  True False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
-: 0.6 (array([6]),) [False False False False False False  True False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
-: 0.7 (array([7]),) [False False False False False False False  True False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
-#+attr_org: :width 2121 :height 1400
-[[file:./.ob-jupyter/a6b9bfc62581e7bb3bd63bfe25083ea544e95596.png]]
-:END:
-
-
 kalsdfjsl
 #+RESULTS:
 :RESULTS:
@@ -354,3 +345,170 @@ nx.adjacency_matrix(g).todense()
 :         [0, 0, 0, 0, 0, 1, 1, 0, 1, 0],
 :         [0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
 :         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]])
+
+#+begin_src jupyter-python
+df.columns
+#+end_src
+
+#+RESULTS:
+: Index(['mi', 'h', 'hc', 'mag', 'p0'], dtype='object')
+
+#+begin_src jupyter-python
+print(df.mi)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+0     [[-0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0...
+1     [[0.010483044738736513, 0.010483044738736513, ...
+2     [[0.0030986073155969546, 0.0030986073155969546...
+3     [[0.014138328180891141, 0.014138328180891141, ...
+4     [[0.39197119061559027, 0.39197119061559027, 0....
+5     [[0.9999999999999996, 1.0, 1.0, 1.0, 1.0, 1.0,...
+6     [[0.39197119061559027, 0.39197119061559027, 0....
+7     [[0.014138328180892556, 0.014138328180892556, ...
+8     [[0.0030986073155959, 0.0030986073155959, 0.01...
+9     [[0.010483044738736735, 0.010483044738736735, ...
+10    [[-0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0.0, -0...
+11    [[1.0, 1.0000000000000002, 1.0000000000000002,...
+Name: mi, dtype: object
+#+end_example
+
+
+#+begin_src jupyter-python
+mi = df.mi.iloc[-1]
+print(mi.shape)
+from utils import ccolors
+C = ccolors(10)
+fig, ax = plt.subplots()
+for ci, mii in zip(C, mi.T):
+    ax.plot(mii, color = ci)
+ax.set_title(f"T = {1/0.5732374683235916}")
+ax.format(xscale = "log")
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: (30000, 10)
+#+attr_org: :width 288 :height 300
+[[file:./.ob-jupyter/a88944bd5c586af256073e6f29b2b9e4da5237d4.png]]
+:END:
+
+#+begin_src jupyter-python
+import proplot as plt, cmasher as cmr, pandas as pd,\
+    numpy as np, os, sys, networkx as nx, warnings
+from plexsim import models
+from imi import infcy
+fp='./data/exact_kite_dyn=ising_beta=0.9001444450539172_T=310_g.is_directed()=False.pkl'
+fp='./data/exact_kite_dyn=ising_beta=0.9001444450539172_T=310_g.is_directed()=False.pkl'
+df = pd.read_pickle(fp)
+from utils import ccolors
+print(df.mag)
+C = ccolors(10)
+mi = np.stack(df.mi)
+fig, ax = plt.subplots()
+I = mi[5].T
+for c, mii in zip(C, I):
+    ax.plot(mii, color = c, lw = 1)
+inax = ax.inset_axes((0.5, 0.5,0.5, 0.5), zoom = 0)
+nx.draw(df.attrs["settings"].g, ax = inax,
+        node_color = C, node_size = 12)
+
+ax.format(
+ylabel = "$I(s_i : M^t)$",
+xlabel = 'Time(t)')
+fig.show()
+fig.savefig("test")
+mi.shape
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+begin_example
+0     0.05
+1     0.15
+2     0.25
+3     0.35
+4     0.45
+5     0.55
+6     0.65
+7     0.75
+8     0.85
+9     0.95
+10    1.05
+11   -1.00
+Name: mag, dtype: float64
+#+end_example
+| 12 | 310 | 10 |
+#+attr_org: :width 342 :height 300
+[[file:./.ob-jupyter/d34873931d551eb092f36b16aff35dd9074d19c0.png]]
+:END:
+
+
+#+begin_src jupyter-python
+from utils import ccolors
+C = ccolors(10)
+print(ndf.columns)
+imi = np.stack(ndf.imi)
+ai = np.stack(ndf.asymp)
+print(imi.shape, ai.shape)
+
+tmp = np.stack((imi, ai))[:, :-1]
+# tmp[tmp < 1e-3] = 0
+
+mag = ndf.mag[:-1]
+print(tmp.shape)
+fig, ax = plt.subplots()
+for node_imi, c in zip(tmp[0].T, C):
+    # node_imi[node_imi < 1e-2] = 0
+    ax.plot(mag, node_imi, color = c, marker = 'o', alpha = 0.2)
+xl = "Integrated mutual information ($\mu(s_i)$)"
+ax.format(xlabel = xl, ylabel = "AI")
+ax.format(xlabel = r"System macrostate $\langle S \rangle$", ylabel = xl)
+# ax.format(yscale = "symlog")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: Index(['mi', 'h', 'hc', 'mag', 'p0', 'pst', 'psc', 'coeffs', 'half', 'asymp',
+:        'imi', 'rmse'],
+:       dtype='object')
+: (12, 10) (12, 10)
+: (2, 11, 10)
+#+attr_org: :width 313 :height 305
+[[file:./.ob-jupyter/568c74087bced5bede3c061939bac668a60e7bbe.png]]
+:END:
+
+
+#+begin_src jupyter-python
+print(ndf.columns)
+mi = np.stack(ndf.mi)
+coeffs = np.stack(ndf.coeffs)
+print(mi.shape, coeffs.shape)
+
+x = np.linspace(0, 1100, 5000)
+C = ccolors(10)
+P  = 5
+node = 8
+fig, ax = plt.subplots()
+for mi_node, c in zip(mi[P].T, C):
+    # node[node < 1e-3] = 0
+    ax.plot(mi_node, color = c)
+ax.plot(x, f(x, *coeffs[P, node]), ls = "dashed", color = C[node])
+ax.format(xscale = "log", yscale = "log")
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: Index(['mi', 'h', 'hc', 'mag', 'p0', 'pst', 'psc', 'coeffs', 'half', 'asymp',
+:        'imi', 'rmse'],
+:       dtype='object')
+: (12, 300, 10) (12, 10, 5)
+#+attr_org: :width 306 :height 282
+[[file:./.ob-jupyter/343d7f57f25d78de305cc261b9e502627d01c7eb.png]]
+:END:

@@ -7,33 +7,125 @@ import warnings
 warnings.filterwarnings('ignore')
 
 g = nx.krackhardt_kite_graph()
-fp = "kite_exact_trajectories.pkl"
+fp = "kite_exact_trajectories_local_target=0_steps=5_local_max=False.pkl"
+# fp = "kite_exact_trajectories_local_target=0.5_steps=5.pkl"
+# fp = "kite_exact_trajectories_local_target=0_steps=10_to1.pkl"
+# fp = "kite_exact_trajectories_local_target=0.5_steps=5.pkl"
+# fp = "kite_exact_trajectories_local_max.pkl"
+# fp = "tmp.pkl"
+
+# fp = "kite_exact_trajectories_local_target=0.5_steps=3.pkl"
 df = pd.read_pickle(fp)
 df.head(1)
 from exact import *
+import numpy as np
 n = len(g)
 states, allowed = gen_states(n)
 def is_tipping(row):
+    s = np.array([states[i] for i in row.state])
     return np.mean(states[row.state[-1]]) == 0.5
-df["is_tipping"] = df.apply(is_tipping, axis = 1)
 
-from utils import ccolors
-tmp = df[df.is_tipping]
-ps = np.log(np.stack(tmp.ps))
-lol = np.argsort(np.nansum(ps, axis = -1))
-idx  = lol[-1]
-highest = np.nansum(ps[idx])
+ps = np.nansum(np.log(np.stack(df.ps)), -1)
+idx = np.argmax(ps)
 
-idxs = np.where(np.nansum(ps,-1) == highest)[0]
+target = np.percentile(ps, 100)
+idxs = np.where(ps >= target)[0]
+
+# df["is_tipping"] = df.apply(is_tipping, axis = 1)
+# from utils import ccolors
+# tmp = df[df.is_tipping]
+# print(df.shape)
+# ps = np.log(np.stack(tmp.ps))
+# lol = np.argsort(np.nansum(ps, axis = -1))
+# idx  = lol[-1]
+# highest = np.nansum(ps[idx])
+# idxs = np.where(np.nansum(ps,-1) == highest)[0]
 #+end_src
 
 #+RESULTS:
-: Using numpy
-: 100% 1024/1024 [00:00<00:00, 7161.90it/s]
+:RESULTS:
+# [goto error]
+#+begin_example
+---------------------------------------------------------------------------
+FileNotFoundError                         Traceback (most recent call last)
+Input In [1], in <cell line: 17>()
+      9 fp = "kite_exact_trajectories_local_target=0_steps=5_local_max=False.pkl"
+     10 # fp = "kite_exact_trajectories_local_target=0.5_steps=5.pkl"
+     11 # fp = "kite_exact_trajectories_local_target=0_steps=10_to1.pkl"
+     12 # fp = "kite_exact_trajectories_local_target=0.5_steps=5.pkl"
+   (...)
+     15
+     16 # fp = "kite_exact_trajectories_local_target=0.5_steps=3.pkl"
+---> 17 df = pd.read_pickle(fp)
+     18 df.head(1)
+     19 from exact import *
+
+File ~/miniconda3/lib/python3.9/site-packages/pandas/io/pickle.py:187, in read_pickle(filepath_or_buffer, compression, storage_options)
+    124 """
+    125 Load pickled pandas object (or any object) from file.
+    126
+   (...)
+    184 4    4    9
+    185 """  # noqa: E501
+    186 excs_to_catch = (AttributeError, ImportError, ModuleNotFoundError, TypeError)
+--> 187 with get_handle(
+    188     filepath_or_buffer,
+    189     "rb",
+    190     compression=compression,
+    191     is_text=False,
+    192     storage_options=storage_options,
+    193 ) as handles:
+    194
+    195     # 1) try standard library Pickle
+    196     # 2) try pickle_compat (older pandas version) to handle subclass changes
+    197     # 3) try pickle_compat with latin-1 encoding upon a UnicodeDecodeError
+    199     try:
+    200         # TypeError for Cython complaints about object.__new__ vs Tick.__new__
+    201         try:
+
+File ~/miniconda3/lib/python3.9/site-packages/pandas/io/common.py:798, in get_handle(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)
+    789         handle = open(
+    790             handle,
+    791             ioargs.mode,
+   (...)
+    794             newline="",
+    795         )
+    796     else:
+    797         # Binary mode
+--> 798         handle = open(handle, ioargs.mode)
+    799     handles.append(handle)
+    801 # Convert BytesIO or file objects passed with an encoding
+
+FileNotFoundError: [Errno 2] No such file or directory: 'kite_exact_trajectories_local_target=0_steps=5_local_max=False.pkl'
+#+end_example
+:END:
+
+
+
+#+begin_src jupyter-python
+val = np.percentile(ps, 100)
+kdx = np.where(ps == val)[0]
+print(kdx.shape)
+
+fig, ax = plt.subplots()
+ax.plot(ps[k])
+ax.scatter(kdx, ps[kdx])
+ax.format()
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: (1,)
+#+attr_org: :width 302 :height 282
+[[file:./.ob-jupyter/052cd9bbb6ae56f3919212b236733f86a0c5cb97.png]]
+:END:
+
+
 
 #+begin_src jupyter-python
 def plot_trajectory(idx, ax):
-    most_path = tmp.state.iloc[idx]
+    most_path = df.state.iloc[idx]
     most_states = np.array([states[i] for i in most_path])
     c = ccolors(2)
     pos = nx.kamada_kawai_layout(g)
@@ -45,11 +137,16 @@ def plot_trajectory(idx, ax):
     ax.format()
     ax.axis("equal")
 
+from utils import ccolors
 # plt.config.use_style("seaborn-poster")
 from matplotlib.pyplot import Line2D
 from tqdm import tqdm
+idxs = np.arange(len(ps))
+val = np.percentile(ps, 99.9)
+idxs = np.where(ps >= val)[0]
 for idx in tqdm(idxs):
-    fig, ax = plt.subplots(ncols = 6)
+    ncols = len(df.state.iloc[idx])
+    fig, ax = plt.subplots(ncols = ncols)
     plot_trajectory(idx, ax)
     handles = [Line2D([], [], color = c, label = f"{idx}",
                     linestyle = 'none', marker = 'o') for idx, c in enumerate(ccolors(2))]
@@ -61,65 +158,213 @@ for idx in tqdm(idxs):
                prop = dict(size = 20),
                markerscale = 2)
     fig.suptitle("Fraction of nodes in +1", fontsize = 32)
-    fig.savefig(f"./figures/kite_maximized_trajectory_{idx}.pdf")
+    fp = f"./figures/kite_maximized_trajectory_{idx}_maxj.pdf"
+    print(fp)
+    ax.set_title(ps[idx])
+    fig.savefig(fp) ,
     fig.show()
+#+end_src
+
+#+begin_src jupyter-python
+import matplotlib.pyplot as pplt
+from utils import ccolors
+C = ccolors(10)
+pos = nx.kamada_kawai_layout(g)
+t = flip.shape[0]
+fig, ax = plt.subplots(ncols = t)
+timing = np.arange(t)#  - t//2
+for ti, (flipi, axi) in enumerate(zip(flip, ax)):
+    nx.draw(g, pos = pos, ax = axi, node_size = 0, alpha = 0.2,
+            )
+    tmp = np.asarray([i for i in pos.values()])
+    # print(flipi)
+    flipi /= flipi.max()
+    axi.scatter(*tmp.T, s = flipi * 200, color = C)
+    print(np.argsort(flipi))
+    axi.set_title(f"t = {timing[ti]}")
+    axi.axis("equal")
+# ax.axis("equal")
+# ax.format()
+fig.tight_layout()
+fig.savefig("test2")
+fig.show()
+#+end_src
+
+
+#+begin_src jupyter-python
+def flip_prob(df, states, p, p0):
+    from exact import to_binary
+    # get state indices and compute the probability for each node to flip
+    # to its opposite state
+    state_idx = np.stack(df.state)
+    n_states, t = state_idx.shape
+    n = states.shape[1] # 2**n x n
+
+    print(state_idx.shape)
+    flip = np.zeros((t, n))
+    for ti in tqdm(range(t)):
+        sidx = state_idx[:, ti]
+
+        p_ = np.zeros(p0.size)
+        p_[sidx] = p0[sidx]
+        p_ /= p_.sum()
+
+        # p_ = p0.copy()
+
+        # if ti == 0:
+        #     p_ = p0.copy()
+        # else:
+        #     p_ = np.zeros(p0.size)
+        #     for pi in sidx:
+        #         p_[pi] += 1 / len(sidx)
+
+        fig, ax = plt.subplots()
+        ax.plot(p_)
+        ax.format()
+        fig.show()
+
+        print(p_.sum())
+        # p_[sidx] = p0[sidx]
+        # p_ /= p_.sum()
+        for idx in sidx:
+            state = states[idx]
+            for node, si in enumerate(state):
+                tmp = state.copy()
+                tmp[node] = abs(si - 1)
+                assert abs(state - tmp).sum() == 1, (state - tmp, state, tmp, idx, other)
+                other = to_binary(tmp)
+                # compute prob of flipping
+                flip[ti, node] += p_[idx] * p[idx, other]
+    flip /= flip.sum(1)[:, None]
+    return flip
+
+from exact import gen_states, ising, get_transfer, Settings
+A = nx.adjacency_matrix(g).todense()
+states, allowed = gen_states(n)
+E = ising(states, A)
+
+g = nx.krackhardt_kite_graph()
+beta = 0.5732374683235916
+# ignore model here, not needed
+settings = Settings(beta=beta, g=g, steps=5, model=None)
+p, p0 = get_transfer(n, E, settings.beta, allowed, states)
+flip = flip_prob(df, states, p, p0)
+print(flip.shape)
+#+end_src
+
+
+#+begin_src jupyter-python
+import matplotlib.pyplot as pplt
+from utils import ccolors
+C = ccolors(10)
+pos = nx.kamada_kawai_layout(g)
+t = flip.shape[0]
+fig, ax = plt.subplots(ncols = t)
+timing = np.arange(t)#  - t//2
+for ti, (flipi, axi) in enumerate(zip(flip, ax)):
+    nx.draw(g, pos = pos, ax = axi, node_size = 0, alpha = 0.2,
+            )
+    tmp = np.asarray([i for i in pos.values()])
+    # print(flipi)
+    flipi /= flipi.max()
+    axi.scatter(*tmp.T, s = flipi * 200, color = C)
+    print(np.argsort(flipi))
+    axi.set_title(f"t = {timing[ti]}")
+    axi.axis("equal")
+# ax.axis("equal")
+# ax.format()
+fig.tight_layout()
+fig.savefig("test2")
+fig.show()
 #+end_src
 
 #+RESULTS:
 :RESULTS:
-: 100% 10/10 [00:09<00:00,  1.01it/s]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/d9ea3ee718f33d43898402af1516c127b01343b1.png]]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/5abe949b02ca26e61886d7749fb7b77c4ee118fa.png]]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/a8135a2cc7bb3f39e05c88837345a2cd32869bdb.png]]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/0badb4662d5024ca6a2126efb8c1fa71ecbff3b3.png]]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/ca509bc30cbc95fdeaa23b2d4743d0fa80b3a77c.png]]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/cebf13f85406d91bdf41481f1e6966768c08b24b.png]]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/883f604898e733c74bfdda02548e97061d6b53ce.png]]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/74f33bf52e4fd0413dc0b08aa8cbd8b258de3f43.png]]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/71f096b9963f8cb892b25bcdc040841de61fe46c.png]]
-#+attr_org: :width 1575 :height 602
-[[file:./.ob-jupyter/11235f6ceab35efbb7ec37ca16b0cfb1fe341632.png]]
+: [8 3 7 0 1 9 4 2 6 5]
+: [3 1 0 8 9 4 2 6 5 7]
+: [3 0 1 5 6 2 4 8 9 7]
+: [3 5 6 0 1 2 4 7 9 8]
+#+attr_org: :width 1050 :height 429
+[[file:./.ob-jupyter/a81f1995707b0500762aafb74f4fa24b083ace90.png]]
 :END:
 
+#+begin_src jupyter-python
+def when_do_we_flip(df, states):
+    paths = np.stack(df.state)
+    n, t = paths.shape
+    nodes = states.shape[1]
+    flipped = np.zeros((nodes, t))
+    for ti in range(1, t):
+        for ni in range(n):
+            s = states[paths[ni, ti]]
+            s_past = states[paths[ni, ti - 1]]
+            node = np.where(abs(s - s_past))[0]
+            flipped[node, ti] += 1
+    return flipped
+
+flipped = when_do_we_flip(df, states)
+print(flipped.shape)
+
+#+end_src
 
 #+begin_src jupyter-python
-print(tmp.columns)
-def get_expectation_node(df):
-    state_idx = np.stack(df.state) # contains state idx
-    ps = np.stack(df.ps) # contains state probability
-    t = state_idx.shape[1]
+%matplotlib inline
+idx = np.stack(df.state)
 
-    expectations = np.zeros((t, states.shape[1]))
-    # extact states and compute expectation value
+fig, ax = plt.subplots()
+ps = np.zeros(p0.size)
+x = np.arange(0, ps.size)
+base = 0
 
-    tmp = ps.copy()
-    print(ps.shape)
-    tmp = np.insert(tmp, 0, np.zeros(tmp.shape[0]), axis = 1)
-    for t in range(t):
-        collection_states = state_idx[:, t]
-        states_ = states[collection_states]
-        p_states = tmp[:, t]
-        p_states /= p_states.sum()
-        p_states[np.isnan(p_states)] = 0
-        # expectation of getting state = 1
-        p = p_states @ states_
-        expectations[t, :] = p
-    return expectations
-expectations = get_expectation_node(tmp)
+for tidx, idx in enumerate(np.stack(df.state).T):
+    ps.fill(0)
+    ps[idx] = p0[idx]
+    ps /= ps.sum()
+    y = -(ps + tidx)
+    idx = np.where(y == np.min(y))[0]
+    ax.plot(y, x, color = "tab:blue")
+    ax.scatter(y[idx], x[idx])
+    base += ps.max()
+ps = np.log(np.stack(df.ps)).sum(-1)
+idx = np.argmax(ps)
+
+y = np.stack(df.state)[idx]
+x = np.arange(0, y.size) + np.stack(df.ps)[idx]
+
+ax.plot(-x, y, color = "k", marker = 'o', s = 3)
+ax.format(
+xlabel = "Time(t)", ylabel = "$P(S^t)$",
+title = "Path analysis tipping points")
+fig.show()
+plt.show()
 #+end_src
 
 #+RESULTS:
-: Index(['state', 'ps', 'is_tipping'], dtype='object')
-: (30240, 5)
+:RESULTS:
+#+attr_org: :width 329 :height 323
+[[file:./.ob-jupyter/76e378c9190db360a065cfb2e4bc1e1886f8d669.png]]
+:END:
+
+#+begin_src jupyter-python
+print(expectations)
+fig, ax = plt.subplots()
+ax.imshow(expectations)
+ax.format()
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: [[0.  0.  0.  0.  0.  0.  0.  0.  0.  0. ]
+:  [0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5]
+:  [0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5]
+:  [0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5]
+:  [0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5]
+:  [0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5 0.5]]
+#+attr_org: :width 277 :height 182
+[[file:./.ob-jupyter/51018bcbdc091a24920e05fe72c6bea097b72d0e.png]]
+:END:
 
 
 #+begin_src jupyter-python
@@ -465,3 +710,109 @@ print(1/(1 + np.exp(6 * beta)))
 
 #+RESULTS:
 : 0.03108580391136416
+
+
+#+begin_src jupyter-python
+from exact import ising, get_transfer, Settings, NodeToSystem, gen_states
+import cupy as cp
+beta = 0.5732374683235916
+T = 1
+g = nx.krackhardt_kite_graph()
+n = len(g)
+A = nx.adjacency_matrix(g).todense()
+states, allowed = gen_states(n)
+settings = Settings(beta, T, g, NodeToSystem)
+E = ising(cp.asarray(states), cp.asarray(A))
+p, p0 = get_transfer(n, E, settings.beta, allowed, states)
+
+#+end_src
+
+#+RESULTS:
+: 100% 1024/1024 [00:00<00:00, 9099.31it/s]
+
+#+begin_src jupyter-python
+p_start = p0.copy()
+for idx, s in enumerate(states):
+    if np.mean(s) != 0.5:
+        p_start[idx] = 0
+p_start /= p_start.sum()
+
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src jupyter-python
+from collections import Counter
+from exact import to_binary, gen_binary
+paths = np.stack(df.state)
+ps  = np.log(np.stack(df.ps)).sum(-1)
+c = Counter(paths[:, -1])
+
+x = np.arange(2**10)
+y = np.zeros(x.size)
+
+N = 0
+for idx, p in enumerate(ps):
+    end = paths[idx, -1]
+
+    if gen_binary(end, 10).mean() != 0.5:
+         continue
+    else:
+        y[end] +=  p
+        N+=1
+
+y /= y.sum()
+print(y.sum(), N)
+#+end_src
+
+#+RESULTS:
+: 1.0 30240
+
+
+#+begin_src jupyter-python
+print(len(c))
+print(c)
+print(paths[5])
+print(gen_binary(512, 10))
+#+end_src
+
+#+begin_src jupyter-python
+print(np.unique(y))
+#+end_src
+
+#+RESULTS:
+: [0.]
+
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+ax.plot(x, p_start, label = "Stationary")
+ax.plot(x, y, label = "Trajectory from <S> = 0")
+ax.format(xlabel = "State(S)", ylabel = "P(S)")
+ax.legend(loc = "t")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+attr_org: :width 328 :height 331
+[[file:./.ob-jupyter/efff153bb5597ede42168d0e09f8fddf0a2f9e99.png]]
+:END:
+
+#+begin_src jupyter-python
+a = y[:y.size//2]
+b = y[y.size // 2:][::-1]
+fig, ax = plt.subplots()
+ax.plot(a, label = "first 512 states")
+ax.plot(b, alpha = 0.5, label = "second 512 states")
+ax.format(xlabel = 'state (S)', ylabel = "P(S)")
+ax.legend(loc = "t")
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+#+attr_org: :width 332 :height 331
+[[file:./.ob-jupyter/a22d03b94ae092ed22956c8a5b84cbfe06a91a6b.png]]
+:END:
