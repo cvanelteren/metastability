@@ -19,6 +19,7 @@ fp = "exact_kite_dyn=sis_beta=9.122104355448496_T=200.pkl"
 fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=200.pkl"
 fp='exact_kite_dyn=ising_beta=0.5732374683235916_T=300_g.is_directed()=False.pkl'
 fp='exact_kite_dyn=ising_beta=0.5732374683235916_T=300_g.is_directed()=False.pkl'
+fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=2000.pkl"
 # fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=30000.pkl"
 # fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=310.pkl"
 # fp='exact_kite_dyn=ising_beta=0.8333333333333334_T=310_g.is_directed()=False.pkl'
@@ -42,8 +43,7 @@ ndf = fit_curve(df, f, offset = True)
 #+end_src
 
 #+RESULTS:
-: The autoreload extension is already loaded. To reload it, use:
-:   %reload_ext autoreload
+: Using numpy
 : 1.05
 
 
@@ -376,7 +376,7 @@ Name: mi, dtype: object
 
 
 #+begin_src jupyter-python
-mi = df.mi.iloc[-1]
+mi = df.mi.iloc[5]
 print(mi.shape)
 from utils import ccolors
 C = ccolors(10)
@@ -391,9 +391,9 @@ fig.show()
 
 #+RESULTS:
 :RESULTS:
-: (30000, 10)
+: (2000, 10)
 #+attr_org: :width 288 :height 300
-[[file:./.ob-jupyter/a88944bd5c586af256073e6f29b2b9e4da5237d4.png]]
+[[file:./.ob-jupyter/1d0dab42017d5a64c9c3d9b80af243282f78ca49.png]]
 :END:
 
 #+begin_src jupyter-python
@@ -458,32 +458,97 @@ print(imi.shape, ai.shape)
 tmp = np.stack((imi, ai))[:, :-1]
 # tmp[tmp < 1e-3] = 0
 
-mag = ndf.mag[:-1]
+mag = ndf.mag[:-1] - 0.05
+
+fig, ax = plt.subplots(ncols = 2, share = 0, spanx = True)
 print(tmp.shape)
-fig, ax = plt.subplots()
-for node_imi, c in zip(tmp[0].T, C):
+
+# inax = ax[2].inset_axes((0,0,1,1), projection = "3d", zoom = 0)
+for node_imi, c in zip(tmp.T, C):
     # node_imi[node_imi < 1e-2] = 0
-    ax.plot(mag, node_imi, color = c, marker = 'o', alpha = 0.2)
-xl = "Integrated mutual information ($\mu(s_i)$)"
-ax.format(xlabel = xl, ylabel = "AI")
-ax.format(xlabel = r"System macrostate $\langle S \rangle$", ylabel = xl)
+    ax[0].plot(mag, node_imi[...,0], color = c, marker = 'o', alpha = 1)
+    ax[1].plot(mag, node_imi[...,1], color = c, marker = 'o', alpha = 1)
+
+    # inax.plot(mag, node_imi[..., 0], node_imi[..., 1])
+
+    # ax[1].plot[]
+xl0 = "Integrated mutual information ($\mu(s_i)$)"
+xl1 = "Aymptotic information ($\omega$)"
+
+ax.format(xlabel = r"System macrostate $\langle S \rangle$")
+ax[0].set_ylabel(xl0)
+ax[1].set_ylabel(xl1)
 # ax.format(yscale = "symlog")
 fig.show()
 #+end_src
 
 #+RESULTS:
 :RESULTS:
-: Index(['mi', 'h', 'hc', 'mag', 'p0', 'pst', 'psc', 'coeffs', 'half', 'asymp',
-:        'imi', 'rmse'],
-:       dtype='object')
+: Index(['mi', 'h', 'hc', 'mag', 'p0', 'coeffs', 'half', 'asymp', 'imi', 'rmse'], dtype='object')
 : (12, 10) (12, 10)
 : (2, 11, 10)
-#+attr_org: :width 313 :height 305
-[[file:./.ob-jupyter/568c74087bced5bede3c061939bac668a60e7bbe.png]]
+#+attr_org: :width 623 :height 304
+[[file:./.ob-jupyter/c49d375fa934f7c2a37110fe09c96b875b3d5c10.png]]
+:END:
+
+#+begin_src jupyter-python
+print(tmp.shape)
+# fig, ax = plt.subplots()
+# for node in range(nodes):
+#     ax.plot(*tmp[..., node], color = C[node], marker = 'o')
+# ax.format()
+# fig.show()
+
+fig, ax = plt.subplots()
+ax.imshow(tmp[0].T)
+ax.format()
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: (2, 11, 10)
+#+attr_org: :width 277 :height 260
+[[file:./.ob-jupyter/b11d44d00c23ffd5490858f7199c7a93af808ed6.png]]
 :END:
 
 
 #+begin_src jupyter-python
+g = nx.krackhardt_kite_graph()
+idx = np.max(tmp, axis = 2)
+print(tmp.round(1))
+pos = nx.kamada_kawai_layout(g)
+l = []
+fig, ax = plt.subplots()
+D = ccolors(len(mag))
+for jdx, magi in enumerate(mag):
+    target = np.where(tmp[0, jdx] == idx[0, jdx])[0]
+    other = np.where(tmp[1, jdx] == idx[1, jdx])[0]
+
+    print(round(magi, 1), target[0], other[0], end = "\n")
+    o = tmp[0, jdx, target[0]]
+    oo = tmp[1, jdx, other[0]]
+    l.append((o, oo))
+    ax.scatter(o, oo, color = C[target[0]])
+    # for t, tt in zip(target,  other):
+        # ax.scatter(tmp[0, jdx, t], tmp[1, jdx, tt], color = D[jdx], alpha = 1)
+l = np.array(l)
+# l /= l.max(0)
+# l /= l.max(1)[:, None]
+ax.plot(*l.T, zorder = 0)
+# ax.set_xscale("symlog")
+# ax.set_yscale("symlog")
+# ax.scatter(*l.T, c = D)
+# h = ax.imshow(l.T)
+# ax.colorbar(h)
+# ax.scatter(*l.T, marker = "o", color = D)
+ax.format(xlabel = "IMI ($\mu(s_i)$)",
+          ylabel = "AI ($\omega$)")
+#+end_src
+
+#+begin_src jupyter-python
+from utils import ccolors
 print(ndf.columns)
 mi = np.stack(ndf.mi)
 coeffs = np.stack(ndf.coeffs)
@@ -505,10 +570,149 @@ fig.show()
 
 #+RESULTS:
 :RESULTS:
-: Index(['mi', 'h', 'hc', 'mag', 'p0', 'pst', 'psc', 'coeffs', 'half', 'asymp',
-:        'imi', 'rmse'],
-:       dtype='object')
-: (12, 300, 10) (12, 10, 5)
-#+attr_org: :width 306 :height 282
-[[file:./.ob-jupyter/343d7f57f25d78de305cc261b9e502627d01c7eb.png]]
+: Index(['mi', 'h', 'hc', 'mag', 'p0', 'coeffs', 'half', 'asymp', 'imi', 'rmse'], dtype='object')
+: (12, 2000, 10) (12, 10, 5)
+#+attr_org: :width 288 :height 282
+[[file:./.ob-jupyter/c5e8e8d5234bdf06bbbac0d48c297ae84d32089e.png]]
 :END:
+
+
+#+begin_src jupyter-python
+
+pos = nx.kamada_kawai_layout(g)
+mi = np.stack(ndf.mi)
+mag = (np.asarray(ndf.mag.copy()) - 0.05).round(1)[:-1]
+print(mag)
+targets = np.linspace(0.1, 0.5, 5)
+
+
+layout = [
+          [1, 1, 2, 2, 3, 3, 4, 4, 5, 5],
+          [6, 6, 6, 6, 6, 7, 7, 7, 7, 7]
+]
+
+# layout = [[3, 4, 5, 6, 7],
+          # [1, 1, 1, 2, 2]]
+
+
+fig = plt.figure(share = 0, spanx = 1, refwidth='10cm')
+fig, ax = plt.subplots(layout, refnum = 5, share = 0, spanx = 1, refwidth = "10cm")
+
+tmp = np.stack((imi, ai))[:, :-1]
+
+for node_imi, c in zip(tmp.T, C):
+    ax[5].plot(mag, node_imi[...,0], color = c, marker = 'o', alpha = 1)
+    ax[6].plot(mag, node_imi[...,1], color = c, marker = 'o', alpha = 1)
+
+
+for target, axi in zip(targets, ax[0, :]):
+    idx = np.argmin( abs(mag  - target))
+    for c, node in zip(C, mi[idx].T):
+        axi.plot(node, color = c)
+
+    title = ""
+    # if target == 0.1:
+        # title = "Ground state\n"
+    if target == 0.5:
+        title = "Tipping point\n"
+    title += f"$\\langle S\\rangle$ = {round(target, 1)}"
+    axi.set_title(title)
+    # inax = axi.inset_axes((0.5, 0.4, 0.5, 0.6), zoom = 0)
+
+    s = tmp[0, idx].copy()
+    s /= s.max()
+
+
+    # if target == 0.1:
+    #     inax.set_title("Integrated mutual information")
+
+    ymin = tmp[0, idx].min()
+    ymax = tmp[0, idx].max()
+
+    y_offset = ymax / tmp[0, :-1].max()
+    y_offset = np.clip(y_offset + 0.01, 0, 1)
+    y_offset  = 0.75
+    b = (target - .15, target + 0.24, 0.25, 0.25)
+    inax = ax[5].inset_axes(b, zoom = 1)
+    rec, indicators = inax.indicate_inset_zoom()
+    [indicator.set_visible(0) for indicator in indicators]
+    # indicators[1].set_visible(1)
+    # indicators[0].set_visible(1)
+    # indicators[2].set_visible(1)
+    inax.axis("off")
+
+    xlim = (target - 0.025, target + 0.025)
+    ylim = (ymin * 0.90, ymax * 1.10)
+    inax.format(xlim = xlim, ylim = ylim)
+
+    inax = ax[5].inset_axes(b, zoom = 0)
+
+    nx.draw_networkx_edges(g, pos, ax = inax, alpha = 0.2)
+    l = np.asarray(list(pos.values())).T
+    inax.scatter(*l, c = C, s = s*60)
+    inax.axis("equal")
+    inax.set_facecolor("none")
+    inax.grid(0)
+    inax.axis('off')
+    inax.margins(0)
+
+
+    s = tmp[1, idx].copy()
+    s /= tmp[1].max()
+
+    ymin = tmp[1, idx].min()
+    ymax = tmp[1, idx].max()
+
+    y_offset = ymax / tmp[0, :-1].max()
+    y_offset = np.clip(y_offset + 0.01, 0, 1)
+    y_offset  = 0.75
+    b = (target - .15, target + 0.24, 0.25, 0.25)
+    inax = ax[6].inset_axes(b, zoom = 1)
+    rec, indicators = inax.indicate_inset_zoom()
+    [indicator.set_visible(0) for indicator in indicators]
+    # indicators[1].set_visible(1)
+    # indicators[0].set_visible(1)
+    # indicators[2].set_visible(1)
+    inax.axis("off")
+
+    xlim = (target - 0.025, target + 0.025)
+    ylim = (ymin * 0.90, ymax * 1.10)
+    inax.format(xlim = xlim, ylim = ylim)
+
+    inax = ax[6].inset_axes(b, zoom = 0)
+
+    nx.draw_networkx_edges(g, pos, ax = inax, alpha = 0.2)
+    l = np.asarray(list(pos.values())).T
+    inax.scatter(*l, c = C, s = s.round(3)*60)
+    inax.axis("equal")
+    inax.set_facecolor("none")
+    inax.grid(0)
+    inax.axis('off')
+    inax.margins(0)
+
+
+
+ax[5].set_ylim(-1, 20)
+ax[6].set_ylim(-0.05, 0.75)
+ax[0, :].format(xlim = (0, 150), xlabel = "Time ($t$)")
+ax[0, 0].format(ylabel = "Information flow\n$I(s_i : S^{\\tau + t }| \\langle S^{\\tau} \\rangle)$")
+ax.format(fontsize = 21, abc = True, titleabove = False)
+
+ax[6].set_ylabel("Asymptotic information ($\omega$)")
+ax[5].set_ylabel("Integrated mutual information\n($\mu(s_i)$)")
+ax[1,:].format(xlabel = "System macrostate ($\\langle S \\rangle $)")
+fig.suptitle("Fraction of nodes in state +1",
+             fontsize = 32)
+fig.savefig("./figures/figure2_alt.pdf")
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: [0.  0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1. ]
+: Figure(refwidth=3.94)
+#+attr_org: :width 2510 :height 1104
+[[file:./.ob-jupyter/0090abb49fcfcad631bf46944d55df0f63819cf6.png]]
+:END:
+#+RESULTS:

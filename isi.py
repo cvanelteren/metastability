@@ -36,7 +36,7 @@ def get_success(s, n):
     return 0
 
 
-def get_isi(seed, nudges={}, max_t=50_000, n=100):
+def get_isi(seed, nudges={}, max_t=50_000, n=500):
     m = models.Potts(
         g,
         t=1 / beta,
@@ -78,6 +78,8 @@ def get_isi(seed, nudges={}, max_t=50_000, n=100):
         buffer = np.roll(buffer, -1, axis=0)
     p = {x: y / sum(p.values()) for x, y in p.items()}
     isi = np.diff(tips)
+
+    print(success, num_tips, nudges)
     return (
         isi,
         tmp[:max_t],
@@ -107,7 +109,7 @@ def run(x):
 
     for node in tqdm(g.nodes()):
         nudges = {node: nudge}
-        isi, system, p, sucess, num_tips = get_isi(seed, nudges)
+        isi, system, p, success, num_tips = get_isi(seed, nudges)
         print(f"{success=}")
         row = dict(
             label=node,
