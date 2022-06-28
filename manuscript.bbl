@@ -17,6 +17,136 @@
 \endgroup
 
 \datalist[entry]{none/global//global/global}
+  \entry{Ladyman2013}{article}{}
+    \name{author}{3}{}{%
+      {{hash=LJ}{%
+         family={Ladyman},
+         familyi={L\bibinitperiod},
+         given={James},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=LJ}{%
+         family={Lambert},
+         familyi={L\bibinitperiod},
+         given={James},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=WK}{%
+         family={Wiesner},
+         familyi={W\bibinitperiod},
+         given={Karoline},
+         giveni={K\bibinitperiod},
+      }}%
+    }
+    \keyw{Complex system,Complexity,Information,Statistical complexity}
+    \strng{namehash}{LJ+1}
+    \strng{fullhash}{LJLJWK1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Complex systems research is becoming ever more important in both the
+  natural and social sciences. It is commonly implied that there is such a
+  thing as a complex system, different examples of which are studied across
+  many disciplines. However, there is no concise definition of a complex
+  system, let alone a definition on which all scientists agree. We review
+  various attempts to characterize a complex system, and consider a core set of
+  features that are widely associated with complex systems in the literature
+  and by those in the field. We argue that some of these features are neither
+  necessary nor sufficient for complexity, and that some of them are too vague
+  or confused to be of any analytical use. In order to bring mathematical
+  rigour to the issue we then review some standard measures of complexity from
+  the scientific literature, and offer a taxonomy for them, before arguing that
+  the one that best captures the qualitative notion of the order produced by
+  complex systems is that of the Statistical Complexity. Finally, we offer our
+  own list of necessary conditions as a characterization of complexity. These
+  conditions are qualitative and may not be jointly sufficient for complexity.
+  We close with some suggestions for future work. \textcopyright{} 2012
+  Springer Science + Business Media B.V.%
+    }
+    \verb{doi}
+    \verb 10.1007/s13194-012-0056-8
+    \endverb
+    \field{issn}{1879-4912}
+    \field{number}{1}
+    \field{pages}{33\bibrangedash 67}
+    \field{title}{What Is a Complex System?}
+    \field{volume}{3}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/NW9HNB5M/Ladyman, Lambert, Wiesner - 2013
+    \verb  - What is a complex system(2).pdf
+    \endverb
+    \field{journaltitle}{European Journal for Philosophy of Science}
+    \field{month}{01}
+    \field{year}{2013}
+  \endentry
+
+  \entry{vanNes2016}{article}{}
+    \name{author}{7}{}{%
+      {{hash=vEH}{%
+         family={{van Nes}},
+         familyi={v\bibinitperiod},
+         given={Egbert\bibnamedelima H.},
+         giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=ABM}{%
+         family={Arani},
+         familyi={A\bibinitperiod},
+         given={Babak\bibnamedelima M.S.},
+         giveni={B\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=SA}{%
+         family={Staal},
+         familyi={S\bibinitperiod},
+         given={Arie},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=vB}{%
+         family={{van der Bolt}},
+         familyi={v\bibinitperiod},
+         given={Bregje},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=FBM}{%
+         family={Flores},
+         familyi={F\bibinitperiod},
+         given={Bernardo\bibnamedelima M.},
+         giveni={B\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=BS}{%
+         family={Bathiany},
+         familyi={B\bibinitperiod},
+         given={Sebastian},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=SM}{%
+         family={Scheffer},
+         familyi={S\bibinitperiod},
+         given={Marten},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{vEH+1}
+    \strng{fullhash}{vEHABMSAvBFBMBSSM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1016/j.tree.2016.09.011
+    \endverb
+    \field{issn}{01695347}
+    \field{number}{12}
+    \field{pages}{902\bibrangedash 904}
+    \field{title}{What {{Do You Mean}}, `{{Tipping Point}}'?}
+    \field{volume}{31}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/IFH4VFTI/van Nes et al. - 2016 - What Do
+    \verb You Mean, ‘Tipping Point’.pdf
+    \endverb
+    \field{journaltitle}{Trends in Ecology \& Evolution}
+    \field{month}{12}
+    \field{year}{2016}
+  \endentry
+
   \entry{Fries2015}{article}{}
     \name{author}{1}{}{%
       {{hash=FP}{%
@@ -99,6 +229,161 @@
     \endverb
     \field{month}{07}
     \field{year}{2000}
+  \endentry
+
+  \entry{Galam2020}{article}{}
+    \name{author}{2}{}{%
+      {{hash=GS}{%
+         family={Galam},
+         familyi={G\bibinitperiod},
+         given={Serge},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=CT}{%
+         family={Cheon},
+         familyi={C\bibinitperiod},
+         given={Taksu},
+         giveni={T\bibinitperiod},
+      }}%
+    }
+    \keyw{Condensed Matter - Statistical Mechanics,Nonlinear Sciences -
+  Adaptation and Self-Organizing Systems,Physics - Physics and Society}
+    \strng{namehash}{GSCT1}
+    \strng{fullhash}{GSCT1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{abstract}{%
+    A universal formula is shown to predict the dynamics of public opinion
+  including eventual sudden and unexpected outbreaks of minority opinions
+  within a generic parameter space of five dimensions. The formula is obtained
+  combining and extending several components of Galam model of opinion
+  dynamics, otherwise treated separately, into one single update equation,
+  which then deploys in a social space of five dimensions. Four dimensions
+  account for a rich diversity of individual traits within a heterogeneous
+  population, including differentiated stubbornness, contrarianism, and
+  embedded prejudices. The fifth dimension is the size for the discussing
+  update groups. Having one single formula allows exploring the complete
+  geometry of the underlying landscape of opinion dynamics. Attractors and
+  tipping points, which shape the topology of the different possible dynamics
+  flows, are unveiled. Driven by repeated discussions among small groups of
+  people during a social or political public campaign, the phenomenon of
+  minority spreading and parallel majority collapse are thus revealed ahead of
+  their occurrence. Accordingly, within the opinion landscape, unexpected and
+  sudden events like Brexit and Trump victories become visible within a
+  forecast time horizon making them predictable. Despite the accidental nature
+  of the landscape, evaluating the parameter values for a specific case allows
+  to single out which basin of attraction is going to drive the associate
+  dynamics and thus a prediction of the outcome becomes feasible. The model may
+  apply to a large spectrum of social situations including voting outcomes,
+  market shares and societal trends, allowing to envision novel winning
+  strategies in competing environments.%
+    }
+    \verb{doi}
+    \verb 10.3389/fphy.2020.566580
+    \endverb
+    \verb{eprint}
+    \verb 1901.09622
+    \endverb
+    \field{issn}{2296-424X}
+    \field{pages}{566580}
+    \field{shorttitle}{Tipping Points in Opinion Dynamics}
+    \field{title}{Tipping Points in Opinion Dynamics: A Universal Formula in
+  Five Dimensions}
+    \field{volume}{8}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/BKBLWWGI/Galam and Cheon - 2020 - Tipping
+    \verb  points in opinion dynamics a universal fo.pdf
+    \endverb
+    \field{journaltitle}{Frontiers in Physics}
+    \field{eprinttype}{arxiv}
+    \field{eprintclass}{cond-mat, physics:nlin, physics:physics}
+    \field{month}{11}
+    \field{year}{2020}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{1986}{article}{}
+    \field{labeltitlesource}{title}
+    \field{title}{\textcopyright{} 1986 {{Nature Publishing Group}}}
+    \field{year}{1986}
+  \endentry
+
+  \entry{Wunderling2021}{article}{}
+    \name{author}{4}{}{%
+      {{hash=WN}{%
+         family={Wunderling},
+         familyi={W\bibinitperiod},
+         given={Nico},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=DJF}{%
+         family={Donges},
+         familyi={D\bibinitperiod},
+         given={Jonathan\bibnamedelima F.},
+         giveni={J\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+      {{hash=KJ}{%
+         family={Kurths},
+         familyi={K\bibinitperiod},
+         given={J{\"u}rgen},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=WR}{%
+         family={Winkelmann},
+         familyi={W\bibinitperiod},
+         given={Ricarda},
+         giveni={R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WN+1}
+    \strng{fullhash}{WNDJFKJWR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    With progressing global warming, there is an increased risk that one or
+  several tipping elements in the climate system might cross a critical
+  threshold, resulting in severe consequences for the global climate,
+  ecosystems and human societies. While the underlying processes are fairly
+  well-understood, it is unclear how their interactions might impact the
+  overall stability of the Earth's climate system. As of yet, this cannot be
+  fully analysed with state-of-the-art Earth system models due to computational
+  constraints as well as some missing and uncertain process representations of
+  certain tipping elements. Here, we explicitly study the effects of known
+  physical interactions among the Greenland and West Antarctic ice sheets, the
+  Atlantic Meridional Overturning Circulation (AMOC) and the Amazon rainforest
+  using a conceptual network approach. We analyse the risk of domino effects
+  being triggered by each of the individual tipping elements under global
+  warming in equilibrium experiments. In these experiments, we propagate the
+  uncertainties in critical temperature thresholds, interaction strengths and
+  interaction structure via large ensembles of simulations in a Monte Carlo
+  approach. Overall, we find that the interactions tend to destabilise the
+  network of tipping elements. Furthermore, our analysis reveals the
+  qualitative role of each of the four tipping elements within the network,
+  showing that the polar ice sheets on Greenland and West Antarctica are
+  oftentimes the initiators of tipping cascades, while the AMOC acts as a
+  mediator transmitting cascades. This indicates that the ice sheets, which are
+  already at risk of transgressing their temperature thresholds within the
+  Paris range of 1.5 to 2 {$\smwhtcircle$}C, are of particular importance for
+  the stability of the climate system as a whole.%
+    }
+    \verb{doi}
+    \verb 10.5194/esd-12-601-2021
+    \endverb
+    \field{issn}{2190-4987}
+    \field{number}{2}
+    \field{pages}{601\bibrangedash 619}
+    \field{title}{Interacting Tipping Elements Increase Risk of Climate Domino
+  Effects under Global Warming}
+    \field{volume}{12}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/ABNBRVL5/Wunderling et al. - 2021 - Inter
+    \verb acting tipping elements increase risk of clim.pdf
+    \endverb
+    \field{journaltitle}{Earth System Dynamics}
+    \field{month}{06}
+    \field{year}{2021}
   \endentry
 
   \entry{Hopfield1982b}{article}{}
@@ -250,6 +535,269 @@
     \field{year}{2015}
   \endentry
 
+  \entry{Harush2017a}{article}{}
+    \name{author}{2}{}{%
+      {{hash=HU}{%
+         family={Harush},
+         familyi={H\bibinitperiod},
+         given={Uzi},
+         giveni={U\bibinitperiod},
+      }}%
+      {{hash=BB}{%
+         family={Barzel},
+         familyi={B\bibinitperiod},
+         given={Baruch},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{Springer US}}%
+    }
+    \strng{namehash}{HUBB1}
+    \strng{fullhash}{HUBB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Although networks are extensively used to visualize information flow in
+  biological, social and technological systems, translating topology into
+  dynamic flow continues to challenge us, as similar networks exhibit
+  fundamentally different flow patterns, driven by different interaction
+  mechanisms. To uncover a network's actual flow patterns, here we use a
+  perturbative formalism, analytically tracking the contribution of all
+  nodes/paths to the flow of information, exposing the rules that link
+  structure and dynamic information flow for a broad range of nonlinear
+  systems. We find that the diversity of flow patterns can be mapped into a
+  single universal function, characterizing the interplay between the system's
+  topology and its dynamics, ultimately allowing us to identify the network's
+  main arteries of information flow. Counter-intuitively, our formalism
+  predicts a family of frequently encountered dynamics where the flow of
+  information avoids the hubs, favoring the network's peripheral pathways, a
+  striking disparity between structure and dynamics.%
+    }
+    \verb{doi}
+    \verb 10.1038/s41467-017-01916-3
+    \endverb
+    \field{issn}{20411723}
+    \field{number}{1}
+    \field{pages}{1\bibrangedash 11}
+    \field{title}{Dynamic Patterns of Information Flow in Complex Networks}
+    \field{volume}{8}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/PFZFNYYG/Harush, Barzel - 2017 - Dynafmic
+    \verb  patterns of information flow in complex networks(2).pdf
+    \endverb
+    \field{journaltitle}{Nature Communications}
+    \field{year}{2017}
+  \endentry
+
+  \entry{Gao2016}{article}{}
+    \name{author}{3}{}{%
+      {{hash=GJ}{%
+         family={Gao},
+         familyi={G\bibinitperiod},
+         given={Jianxi},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=BB}{%
+         family={Barzel},
+         familyi={B\bibinitperiod},
+         given={Baruch},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=BAL}{%
+         family={Barab{\'a}si},
+         familyi={B\bibinitperiod},
+         given={Albert-L{\'a}szl{\'o}},
+         giveni={A\bibinithyphendelim L\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{Nature Publishing Group}}%
+    }
+    \strng{namehash}{GJ+1}
+    \strng{fullhash}{GJBBBAL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    We have shown previously that the AKT2 pathway is essential for cell
+  survival and important in malignant transformation. In this study, we
+  demonstrate elevated kinase levels of AKT2 and phosphatidylinositol-3-OH
+  kinase (PI3K) in 32 of 80 primary breast carcinomas. The majority of the
+  cases with the activation are estrogen receptor alpha (ERalpha) positive,
+  which prompted us to examine whether AKT2 regulates ERalpha activity. We
+  found that constitutively activated AKT2 or AKT2 activated by epidermal
+  growth factor or insulin-like growth factor-1 promotes the transcriptional
+  activity of ERalpha. This effect occurred in the absence or presence of
+  estrogen. Activated AKT2 phosphorylates ERalpha in vitro and in vivo, but it
+  does not phosphorylate a mutant ERalpha in which ser-167 was replaced by Ala.
+  The PI3K inhibitor, wortmannin, abolishes both the phosphorylation and
+  transcriptional activity of ERalpha induced by AKT2. However, AKT2-induced
+  ERalpha activity was not inhibited by tamoxifen but was completely abolished
+  by ICI 164,384, implicating that AKT2-activated ERalpha contributes to
+  tamoxifen resistance. Moreover, we found that ERalpha binds to the p85alpha
+  regulatory subunit of PI3K in the absence or presence of estradiol in
+  epithelial cells and subsequently activates PI3K/AKT2, suggesting ERalpha
+  regulation of PI3K/AKT2 through a nontranscriptional and ligand-independent
+  mechanism. These data indicate that regulation between the ERalpha and
+  PI3K/AKT2 pathway (ERalpha-PI3K/AKT2-ERalpha) may play an important role in
+  pathogenesis of human breast cancer and could contribute to
+  ligand-independent breast cancer cell growth.%
+    }
+    \verb{doi}
+    \verb 10.1038/nature18019
+    \endverb
+    \field{isbn}{0008-5472 (Print)\$\textbackslash\$r0008-5472 (Linking)}
+    \field{issn}{0028-0836}
+    \field{number}{7615}
+    \field{pages}{238\bibrangedash 238}
+    \field{title}{Universal Resilience Patterns in Complex Networks}
+    \field{volume}{536}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/Z8RN3VSI/Gao, Barzel, Barabási - 2016 -
+    \verb Universal resilience patterns in complex networks(2).pdf
+    \endverb
+    \field{journaltitle}{Nature}
+    \field{year}{2016}
+  \endentry
+
+  \entry{Wunderling2020}{article}{}
+    \name{author}{7}{}{%
+      {{hash=WN}{%
+         family={Wunderling},
+         familyi={W\bibinitperiod},
+         given={Nico},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=SB}{%
+         family={Stumpf},
+         familyi={S\bibinitperiod},
+         given={Benedikt},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=KJ}{%
+         family={Kr{\"o}nke},
+         familyi={K\bibinitperiod},
+         given={Jonathan},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=SA}{%
+         family={Staal},
+         familyi={S\bibinitperiod},
+         given={Arie},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=TOA}{%
+         family={Tuinenburg},
+         familyi={T\bibinitperiod},
+         given={Obbe\bibnamedelima A.},
+         giveni={O\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=WR}{%
+         family={Winkelmann},
+         familyi={W\bibinitperiod},
+         given={Ricarda},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=DJF}{%
+         family={Donges},
+         familyi={D\bibinitperiod},
+         given={Jonathan\bibnamedelima F.},
+         giveni={J\bibinitperiod\bibinitdelim F\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{WN+1}
+    \strng{fullhash}{WNSBKJSATOAWRDJF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{abstract}{%
+    In this study, we investigate how specific micro-interaction structures
+  (motifs) affect the occurrence of tipping cascades on networks of stylized
+  tipping elements. We compare the properties of cascades in
+  Erdo\H{}s\textendash R\'enyi networks and an exemplary moisture recycling
+  network of the Amazon rainforest. Within these networks, decisive small-scale
+  motifs are the feed forward loop, the secondary feed forward loop, the zero
+  loop, and the neighboring loop. Of all motifs, the feed forward loop motif
+  stands out in tipping cascades since it decreases the critical coupling
+  strength necessary to initiate a cascade more than the other motifs. We find
+  that for this motif, the reduction of critical coupling strength is 11\% less
+  than the critical coupling of a pair of tipping elements. For highly
+  connected networks, our analysis reveals that coupled feed forward loops
+  coincide with a strong 90\% decrease in the critical coupling strength. For
+  the highly clustered moisture recycling network in the Amazon, we observe
+  regions of a very high motif occurrence for each of the four investigated
+  motifs, suggesting that these regions are more vulnerable. The occurrence of
+  motifs is found to be one order of magnitude higher than in a random
+  Erdo\H{}s\textendash R\'enyi network. This emphasizes the importance of local
+  interaction structures for the emergence of global cascades and the stability
+  of the network as a whole.%
+    }
+    \verb{doi}
+    \verb 10.1063/1.5142827
+    \endverb
+    \field{issn}{1054-1500, 1089-7682}
+    \field{number}{4}
+    \field{pages}{043129}
+    \field{shorttitle}{How Motifs Condition Critical Thresholds for Tipping
+  Cascades in Complex Networks}
+    \field{title}{How Motifs Condition Critical Thresholds for Tipping Cascades
+  in Complex Networks: {{Linking}} Micro- to Macro-Scales}
+    \field{volume}{30}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/NVIWHN5B/Wunderling et al. - 2020 - How m
+    \verb otifs condition critical thresholds for tippi.pdf
+    \endverb
+    \field{journaltitle}{Chaos: An Interdisciplinary Journal of Nonlinear
+  Science}
+    \field{month}{04}
+    \field{year}{2020}
+  \endentry
+
+  \entry{Cover2005}{book}{}
+    \name{author}{2}{}{%
+      {{hash=CTM}{%
+         family={Cover},
+         familyi={C\bibinitperiod},
+         given={Thomas\bibnamedelima M.},
+         giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=TJA}{%
+         family={Thomas},
+         familyi={T\bibinitperiod},
+         given={Joy\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{CTMTJA1}
+    \strng{fullhash}{CTMTJA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Following a brief introduction and overview, early chapters cover the basic
+  algebraic relationships of entropy, relative entropy and mutual information,
+  AEP, entropy rates of stochastics processes and data compression, duality of
+  data compression and the growth rate of wealth. Later chapters explore
+  Kolmogorov complexity, channel capacity, differential entropy, the capacity
+  of the fundamental Gaussian channel, the relationship between information
+  theory and statistics, rate distortion and network information theories. The
+  final two chapters examine the stock market and inequalities in information
+  theory. In many cases the authors actually describe the properties of the
+  solutions before the presented problems.%
+    }
+    \verb{doi}
+    \verb 10.1002/047174882X
+    \endverb
+    \field{isbn}{978-0-471-24195-9}
+    \field{issn}{15579654}
+    \field{title}{Elements of {{Information Theory}}}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/296ZDX75/Cover, Thomas - 2005 - Elements
+    \verb of Information Theory(2).pdf
+    \endverb
+    \field{journaltitle}{Elements of Information Theory}
+    \field{year}{2005}
+  \endentry
+
   \entry{vanElteren2022}{article}{}
     \name{author}{3}{}{%
       {{hash=vC}{%
@@ -383,6 +931,235 @@
   Society}
     \field{eprinttype}{arxiv}
     \field{year}{2013}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{James2016a}{article}{}
+    \name{author}{3}{}{%
+      {{hash=JRG}{%
+         family={James},
+         familyi={J\bibinitperiod},
+         given={Ryan\bibnamedelima G.},
+         giveni={R\bibinitperiod\bibinitdelim G\bibinitperiod},
+      }}%
+      {{hash=BN}{%
+         family={Barnett},
+         familyi={B\bibinitperiod},
+         given={Nix},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=CJP}{%
+         family={Crutchfield},
+         familyi={C\bibinitperiod},
+         given={James\bibnamedelima P.},
+         giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+    }
+    \keyw{-a 89,05,45,50,70,75,an important task in,c 05,causation
+  entropy,ey,kd 89,network science,pacs numbers,partial information
+  decomposi-,stochastic process,tion,tp 02,transfer entropy,understanding a
+  complex system}
+    \strng{namehash}{JRG+1}
+    \strng{fullhash}{JRGBNCJP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    A central task in analyzing complex dynamics is to determine the loci of
+  information storage and the communication topology of information flows
+  within a system. Over the last decade and a half, diagnostics for the latter
+  have come to be dominated by the transfer entropy. Via straightforward
+  examples, we show that it and a derivative quantity, the causation entropy,
+  do not, in fact, quantify the flow of information. At one and the same time
+  they can overestimate flow or underestimate influence. We isolate why this is
+  the case and propose several avenues to alternate measures for information
+  flow. We also address an auxiliary consequence: The proliferation of networks
+  as a now-common theoretical model for large-scale systems, in concert with
+  the use of transfer-like entropies, has shoehorned dyadic relationships into
+  our structural interpretation of the organization and behavior of complex
+  systems. This interpretation thus fails to include the effects of polyadic
+  dependencies. The net result is that much of the sophisticated organization
+  of complex systems may go undetected.%
+    }
+    \verb{doi}
+    \verb 10.1103/PhysRevLett.116.238701
+    \endverb
+    \verb{eprint}
+    \verb 1512.06479
+    \endverb
+    \field{issn}{10797114}
+    \field{number}{23}
+    \field{pages}{1\bibrangedash 6}
+    \field{title}{Information {{Flows}}? {{A Critique}} of {{Transfer
+  Entropies}}}
+    \field{volume}{116}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/285RW7MU/James, Barnett, Crutchfield - 20
+    \verb 16 - Information Flows A Critique of Transfer Entropies(2).pdf
+    \endverb
+    \field{journaltitle}{Physical Review Letters}
+    \field{eprinttype}{arxiv}
+    \field{year}{2016}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{Beer2015}{article}{}
+    \name{author}{2}{}{%
+      {{hash=BRD}{%
+         family={Beer},
+         familyi={B\bibinitperiod},
+         given={Randall\bibnamedelima D.},
+         giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+      {{hash=WPL}{%
+         family={Williams},
+         familyi={W\bibinitperiod},
+         given={Paul\bibnamedelima L.},
+         giveni={P\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+    }
+    \keyw{Computational model,Dynamical systems theory,Evolutionary
+  algorithms,Information theory,Relational categorization}
+    \strng{namehash}{BRDWPL1}
+    \strng{fullhash}{BRDWPL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    There has been considerable debate in the literature about the relative
+  merits of information processing versus dynamical approaches to understanding
+  cognitive processes. In this article, we explore the relationship between
+  these two styles of explanation using a model agent evolved to solve a
+  relational categorization task. Specifically, we separately analyze the
+  operation of this agent using the mathematical tools of information theory
+  and dynamical systems theory. Information-theoretic analysis reveals how
+  task-relevant information flows through the system to be combined into a
+  categorization decision. Dynamical analysis reveals the key geometrical and
+  temporal interrelationships underlying the categorization decision. Finally,
+  we propose a framework for directly relating these two different styles of
+  explanation and discuss the possible implications of our analysis for some of
+  the ongoing debates in cognitive science.%
+    }
+    \verb{doi}
+    \verb 10.1111/cogs.12142
+    \endverb
+    \field{issn}{1551-6709}
+    \field{number}{1}
+    \field{pages}{1\bibrangedash 38}
+    \field{title}{Information {{Processing}} and {{Dynamics}} in {{Minimally
+  Cognitive Agents}}}
+    \field{volume}{39}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/VIJQQ6BK/Beer_Williams_2015_Information P
+    \verb rocessing and Dynamics in Minimally Cognitive Agents.pdf;/home/casper
+    \verb /Zotero/storage/RBBNWR7X/cogs.html
+    \endverb
+    \field{journaltitle}{Cognitive Science}
+    \field{annotation}{%
+    \_eprint: https://onlinelibrary.wiley.com/doi/pdf/10.1111/cogs.12142%
+    }
+    \field{year}{2015}
+  \endentry
+
+  \entry{Kolchinsky2022}{article}{}
+    \name{author}{1}{}{%
+      {{hash=KA}{%
+         family={Kolchinsky},
+         familyi={K\bibinitperiod},
+         given={Artemy},
+         giveni={A\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{KA1}
+    \strng{fullhash}{KA1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    We consider the ``partial information decomposition'' (PID) problem, which
+  aims to decompose the information that a set of source random variables
+  provide about a target random variable into separate redundant, synergistic,
+  union, and unique components. In the first part of this paper, we propose a
+  general framework for constructing a multivariate PID. Our framework is
+  defined in terms of a formal analogy with intersection and union from set
+  theory, along with an ordering relation which specifies when one information
+  source is more informative than another. Our definitions are algebraically
+  and axiomatically motivated, and can be generalized to domains beyond Shannon
+  information theory (such as algorithmic information theory and quantum
+  information theory). In the second part of this paper, we use our general
+  framework to define a PID in terms of the well-known Blackwell order, which
+  has a fundamental operational interpretation. We demonstrate our approach on
+  numerous examples and show that it overcomes many drawbacks associated with
+  previous proposals.%
+    }
+    \verb{doi}
+    \verb 10.3390/e24030403
+    \endverb
+    \field{issn}{1099-4300}
+    \field{number}{3}
+    \field{pages}{403}
+    \field{title}{A {{Novel Approach}} to the {{Partial Information
+  Decomposition}}}
+    \field{volume}{24}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/SZU63VWG/Kolchinsky - 2022 - A Novel Appr
+    \verb oach to the Partial Information Decomp.pdf
+    \endverb
+    \field{journaltitle}{Entropy}
+    \field{month}{03}
+    \field{year}{2022}
+  \endentry
+
+  \entry{Williams2010}{article}{}
+    \name{author}{2}{}{%
+      {{hash=WPL}{%
+         family={Williams},
+         familyi={W\bibinitperiod},
+         given={Paul\bibnamedelima L.},
+         giveni={P\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+      {{hash=BRD}{%
+         family={Beer},
+         familyi={B\bibinitperiod},
+         given={Randall\bibnamedelima D.},
+         giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod},
+      }}%
+    }
+    \keyw{information theory,interaction information,multivariate
+  interaction,redundancy,synergy}
+    \strng{namehash}{WPLBRD1}
+    \strng{fullhash}{WPLBRD1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Of the various attempts to generalize information theory to multiple
+  variables, the most widely utilized, interaction information, suffers from
+  the problem that it is sometimes negative. Here we reconsider from first
+  principles the general structure of the information that a set of sources
+  provides about a given variable. We begin with a new definition of redundancy
+  as the minimum information that any source provides about each possible
+  outcome of the variable, averaged over all possible outcomes. We then show
+  how this measure of redundancy induces a lattice over sets of sources that
+  clarifies the general structure of multivariate information. Finally, we use
+  this redundancy lattice to propose a definition of partial information atoms
+  that exhaustively decompose the Shannon information in a multivariate system
+  in terms of the redundancy between synergies of subsets of the sources.
+  Unlike interaction information, the atoms of our partial information
+  decomposition are never negative and always support a clear interpretation as
+  informational quantities. Our analysis also demonstrates how the negativity
+  of interaction information can be explained by its confounding of redundancy
+  and synergy.%
+    }
+    \verb{eprint}
+    \verb 1004.2515
+    \endverb
+    \field{pages}{1\bibrangedash 14}
+    \field{title}{Nonnegative {{Decomposition}} of {{Multivariate
+  Information}}}
+    \verb{url}
+    \verb http://arxiv.org/abs/1004.2515
+    \endverb
+    \field{eprinttype}{arxiv}
+    \field{year}{2010}
     \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
   \endentry
 
@@ -562,49 +1339,266 @@
     \field{year}{2013}
   \endentry
 
-  \entry{Cover2005}{book}{}
-    \name{author}{2}{}{%
-      {{hash=CTM}{%
-         family={Cover},
-         familyi={C\bibinitperiod},
-         given={Thomas\bibnamedelima M.},
-         giveni={T\bibinitperiod\bibinitdelim M\bibinitperiod},
+  \entry{Lizier2008}{article}{}
+    \name{author}{3}{}{%
+      {{hash=LJT}{%
+         family={Lizier},
+         familyi={L\bibinitperiod},
+         given={Joseph\bibnamedelima T},
+         giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod},
       }}%
-      {{hash=TJA}{%
-         family={Thomas},
-         familyi={T\bibinitperiod},
-         given={Joy\bibnamedelima A.},
-         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      {{hash=PM}{%
+         family={Prokopenko},
+         familyi={P\bibinitperiod},
+         given={Mikhail},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=ZAY}{%
+         family={Zomaya},
+         familyi={Z\bibinitperiod},
+         given={Albert\bibnamedelima Y},
+         giveni={A\bibinitperiod\bibinitdelim Y\bibinitperiod},
       }}%
     }
-    \strng{namehash}{CTMTJA1}
-    \strng{fullhash}{CTMTJA1}
+    \strng{namehash}{LJT+2}
+    \strng{fullhash}{LJTPMZAY1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{abstract}{%
-    Following a brief introduction and overview, early chapters cover the basic
-  algebraic relationships of entropy, relative entropy and mutual information,
-  AEP, entropy rates of stochastics processes and data compression, duality of
-  data compression and the growth rate of wealth. Later chapters explore
-  Kolmogorov complexity, channel capacity, differential entropy, the capacity
-  of the fundamental Gaussian channel, the relationship between information
-  theory and statistics, rate distortion and network information theories. The
-  final two chapters examine the stock market and inequalities in information
-  theory. In many cases the authors actually describe the properties of the
-  solutions before the presented problems.%
+    Random Boolean Networks (RBNs) are discrete dynamical systems which have
+  been used to model Gene Regulatory Networks. We investigate the well-known
+  phase transition between ordered and chaotic behavior in RBNs from the
+  perspective of the distributed computation conducted by their nodes. We use a
+  recently published framework to characterize the distributed computation in
+  terms of its underlying information dynamics: information storage,
+  information transfer and information modification. We find maximizations in
+  information storage and coherent information transfer on either side of the
+  critical point, allowing us to explain the phase transition in RBNs in terms
+  of the intrinsic distributed computations they are undertaking.%
+    }
+    \field{pages}{9}
+    \field{title}{The {{Information Dynamics}} of {{Phase Transitions}} in
+  {{Random Boolean Networks}}}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/JW4JIHWK/Lizier et al. - 2008 - The Infor
+    \verb mation Dynamics of Phase Transitions in R.pdf
+    \endverb
+    \field{year}{2008}
+  \endentry
+
+  \entry{Lizier2013}{article}{}
+    \name{author}{3}{}{%
+      {{hash=LJT}{%
+         family={Lizier},
+         familyi={L\bibinitperiod},
+         given={Joseph\bibnamedelima T.},
+         giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=FB}{%
+         family={Flecker},
+         familyi={F\bibinitperiod},
+         given={Benjamin},
+         giveni={B\bibinitperiod},
+      }}%
+      {{hash=WPL}{%
+         family={Williams},
+         familyi={W\bibinitperiod},
+         given={Paul\bibnamedelima L.},
+         giveni={P\bibinitperiod\bibinitdelim L\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{LJT+1}
+    \strng{fullhash}{LJTFBWPL1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Distributed computation in artificial life and complex systems is often
+  described in terms of component operations on information: information
+  storage, transfer and modification. Information modification remains poorly
+  described however, with the popularly-understood examples of glider and
+  particle collisions in cellular automata being only quantitatively identified
+  to date using a heuristic (separable information) rather than a proper
+  information-theoretic measure. We outline how a recently-introduced axiomatic
+  framework for measuring information redundancy and synergy, called partial
+  information decomposition, can be applied to a perspective of distributed
+  computation in order to quantify component operations on information. Using
+  this framework, we propose a new measure of information modification that
+  captures the intuitive understanding of information modification events as
+  those involving interactions between two or more information sources. We also
+  consider how the local dynamics of information modification in space and time
+  could be measured, and suggest a new axiom that redundancy measures would
+  need to meet in order to make such local measurements. Finally, we evaluate
+  the potential for existing redundancy measures to meet this localizability
+  axiom.%
     }
     \verb{doi}
-    \verb 10.1002/047174882X
+    \verb 10.1109/ALIFE.2013.6602430
     \endverb
-    \field{isbn}{978-0-471-24195-9}
-    \field{issn}{15579654}
-    \field{title}{Elements of {{Information Theory}}}
+    \verb{eprint}
+    \verb 1303.3440
+    \endverb
+    \field{isbn}{978-1-4673-5863-7}
+    \field{issn}{21606382}
+    \field{number}{January}
+    \field{pages}{43\bibrangedash 51}
+    \field{title}{Towards a Synergy-Based Approach to Measuring Information
+  Modification}
+    \field{volume}{2013-Janua}
+    \field{journaltitle}{IEEE Symposium on Artificial Life (ALIFE)}
+    \field{eprinttype}{arxiv}
+    \field{year}{2013}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{Lizier2018}{article}{}
+    \name{author}{4}{}{%
+      {{hash=LJT}{%
+         family={Lizier},
+         familyi={L\bibinitperiod},
+         given={Joseph\bibnamedelima T.},
+         giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=BN}{%
+         family={Bertschinger},
+         familyi={B\bibinitperiod},
+         given={Nils},
+         giveni={N\bibinitperiod},
+      }}%
+      {{hash=JJ}{%
+         family={Jost},
+         familyi={J\bibinitperiod},
+         given={J{\"u}rgen},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=WM}{%
+         family={Wibral},
+         familyi={W\bibinitperiod},
+         given={Michael},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {{Multidisciplinary Digital Publishing Institute}}%
+    }
+    \keyw{complementary information,information decomposition,mutual
+  information,redundancy,redundant information,synergy,unique information}
+    \strng{namehash}{LJT+1}
+    \strng{fullhash}{LJTBNJJWM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{abstract}{%
+    The formulation of the Partial Information Decomposition (PID) framework by
+  Williams and Beer in 2010 attracted a significant amount of attention to the
+  problem of defining redundant (or shared), unique and synergistic (or
+  complementary) components of mutual information that a set of source
+  variables provides about a target. This attention resulted in a number of
+  measures proposed to capture these concepts, theoretical investigations into
+  such measures, and applications to empirical data (in particular to datasets
+  from neuroscience). In this Special Issue on ``Information Decomposition of
+  Target Effects from Multi-Source Interactions'' at Entropy, we have gathered
+  current work on such information decomposition approaches from many of the
+  leading research groups in the field. We begin our editorial by providing the
+  reader with a review of previous information decomposition research,
+  including an overview of the variety of measures proposed, how they have been
+  interpreted and applied to empirical investigations. We then introduce the
+  articles included in the special issue one by one, providing a similar
+  categorisation of these articles into: i. proposals of new measures; ii.
+  theoretical investigations into properties and interpretations of such
+  approaches, and iii. applications of these measures in empirical studies. We
+  finish by providing an outlook on the future of the field.%
+    }
+    \verb{doi}
+    \verb 10.3390/e20040307
+    \endverb
+    \field{number}{4}
+    \field{pages}{307}
+    \field{shorttitle}{Information {{Decomposition}} of {{Target Effects}} from
+  {{Multi-Source Interactions}}}
+    \field{title}{Information {{Decomposition}} of {{Target Effects}} from
+  {{Multi-Source Interactions}}: {{Perspectives}} on {{Previous}}, {{Current}}
+  and {{Future Work}}}
+    \field{volume}{20}
+    \field{langid}{english}
     \verb{file}
-    \verb /home/casper/Zotero/storage/296ZDX75/Cover, Thomas - 2005 - Elements
-    \verb of Information Theory(2).pdf
+    \verb /home/casper/Zotero/storage/W37QKSHM/Lizier et al_2018_Information De
+    \verb composition of Target Effects from Multi-Source Interactions.pdf;/hom
+    \verb e/casper/Zotero/storage/WXAC7IMT/307.html
     \endverb
-    \field{journaltitle}{Elements of Information Theory}
-    \field{year}{2005}
+    \field{journaltitle}{Entropy}
+    \field{month}{04}
+    \field{year}{2018}
+  \endentry
+
+  \entry{Quax2017}{article}{}
+    \name{author}{3}{}{%
+      {{hash=QR}{%
+         family={Quax},
+         familyi={Q\bibinitperiod},
+         given={Rick},
+         giveni={R\bibinitperiod},
+      }}%
+      {{hash=HO}{%
+         family={{Har-Shemesh}},
+         familyi={H\bibinitperiod},
+         given={Omri},
+         giveni={O\bibinitperiod},
+      }}%
+      {{hash=SPM}{%
+         family={Sloot},
+         familyi={S\bibinitperiod},
+         given={Peter\bibnamedelima M.A.},
+         giveni={P\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+    }
+    \keyw{Higher order information,Information theory,Stochastic
+  variables,Synergistic entropy,Synergistic information,Synergy}
+    \strng{namehash}{QR+1}
+    \strng{fullhash}{QRHOSPM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Quantifying synergy among stochastic variables is an important open problem
+  in information theory. Information synergy occurs when multiple sources
+  together predict an outcome variable better than the sum of single-source
+  predictions. It is an essential phenomenon in biology such as in neuronal
+  networks and cellular regulatory processes, where different information flows
+  integrate to produce a single response, but also in social cooperation
+  processes as well as in statistical inference tasks in machine learning. Here
+  we propose a metric of synergistic entropy and synergistic information from
+  first principles. The proposed measure relies on so-called synergistic random
+  variables (SRVs) which are constructed to have zero mutual information about
+  individual source variables but non-zero mutual information about the
+  complete set of source variables. We prove several basic and desired
+  properties of our measure, including bounds and additivity properties. In
+  addition, we prove several important consequences of our measure, including
+  the fact that different types of synergistic information may co-exist between
+  the same sets of variables. A numerical implementation is provided, which we
+  use to demonstrate that synergy is associated with resilience to noise. Our
+  measure may be a marked step forward in the study of multivariate information
+  theory and its numerous applications.%
+    }
+    \verb{doi}
+    \verb 10.3390/e19020085
+    \endverb
+    \verb{eprint}
+    \verb 1602.01265
+    \endverb
+    \field{issn}{10994300}
+    \field{number}{2}
+    \field{pages}{7\bibrangedash 10}
+    \field{title}{Quantifying Synergistic Information Using Intermediate
+  Stochastic Variables}
+    \field{volume}{19}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/H3ZPMP8K/Quax, Har-Shemesh, Sloot - 2017
+    \verb - Quantifying synergistic information using intermediate stochastic v
+    \verb ariables(2).pdf
+    \endverb
+    \field{journaltitle}{Entropy}
+    \field{eprinttype}{arxiv}
+    \field{year}{2017}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
   \endentry
 
   \entry{Nicolis2016}{article}{}
@@ -675,8 +1669,8 @@
          giveni={A\bibinitperiod\bibinitdelim Y\bibinitperiod},
       }}%
     }
-    \strng{namehash}{LJT+1}
-    \strng{fullhash}{LJTPMZAY1}
+    \strng{namehash}{LJT+3}
+    \strng{fullhash}{LJTPMZAY2}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \verb{doi}
@@ -697,6 +1691,261 @@
   Science}
     \field{month}{09}
     \field{year}{2010}
+  \endentry
+
+  \entry{Scheffer2009}{article}{}
+    \name{author}{10}{}{%
+      {{hash=SM}{%
+         family={Scheffer},
+         familyi={S\bibinitperiod},
+         given={Marten},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=BJ}{%
+         family={Bascompte},
+         familyi={B\bibinitperiod},
+         given={Jordi},
+         giveni={J\bibinitperiod},
+      }}%
+      {{hash=BWA}{%
+         family={Brock},
+         familyi={B\bibinitperiod},
+         given={William\bibnamedelima A},
+         giveni={W\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=BV}{%
+         family={Brovkin},
+         familyi={B\bibinitperiod},
+         given={Victor},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=CSR}{%
+         family={Carpenter},
+         familyi={C\bibinitperiod},
+         given={Stephen\bibnamedelima R},
+         giveni={S\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+      {{hash=DV}{%
+         family={Dakos},
+         familyi={D\bibinitperiod},
+         given={Vasilis},
+         giveni={V\bibinitperiod},
+      }}%
+      {{hash=HH}{%
+         family={Held},
+         familyi={H\bibinitperiod},
+         given={Hermann},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=vEH}{%
+         family={{van Nes}},
+         familyi={v\bibinitperiod},
+         given={Egbert\bibnamedelima H},
+         giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod},
+      }}%
+      {{hash=RM}{%
+         family={Rietkerk},
+         familyi={R\bibinitperiod},
+         given={Max},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=SG}{%
+         family={Sugihara},
+         familyi={S\bibinitperiod},
+         given={George},
+         giveni={G\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SM+1}
+    \strng{fullhash}{SMBJBWABVCSRDVHHvEHRMSG1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Complex dynamical systems, ranging from ecosystems to financial markets and
+  the climate, can have tipping points at which a sudden shift to a contrasting
+  dynamical regime may occur. Although predicting such critical points before
+  they are reached is extremely difficult, work in different scientific fields
+  is now suggesting the existence of generic early-warning signals that may
+  indicate for a wide class of systems if a critical threshold is approaching.%
+    }
+    \verb{doi}
+    \verb 10.1038/nature08227
+    \endverb
+    \field{issn}{1476-4687}
+    \field{number}{7260}
+    \field{pages}{53\bibrangedash 9}
+    \field{title}{Early-Warning Signals for Critical Transitions.}
+    \field{volume}{461}
+    \field{journaltitle}{Nature}
+    \field{year}{2009}
+  \endentry
+
+  \entry{Prokopenko2011}{article}{}
+    \name{author}{4}{}{%
+      {{hash=PM}{%
+         family={Prokopenko},
+         familyi={P\bibinitperiod},
+         given={Mikhail},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=LJT}{%
+         family={Lizier},
+         familyi={L\bibinitperiod},
+         given={Joseph\bibnamedelima T.},
+         giveni={J\bibinitperiod\bibinitdelim T\bibinitperiod},
+      }}%
+      {{hash=OO}{%
+         family={Obst},
+         familyi={O\bibinitperiod},
+         given={Oliver},
+         giveni={O\bibinitperiod},
+      }}%
+      {{hash=WXR}{%
+         family={Wang},
+         familyi={W\bibinitperiod},
+         given={X.\bibnamedelima Rosalind},
+         giveni={X\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{PM+1}
+    \strng{fullhash}{PMLJTOOWXR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1103/PhysRevE.84.041116
+    \endverb
+    \field{issn}{1539-3755, 1550-2376}
+    \field{number}{4}
+    \field{pages}{041116}
+    \field{title}{Relating {{Fisher}} Information to Order Parameters}
+    \field{volume}{84}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/WVCZP9V3/Prokopenko et al. - 2011 - Relat
+    \verb ing Fisher information to order parameters.pdf
+    \endverb
+    \field{journaltitle}{Physical Review E}
+    \field{month}{10}
+    \field{year}{2011}
+  \endentry
+
+  \entry{Scheffer2001}{article}{}
+    \name{author}{5}{}{%
+      {{hash=SM}{%
+         family={Scheffer},
+         familyi={S\bibinitperiod},
+         given={Marten},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=CS}{%
+         family={Carpenter},
+         familyi={C\bibinitperiod},
+         given={Steve},
+         giveni={S\bibinitperiod},
+      }}%
+      {{hash=FJA}{%
+         family={Foley},
+         familyi={F\bibinitperiod},
+         given={Jonathan\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=FC}{%
+         family={Folke},
+         familyi={F\bibinitperiod},
+         given={Carl},
+         giveni={C\bibinitperiod},
+      }}%
+      {{hash=WB}{%
+         family={Walker},
+         familyi={W\bibinitperiod},
+         given={Brian},
+         giveni={B\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{SM+1}
+    \strng{fullhash}{SMCSFJAFCWB1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \verb{doi}
+    \verb 10.1038/35098000
+    \endverb
+    \field{issn}{0028-0836, 1476-4687}
+    \field{number}{6856}
+    \field{pages}{591\bibrangedash 596}
+    \field{title}{Catastrophic Shifts in Ecosystems}
+    \field{volume}{413}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/9PC6GLB5/Scheffer et al. - 2001 - Catastr
+    \verb ophic shifts in ecosystems.pdf
+    \endverb
+    \field{journaltitle}{Nature}
+    \field{month}{10}
+    \field{year}{2001}
+  \endentry
+
+  \entry{Eason2014}{article}{}
+    \name{author}{3}{}{%
+      {{hash=ET}{%
+         family={Eason},
+         familyi={E\bibinitperiod},
+         given={Tarsha},
+         giveni={T\bibinitperiod},
+      }}%
+      {{hash=GAS}{%
+         family={Garmestani},
+         familyi={G\bibinitperiod},
+         given={Ahjond\bibnamedelima S.},
+         giveni={A\bibinitperiod\bibinitdelim S\bibinitperiod},
+      }}%
+      {{hash=CH}{%
+         family={Cabezas},
+         familyi={C\bibinitperiod},
+         given={Heriberto},
+         giveni={H\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{ET+1}
+    \strng{fullhash}{ETGASCH1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{shorttitle}
+    \field{abstract}{%
+    The broad implications of catastrophic regime shifts have prompted the need
+  to find methods that are not only able to detect regime shifts but more
+  importantly, identify them before they occur. Rising variance, skewness,
+  kurtosis, and critical slowing down have all been proposed as indicators of
+  impending regime shifts. However, these approaches typically do not signal a
+  shift until it is well underway. Further, they have primarily been used to
+  evaluate simple systems; hence, additional work is needed to adapt these
+  methods, if possible, to real systems which typically are complex and
+  multivariate. Fisher information is a key method in information theory and
+  affords the ability to characterize the dynamic behavior of systems. In this
+  work, Fisher information is compared to traditional indicators through the
+  assessment of model and real systems and identified as a leading indicator of
+  impending regime shifts. Evidenced by the great deal of activity in this
+  research area, it is understood that such work could lead to better methods
+  for detecting and managing systems that are of significant importance to
+  humans. Thus, we believe the results of this work offer great promise for
+  resilience science and sustainability.%
+    }
+    \verb{doi}
+    \verb 10.1007/s10098-013-0687-2
+    \endverb
+    \field{issn}{1618-954X, 1618-9558}
+    \field{number}{4}
+    \field{pages}{773\bibrangedash 783}
+    \field{shorttitle}{Managing for Resilience}
+    \field{title}{Managing for Resilience: Early Detection of Regime Shifts in
+  Complex Systems}
+    \field{volume}{16}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/5AJ9RRBF/Eason et al. - 2014 - Managing f
+    \verb or resilience early detection of regime.pdf
+    \endverb
+    \field{journaltitle}{Clean Technologies and Environmental Policy}
+    \field{month}{04}
+    \field{year}{2014}
   \endentry
 
   \entry{Schreiber}{book}{}
@@ -923,55 +2172,35 @@
     \field{year}{2019}
   \endentry
 
-  \entry{Li2018}{article}{}
-    \name{author}{4}{}{%
-      {{hash=LS}{%
+  \entry{Li2008}{article}{}
+    \name{author}{1}{}{%
+      {{hash=LC}{%
          family={Li},
          familyi={L\bibinitperiod},
-         given={Songting},
-         giveni={S\bibinitperiod},
-      }}%
-      {{hash=XY}{%
-         family={Xiao},
-         familyi={X\bibinitperiod},
-         given={Yanyang},
-         giveni={Y\bibinitperiod},
-      }}%
-      {{hash=ZD}{%
-         family={Zhou},
-         familyi={Z\bibinitperiod},
-         given={Douglas},
-         giveni={D\bibinitperiod},
-      }}%
-      {{hash=CD}{%
-         family={Cai},
-         familyi={C\bibinitperiod},
-         given={David},
-         giveni={D\bibinitperiod},
+         given={Chunguang},
+         giveni={C\bibinitperiod},
       }}%
     }
-    \strng{namehash}{LS+1}
-    \strng{fullhash}{LSXYZDCD1}
+    \strng{namehash}{LC1}
+    \strng{fullhash}{LC1}
     \field{labelnamesource}{author}
-    \field{labeltitlesource}{shorttitle}
+    \field{labeltitlesource}{title}
     \verb{doi}
-    \verb 10.1103/PhysRevE.97.052216
+    \verb 10.1103/PhysRevE.78.037101
     \endverb
-    \field{issn}{2470-0045, 2470-0053}
-    \field{number}{5}
-    \field{pages}{052216}
-    \field{shorttitle}{Causal Inference in Nonlinear Systems}
-    \field{title}{Causal Inference in Nonlinear Systems: {{Granger}} Causality
-  versus Time-Delayed Mutual Information}
-    \field{volume}{97}
+    \field{issn}{1539-3755, 1550-2376}
+    \field{number}{3}
+    \field{pages}{037101}
+    \field{title}{Functions of Neuronal Network Motifs}
+    \field{volume}{78}
     \field{langid}{english}
     \verb{file}
-    \verb /home/casper/Zotero/storage/AA9EZE7D/Li et al. - 2018 - Causal infere
-    \verb nce in nonlinear systems Granger cau.pdf
+    \verb /home/casper/Zotero/storage/GQQ2BVL7/Li - 2008 - Functions of neurona
+    \verb l network motifs.pdf
     \endverb
     \field{journaltitle}{Physical Review E}
-    \field{month}{05}
-    \field{year}{2018}
+    \field{month}{09}
+    \field{year}{2008}
   \endentry
 
   \entry{James2016}{article}{}
@@ -1042,208 +2271,61 @@
     \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
   \endentry
 
-  \entry{Janzing2013}{article}{}
-    \name{author}{4}{}{%
-      {{hash=JD}{%
-         family={Janzing},
-         familyi={J\bibinitperiod},
-         given={Dominik},
-         giveni={D\bibinitperiod},
-      }}%
-      {{hash=BD}{%
-         family={Balduzzi},
+  \entry{Bialek1999}{misc}{}
+    \name{author}{2}{}{%
+      {{hash=BW}{%
+         family={Bialek},
          familyi={B\bibinitperiod},
-         given={David},
-         giveni={D\bibinitperiod},
-      }}%
-      {{hash=GM}{%
-         family={{Grosse-Wentrup}},
-         familyi={G\bibinitperiod},
-         given={Moritz},
-         giveni={M\bibinitperiod},
-      }}%
-      {{hash=SB}{%
-         family={Sch{\"o}lkopf},
-         familyi={S\bibinitperiod},
-         given={Bernhard},
-         giveni={B\bibinitperiod},
-      }}%
-    }
-    \keyw{Bayesian networks,Causality,Information flow,Transfer entropy}
-    \strng{namehash}{JD+1}
-    \strng{fullhash}{JDBDGMSB1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-    \field{abstract}{%
-    Manymethods for causal inference generate directed acyclic graphs (DAGs)
-  that formalize causal relations between n variables. Given the joint
-  distribution on all these variables, the DAG contains all information about
-  how intervening on one variable changes the distribution of the other n-1
-  variables. However, quantifying the causal influence of one variable on
-  another one remains a nontrivial question. Here we propose a set of natural,
-  intuitive postulates that a measure of causal strength should satisfy. We
-  then introduce a communication scenario, where edges in a DAG play the role
-  of channels that can be locally corrupted by interventions. Causal strength
-  is then the relative entropy distance between the old and the new
-  distribution. Many other measures of causal strength have been proposed,
-  including average causal effect, transfer entropy, directed information, and
-  information flow. We explain how they fail to satisfy the postulates on
-  simple DAGs of {$\leq$} 3 nodes. Finally, we investigate the behavior of our
-  measure on time-series, supporting our claims with experiments on simulated
-  data.%
-    }
-    \verb{doi}
-    \verb 10.1214/13-AOS1145
-    \endverb
-    \verb{eprint}
-    \verb 1203.6502v2
-    \endverb
-    \field{issn}{00905364}
-    \field{number}{5}
-    \field{pages}{2324\bibrangedash 2358}
-    \field{title}{Quantifying Causal Influences}
-    \field{volume}{41}
-    \field{journaltitle}{Annals of Statistics}
-    \field{eprinttype}{arxiv}
-    \field{year}{2013}
-    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
-  \endentry
-
-  \entry{Schamberg2020}{article}{}
-    \name{author}{4}{}{%
-      {{hash=SG}{%
-         family={Schamberg},
-         familyi={S\bibinitperiod},
-         given={Gabriel},
-         giveni={G\bibinitperiod},
-      }}%
-      {{hash=CW}{%
-         family={Chapman},
-         familyi={C\bibinitperiod},
          given={William},
          giveni={W\bibinitperiod},
       }}%
-      {{hash=XSP}{%
-         family={Xie},
-         familyi={X\bibinitperiod},
-         given={Shang-Ping},
-         giveni={S\bibinithyphendelim P\bibinitperiod},
-      }}%
-      {{hash=CTP}{%
-         family={Coleman},
-         familyi={C\bibinitperiod},
-         given={Todd\bibnamedelima P.},
-         giveni={T\bibinitperiod\bibinitdelim P\bibinitperiod},
+      {{hash=TN}{%
+         family={Tishby},
+         familyi={T\bibinitperiod},
+         given={Naftali},
+         giveni={N\bibinitperiod},
       }}%
     }
     \list{publisher}{1}{%
-      {{Multidisciplinary Digital Publishing Institute}}%
+      {{arXiv}}%
     }
-    \keyw{causality,El Niño–Southern oscillation,KL divergence,mediation
-  analysis,specific information}
-    \strng{namehash}{SG+1}
-    \strng{fullhash}{SGCWXSPCTP1}
+    \keyw{Condensed Matter - Disordered Systems and Neural Networks,Condensed
+  Matter - Statistical Mechanics,Quantitative Biology - Neurons and Cognition}
+    \strng{namehash}{BWTN1}
+    \strng{fullhash}{BWTN1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{abstract}{%
-    Information theoretic (IT) approaches to quantifying causal influences have
-  experienced some popularity in the literature, in both theoretical and
-  applied (e.g., neuroscience and climate science) domains. While these causal
-  measures are desirable in that they are model agnostic and can capture
-  non-linear interactions, they are fundamentally different from common
-  statistical notions of causal influence in that they (1) compare
-  distributions over the effect rather than values of the effect and (2) are
-  defined with respect to random variables representing a cause rather than
-  specific values of a cause. We here present IT measures of direct, indirect,
-  and total causal effects. The proposed measures are unlike existing IT
-  techniques in that they enable measuring causal effects that are defined with
-  respect to specific values of a cause while still offering the flexibility
-  and general applicability of IT techniques. We provide an identifiability
-  result and demonstrate application of the proposed measures in estimating the
-  causal effect of the El Ni\&ntilde;o\&ndash;Southern Oscillation on
-  temperature anomalies in the North American Pacific Northwest.%
-    }
-    \verb{doi}
-    \verb 10.3390/e22080854
-    \endverb
-    \field{number}{8}
-    \field{pages}{854}
-    \field{title}{Direct and {{Indirect Effects}}\textemdash{{An Information
-  Theoretic Perspective}}}
-    \field{volume}{22}
-    \field{langid}{english}
-    \verb{file}
-    \verb /home/casper/Zotero/storage/ZM36G7PM/Schamberg et al_2020_Direct and
-    \verb Indirect Effects—An Information Theoretic Perspective.pdf;/home/cas
-    \verb per/Zotero/storage/B9L9R8TX/854.html
-    \endverb
-    \field{journaltitle}{Entropy}
-    \field{month}{08}
-    \field{year}{2020}
-  \endentry
-
-  \entry{Williams2010a}{article}{}
-    \name{author}{2}{}{%
-      {{hash=WPL}{%
-         family={Williams},
-         familyi={W\bibinitperiod},
-         given={Paul\bibnamedelima L.},
-         giveni={P\bibinitperiod\bibinitdelim L\bibinitperiod},
-      }}%
-      {{hash=BRD}{%
-         family={Beer},
-         familyi={B\bibinitperiod},
-         given={Randall\bibnamedelima D.},
-         giveni={R\bibinitperiod\bibinitdelim D\bibinitperiod},
-      }}%
-    }
-    \keyw{94A15,Computer Science - Information Theory,Mathematical
-  Physics,Physics - Biological Physics,Physics - Data Analysis; Statistics and
-  Probability,Quantitative Biology - Neurons and Cognition,Quantitative Biology
-  - Quantitative Methods}
-    \strng{namehash}{WPLBRD1}
-    \strng{fullhash}{WPLBRD1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-    \field{abstract}{%
-    Of the various attempts to generalize information theory to multiple
-  variables, the most widely utilized, interaction information, suffers from
-  the problem that it is sometimes negative. Here we reconsider from first
-  principles the general structure of the information that a set of sources
-  provides about a given variable. We begin with a new definition of redundancy
-  as the minimum information that any source provides about each possible
-  outcome of the variable, averaged over all possible outcomes. We then show
-  how this measure of redundancy induces a lattice over sets of sources that
-  clarifies the general structure of multivariate information. Finally, we use
-  this redundancy lattice to propose a definition of partial information atoms
-  that exhaustively decompose the Shannon information in a multivariate system
-  in terms of the redundancy between synergies of subsets of the sources.
-  Unlike interaction information, the atoms of our partial information
-  decomposition are never negative and always support a clear interpretation as
-  informational quantities. Our analysis also demonstrates how the negativity
-  of interaction information can be explained by its confounding of redundancy
-  and synergy.%
+    Observations on the past provide some hints about what will happen in the
+  future, and this can be quantified using information theory. The ``predictive
+  information'' defined in this way has connections to measures of complexity
+  that have been proposed both in the study of dynamical systems and in
+  mathematical statistics. In particular, the predictive information diverges
+  when the observed data stream allows us to learn an increasingly precise
+  model for the dynamics that generate the data, and the structure of this
+  divergence measures the complexity of the model. We argue that divergent
+  contributions to the predictive information provide the only measure of
+  complexity or richness that is consistent with certain plausible
+  requirements.%
     }
     \verb{eprint}
-    \verb 1004.2515
+    \verb cond-mat/9902341
     \endverb
-    \field{title}{Nonnegative {{Decomposition}} of {{Multivariate
-  Information}}}
+    \field{number}{arXiv:cond-mat/9902341}
+    \field{title}{Predictive {{Information}}}
     \verb{url}
-    \verb http://arxiv.org/abs/1004.2515
+    \verb http://arxiv.org/abs/cond-mat/9902341
     \endverb
     \field{langid}{english}
     \verb{file}
-    \verb /home/casper/Zotero/storage/4VLTWLN9/Williams and Beer - 2010 - Nonne
-    \verb gative Decomposition of Multivariate Informat.pdf
+    \verb /home/casper/Zotero/storage/ZHN9WDLZ/Bialek and Tishby - 1999 - Predi
+    \verb ctive Information.pdf
     \endverb
-    \field{journaltitle}{arXiv:1004.2515 [math-ph, physics:physics, q-bio]}
     \field{eprinttype}{arxiv}
-    \field{eprintclass}{math-ph, physics:physics, q-bio}
-    \field{month}{04}
-    \field{year}{2010}
-    \field{urlday}{18}
-    \field{urlmonth}{01}
+    \field{month}{02}
+    \field{year}{1999}
+    \field{urlday}{17}
+    \field{urlmonth}{05}
     \field{urlyear}{2022}
     \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
   \endentry

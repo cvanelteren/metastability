@@ -33,7 +33,7 @@ def get_var(row):
     return rmses
 
 
-def system_trajectory(df, ax, nudge, seed=1234, spacing=0.6, max_t=20000):
+def system_trajectory(df, ax, nudge, seed=1234, spacing=0.6, max_t=20_000):
     from utils import ccolors
 
     c = ccolors(df.label.unique().size - 1)
@@ -55,7 +55,8 @@ def system_trajectory(df, ax, nudge, seed=1234, spacing=0.6, max_t=20000):
             ci = c[dfj.label]
         yt.append(up)
         yt.append(up + 1)
-        y = dfj.system[:max_t] + up
+        s = dfj.system
+        y = s.mean(1)[:max_t]+ up
 
         hi = Line2D(
             [],
@@ -106,7 +107,7 @@ def make_windows(idx):
 def estimate_white_noise(row, tipping=0.5):
     from scipy.stats import sem
 
-    macrostate = row.system
+    macrostate = row.system.mean(1)
     output = {}
     # print(row.label, np.where(macrostate > tipping)[0].size / macrostate.size)
     for idx, op in enumerate((np.greater, np.less)):
@@ -132,18 +133,7 @@ def estimate_white_noise(row, tipping=0.5):
                 d = abs(1 - d)
             if row.label != "control" and op == np.greater:
                 a = 4 / 5
-            # p = {}
-            # for di in d:
-            # p[di] = p.get(di, 0) + 1 / len(window)
-            # l = 0
-            # for k, v in p.items():
-            # l += k**2 * v
-            # d = np.var(d)
             d = np.mean(d**2) / a**2  # / len(windows)
-            # d = np.var(d)
-            # d = np.nanmean((d - np.nanmean(d)) ** 2)  # / len(window)
-            # d = a**2 * l
-            # d = a**2 * (d**2).sum() / len(window)
             output[name] += d  # / macrostate.size
             # output[other_name] += len(window) / len(windows)
     output["label"] = row.label
@@ -220,7 +210,7 @@ def show_wn(df, X, Y, ax, Z=None, marker="o"):
         # )
 
 
-fp = "kite_isi_beta=0.5732374683235916.pkl"
+fp = "kite_isi_beta=0.5732374683235916_sanity.pkl"
 # fp = "kite_intervention_beta=0.5732374683235916.pkl"
 df = pd.read_pickle(fp)
 print(df.columns)
@@ -232,7 +222,7 @@ for idx, row in tmp.reset_index().iterrows():
     errors.append(row.iloc[1])
 errors = pd.DataFrame(errors)
 
-print(errors.columns)
+print(errors)
 # plt.config.use_style("seaborn-poster")
 # tmp = df.groupby("label").apply(get_var)
 # mu = errors[errors.label == "control"]["less_n greater_n".split()].mean()
@@ -259,23 +249,23 @@ print("making figure")
 
 for x, e in errors.groupby("nudge"):
     nudge = x
-    fig, ax = plt.subplots(ncols=3, share=0)
+    fig, ax = plt.subplots(ncols=2, share=0)
     show_wn(
         e,
         "less_n",
         "less_w",
-        ax[2],
+        ax[1],
         Z="less_t",
     )
     show_wn(
         e,
         "greater_n",
         "greater_w",
-        ax[2],
+        ax[1],
         Z="greater_t",
         marker="s",
     )
-    system_trajectory(df, ax[1], x)
+    system_trajectory(df, ax[0], x)
     g = nx.krackhardt_kite_graph()
     from fa2 import ForceAtlas2 as fa2
 
@@ -286,7 +276,9 @@ for x, e in errors.groupby("nudge"):
 
     # ax[1].format(title="Fraction of nodes < 0.5")
     # ax[2].format(title="Fraction of nodes > 0.5")
-    ax[2].format(
+    print(e["less_n"])
+    print(e["less_w"])
+    ax[1].format(
         xlabel="Fraction time spent <S> < 0.5",
         # ylabel=r"Variance ($\frac{1}{N} \sum_i (s_{w_i} - \overline{s_{w_i}})$)",
         # ylabel=r"Second moment ($\frac{1}{n a^2} \sum s_{w_i}^2$)",
@@ -314,16 +306,17 @@ for x, e in errors.groupby("nudge"):
         ),
     ]
 
-    ax[2].legend(
+    ax[1].legend(
         handles=handles,
         loc="ur",
         # pad=0,
         # space=0,
         ncols=1,
         fontsize=6,
+        frameon = 0
     )
-    ax[2].set_title("Noise dependent tipping behavior")
-    ax[1].set_title("System trajectory under intervention")
+    ax[1].set_title("Noise dependent tipping behavior")
+    ax[0].set_title("System trajectory under intervention")
     # ax[2].set_title("")
 
     labels = np.array(df.label.unique())
@@ -345,15 +338,24 @@ for x, e in errors.groupby("nudge"):
             )
         )
 
-    fig.legend(h, loc="r", title="Pinning\nintervention\non", ncols=1)
+    fig.legend(h, loc="r", title="Pinning\nintervention\non", ncols=1, frameon = 0)
 
     ax.format(abc=True, abc_kw=dict(fontsize=14))
 
-    inax = ax[0].inset_axes((0.0, 0.0, 1, 1), zoom=0)
-    inax.axis("off")
-    ax[0].axis("off")
-    nx.draw(g, pos=pos, ax=inax, node_color=c)
+    # inax = ax[0].panel("r")
+    # inax.axis('off')
+    inax = ax[0].inset_axes((1.02, 0.6, 0.2, 0.5), zoom=0)
     inax.axis("equal")
+    inax.axis("off")
+    inax.invert_xaxis()
+    # inax.invert_yaxis()
+
+    # ax[0].axis("off")
+    nx.draw(g, pos=pos, ax=inax, node_color=c, node_size = 30)
+    inax.axis("equal")
+    # ax[1].axvline(0.5)
+    # ax[1].set_xscale("symlog")
+    # ax[1].set_yscale("symlog")
     # ax[0].axis(
     # "equal",
     # )

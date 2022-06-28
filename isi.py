@@ -1,6 +1,5 @@
 import proplot as plt, cmasher as cmr, pandas as pd, numpy as np, os, sys, networkx as nx, warnings
 from plexsim import models
-from imi import infcy
 
 from tqdm import tqdm
 
