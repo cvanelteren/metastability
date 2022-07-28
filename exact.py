@@ -48,7 +48,9 @@ def gen_states(n) -> tuple:
     return states, allowed
 
 
+
 def get_transfer(n, E, beta, allowed, states, node=-1, eta=0) -> tuple:
+# def get_transfer(n, E, beta, allowed) -> tuple:
     """
     Construct transfer matrix based on energy and temperature
     """
@@ -58,20 +60,15 @@ def get_transfer(n, E, beta, allowed, states, node=-1, eta=0) -> tuple:
     # sanity checks
     assert len(allowed) == 2**n
     pairs = []
-    for state, trans in allowed.items():
+    for state, trans in tqdm(allowed.items()):
         e1 = E[state]
         p0[state] = np.exp(-beta * e1.sum())
 
         # sanity checks
-        assert np.isnan(p0[state]) == False, (p0[state], np.exp(-beta * e1.sum()))
-        assert p0[state] >= 0, f"{p0[state]} {e1.sum()} {e1}"
+        assert p0[state] >= 0
         for other in trans:
-            cidx = np.where(states[state] - states[other] != 0)[0]
-            assert len(cidx) == 1
-
-            e1 = E[state, cidx]
-            e2 = E[other, cidx]
-
+            e2 = E[other]
+            delta = e2.sum() - e1.sum()
             # if abs(eta) > 0 and node == cidx:
             #     if states[state, cidx] == 0:
             #         e1 = -np.inf
@@ -86,16 +83,9 @@ def get_transfer(n, E, beta, allowed, states, node=-1, eta=0) -> tuple:
             #         else:
             #             e2 = e1
 
-            delta = e2 - e1
-            # if np.isnan(delta):
-            # pi = 0
-            # else:
-            # pi = 1 / n * 1 / (1 + np.exp(beta * delta))
-
             pi = 1 / n * 1 / (1 + np.exp(beta * delta))
-
             # sanity checks
-            assert 0 <= pi <= 1, f"{delta=} {e2.sum()=} {e1.sum()=}"
+            assert 0 <= pi <= 1
             p[state, other] = pi
             if (state, other) in pairs:
                 assert False, pairs
@@ -106,20 +96,8 @@ def get_transfer(n, E, beta, allowed, states, node=-1, eta=0) -> tuple:
 
     np.fill_diagonal(p, 1 - p.sum(1))
     assert np.any(np.isnan(p)) == False, p
-    from scipy import linalg
-    from numpy import argmax
-
-    # e, v = linalg.eig(p.get().T)
-    # idx = argmax(e)
-    # p0 = v[:, idx]
     p0 /= p0.sum()
-    p0 = np.asarray(p0)
-    # p0 = np.array(p0)
-    # p0[p0 == np.inf] = 1
-    # for pi in p0:
-    # print(pi)
     return p, p0
-
 
 def get_allowed_per_mag(states, p_state):
     s = np.mean(states, 1)
