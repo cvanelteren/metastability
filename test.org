@@ -51,8 +51,8 @@ fig.show()
 #+RESULTS:
 :RESULTS:
 : 1234
-: /tmp/ipykernel_170151/1984990829.py:16: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+: /tmp/ipykernel_170248/3546165121.py:16: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
 :   fig.show()
 #+attr_org: :width 288 :height 282
-[[file:./.ob-jupyter/9a965cd8705c879bc277f20ff564cf7b5f07fee2.png]]
+[[file:./.ob-jupyter/00abfc1b62a2ea54af1438794ee52359a75da037.png]]
 :END:

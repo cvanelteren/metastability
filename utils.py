@@ -68,6 +68,7 @@ def fit_curve(mi, f):
             y,
             bounds=(0, np.inf),
             maxfev=1e5,
+            ftol = 1e-3,
         )
         opts.append(popt)
     return np.asarray(opts)

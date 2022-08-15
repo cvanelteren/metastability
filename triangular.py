@@ -17,7 +17,7 @@ from exact import ising, sis, bornholdt
 # from exact import store_results, gen_information_curves
 
 n = 10
-T = 2000
+T = 300
 
 
 from plexsim.utils.graph import recursive_tree
@@ -36,7 +36,7 @@ def gen_shift(comb):
     )
 
 
-def run(g, name, params={}, e_func=ising):
+def run(g, name, params={}, e_func=ising, target = "./data"):
     # g = nx.random_tree(10)
     t = match_temp_stc(g, e_func=e_func)
     # t = 1
@@ -49,37 +49,19 @@ def run(g, name, params={}, e_func=ising):
     s = ""
     for k, v in params.items():
         s += f"_{k}={v}"
-    s = f"exact_{name}{s}_dyn={e_func.__name__}_{beta=}_{T=}_{g.is_directed()=}"
+    s = f"exact_{name}{s}_dyn={e_func.__name__}_{beta=}_{T=}_{g.is_directed()=}_NEW"
 
     print(f"beta = {beta}")
-    settings = Settings(beta, T, g, NodeToSystem)
+    settings = Settings(beta, T, g, NodeToSystem, mag = [])
     # settings = Settings(beta, T, g, NodeToMacroBit)
     # settings = Settings(beta, T, g, SystemToNode)
     df = simulate(settings, e_func=e_func)
-    fp = f"./data/{s}.pkl"
+    fp = f"{target}/{s}.pkl"
     df.to_pickle(fp)
     print(f"Saving to {fp=}")
     # df.attrs["H"] = H
     # df.attrs["D"] = D
 
-
-def lemke_graph():
-    el = [
-        (0, 1),
-        (1, 2),
-        (2, 3),
-        (3, 4),
-        (4, 5),
-        (5, 6),
-        (6, 0),
-        (7, 6),
-        (7, 4),
-        (7, 2),
-        (6, 4),
-        (5, 2),
-        (3, 6),
-    ]
-    return nx.from_edgelist(el)
 
 
 # g = nx.random_tree(10)
@@ -103,7 +85,12 @@ g = nx.krackhardt_kite_graph()
 # g = nx.path_graph(10)
 # nx.draw(g)
 # plt.show(block=1)
-run(g, "kite", e_func=ising)
+graphs = pd.read_pickle("graphs_seed=0.pkl")
+# graphs = [g]
+# graphs =
+target = "/run/media/casper/9ee50225-d11d-4dae-81d9-9fa441997327"
+for id, g in enumerate(graphs):
+    run(g, f"{id}", e_func=ising, target = target)
 # run(g, "florentine", e_func=ising)
 # run(nx.krackhardt_kite_graph(), "kite", e_func=sis)
 

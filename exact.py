@@ -48,9 +48,8 @@ def gen_states(n) -> tuple:
     return states, allowed
 
 
-
 def get_transfer(n, E, beta, allowed, states, node=-1, eta=0) -> tuple:
-# def get_transfer(n, E, beta, allowed) -> tuple:
+    # def get_transfer(n, E, beta, allowed) -> tuple:
     """
     Construct transfer matrix based on energy and temperature
     """
@@ -62,7 +61,7 @@ def get_transfer(n, E, beta, allowed, states, node=-1, eta=0) -> tuple:
     pairs = []
     for state, trans in tqdm(allowed.items()):
         e1 = E[state]
-        p0[state] = np.exp(-beta * e1.sum())
+        p0[state] = np.exp(-beta * e1.sum() / 2)
 
         # sanity checks
         assert p0[state] >= 0
@@ -98,6 +97,7 @@ def get_transfer(n, E, beta, allowed, states, node=-1, eta=0) -> tuple:
     assert np.any(np.isnan(p)) == False, p
     p0 /= p0.sum()
     return p, p0
+
 
 def get_allowed_per_mag(states, p_state):
     s = np.mean(states, 1)
@@ -343,6 +343,7 @@ class Settings:
     steps: int
     g: nx.Graph
     model: AbstractSimulator
+    mag: []  # optional to reduce computations
 
 
 class MetaDataFrame(pd.DataFrame):
@@ -764,6 +765,9 @@ def simulate(settings, structure=None, e_func=ising):
 
     df = []
     for mag, mag_allowed in allowed_starting.items():
+        if settings.mag:
+            if mag not in settings.mag:
+                continue
         # init model and setup
         # test = True
         # if test and mag - 0.05 == 0.5:
@@ -806,8 +810,8 @@ def simulate(settings, structure=None, e_func=ising):
             hc=np.asarray(HC).copy(),
             mag=mag,
             p0=m.p_state.copy(),
-            pst=np.asarray(ps),
-            psc=np.asarray(psc),
+            # pst=np.asarray(ps),
+            # psc=np.asarray(psc),
         )
         # convert cupy back to numpy
         if hasattr(h, "get"):
@@ -869,7 +873,7 @@ if __name__ == "__main__":
     # g = nx.LCF_graph(n=10, shift_list=[-2], repeats=4)
     g = nx.convert_node_labels_to_integers(g)
 
-    settings = Settings(1.0, T, g, NodeToSystem)
+    settings = Settings(1.0, T, g, NodeToSystem, mag=[])
     df = simulate(settings)
 
     target = 0.2

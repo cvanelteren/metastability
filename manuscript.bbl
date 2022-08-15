@@ -17,6 +17,10 @@
 \endgroup
 
 \datalist[entry]{none/global//global/global}
+\preamble{%
+\ifdefined\DeclarePrefChars\DeclarePrefChars{'’-}\else\fi
+}
+
   \entry{Ladyman2013}{article}{}
     \name{author}{3}{}{%
       {{hash=LJ}{%
@@ -60,8 +64,8 @@
   complex systems is that of the Statistical Complexity. Finally, we offer our
   own list of necessary conditions as a characterization of complexity. These
   conditions are qualitative and may not be jointly sufficient for complexity.
-  We close with some suggestions for future work. \textcopyright{} 2012
-  Springer Science + Business Media B.V.%
+  We close with some suggestions for future work. © 2012 Springer Science +
+  Business Media B.V.%
     }
     \verb{doi}
     \verb 10.1007/s13194-012-0056-8
@@ -76,15 +80,18 @@
     \verb  - What is a complex system(2).pdf
     \endverb
     \field{journaltitle}{European Journal for Philosophy of Science}
+    \field{day}{19}
     \field{month}{01}
     \field{year}{2013}
   \endentry
 
-  \entry{vanNes2016}{article}{}
+  \entry{vanNes2016}{article}{useprefix}
     \name{author}{7}{}{%
-      {{hash=vEH}{%
-         family={{van Nes}},
-         familyi={v\bibinitperiod},
+      {{hash=vNEH}{%
+         prefix={van},
+         prefixi={v\bibinitperiod},
+         family={Nes},
+         familyi={N\bibinitperiod},
          given={Egbert\bibnamedelima H.},
          giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod},
       }}%
@@ -100,9 +107,11 @@
          given={Arie},
          giveni={A\bibinitperiod},
       }}%
-      {{hash=vB}{%
-         family={{van der Bolt}},
-         familyi={v\bibinitperiod},
+      {{hash=vdBB}{%
+         prefix={van\bibnamedelima der},
+         prefixi={v\bibinitperiod\bibinitdelim d\bibinitperiod},
+         family={Bolt},
+         familyi={B\bibinitperiod},
          given={Bregje},
          giveni={B\bibinitperiod},
       }}%
@@ -125,8 +134,8 @@
          giveni={M\bibinitperiod},
       }}%
     }
-    \strng{namehash}{vEH+1}
-    \strng{fullhash}{vEHABMSAvBFBMBSSM1}
+    \strng{namehash}{vNEH+1}
+    \strng{fullhash}{vNEHABMSAvdBBFBMBSSM1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \verb{doi}
@@ -135,7 +144,8 @@
     \field{issn}{01695347}
     \field{number}{12}
     \field{pages}{902\bibrangedash 904}
-    \field{title}{What {{Do You Mean}}, `{{Tipping Point}}'?}
+    \field{shortjournal}{Trends in Ecology \& Evolution}
+    \field{title}{What {{Do You Mean}}, ‘{{Tipping Point}}’?}
     \field{volume}{31}
     \field{langid}{english}
     \verb{file}
@@ -166,6 +176,7 @@
     \field{issn}{08966273}
     \field{number}{1}
     \field{pages}{220\bibrangedash 235}
+    \field{shortjournal}{Neuron}
     \field{shorttitle}{Rhythms for {{Cognition}}}
     \field{title}{Rhythms for {{Cognition}}: {{Communication}} through
   {{Coherence}}}
@@ -220,7 +231,7 @@
   cognitive neuroscience of perception, planning, action, motivation and
   memory; ion channel mechanisms; and much more.%
     }
-    \field{edition}{Fourth}
+    \field{edition}{4}
     \field{isbn}{0-07-112000-9}
     \field{title}{Principles of {{Neural Science}}}
     \verb{url}
@@ -286,6 +297,7 @@
     \endverb
     \field{issn}{2296-424X}
     \field{pages}{566580}
+    \field{shortjournal}{Front. Phys.}
     \field{shorttitle}{Tipping Points in Opinion Dynamics}
     \field{title}{Tipping Points in Opinion Dynamics: A Universal Formula in
   Five Dimensions}
@@ -298,6 +310,7 @@
     \field{journaltitle}{Frontiers in Physics}
     \field{eprinttype}{arxiv}
     \field{eprintclass}{cond-mat, physics:nlin, physics:physics}
+    \field{day}{10}
     \field{month}{11}
     \field{year}{2020}
     \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
@@ -305,7 +318,7 @@
 
   \entry{1986}{article}{}
     \field{labeltitlesource}{title}
-    \field{title}{\textcopyright{} 1986 {{Nature Publishing Group}}}
+    \field{title}{© 1986 {{Nature Publishing Group}}}
     \field{year}{1986}
   \endentry
 
@@ -326,7 +339,7 @@
       {{hash=KJ}{%
          family={Kurths},
          familyi={K\bibinitperiod},
-         given={J{\"u}rgen},
+         given={Jürgen},
          giveni={J\bibinitperiod},
       }}%
       {{hash=WR}{%
@@ -346,7 +359,7 @@
   threshold, resulting in severe consequences for the global climate,
   ecosystems and human societies. While the underlying processes are fairly
   well-understood, it is unclear how their interactions might impact the
-  overall stability of the Earth's climate system. As of yet, this cannot be
+  overall stability of the Earth’s climate system. As of yet, this cannot be
   fully analysed with state-of-the-art Earth system models due to computational
   constraints as well as some missing and uncertain process representations of
   certain tipping elements. Here, we explicitly study the effects of known
@@ -364,8 +377,8 @@
   oftentimes the initiators of tipping cascades, while the AMOC acts as a
   mediator transmitting cascades. This indicates that the ice sheets, which are
   already at risk of transgressing their temperature thresholds within the
-  Paris range of 1.5 to 2 {$\smwhtcircle$}C, are of particular importance for
-  the stability of the climate system as a whole.%
+  Paris range of 1.5 to 2 ◦C, are of particular importance for the stability
+  of the climate system as a whole.%
     }
     \verb{doi}
     \verb 10.5194/esd-12-601-2021
@@ -373,6 +386,7 @@
     \field{issn}{2190-4987}
     \field{number}{2}
     \field{pages}{601\bibrangedash 619}
+    \field{shortjournal}{Earth Syst. Dynam.}
     \field{title}{Interacting Tipping Elements Increase Risk of Climate Domino
   Effects under Global Warming}
     \field{volume}{12}
@@ -382,8 +396,316 @@
     \verb acting tipping elements increase risk of clim.pdf
     \endverb
     \field{journaltitle}{Earth System Dynamics}
+    \field{day}{03}
     \field{month}{06}
     \field{year}{2021}
+  \endentry
+
+  \entry{Beggs2012}{article}{}
+    \name{author}{2}{}{%
+      {{hash=BJM}{%
+         family={Beggs},
+         familyi={B\bibinitperiod},
+         given={John\bibnamedelima M.},
+         giveni={J\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+      {{hash=TN}{%
+         family={Timme},
+         familyi={T\bibinitperiod},
+         given={Nicholas},
+         giveni={N\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{BJMTN1}
+    \strng{fullhash}{BJMTN1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Relatively recent work has reported that networks of neurons can produce
+  avalanches of activity whose sizes follow a power law distribution. This
+  suggests that these networks may be operating near a critical point, poised
+  between a phase where activity rapidly dies out and a phase where activity is
+  amplified over time. The hypothesis that the electrical activity of neural
+  networks in the brain is critical is potentially important, as many
+  simulations suggest that information processing functions would be optimized
+  at the critical point. This hypothesis, however, is still controversial. Here
+  we will explain the concept of criticality and review the substantial
+  objections to the criticality hypothesis raised by skeptics. Points and
+  counter points are presented in dialog form.%
+    }
+    \verb{doi}
+    \verb 10.3389/fphys.2012.00163
+    \endverb
+    \field{issn}{1664-042X}
+    \field{shortjournal}{Front. Physio.}
+    \field{title}{Being {{Critical}} of {{Criticality}} in the {{Brain}}}
+    \field{volume}{3}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/TTQKKY69/Beggs and Timme - 2012 - Being C
+    \verb ritical of Criticality in the Brain.pdf
+    \endverb
+    \field{journaltitle}{Frontiers in Physiology}
+    \field{year}{2012}
+  \endentry
+
+  \entry{Mitchell1993}{unpublished}{}
+    \name{author}{3}{}{%
+      {{hash=MM}{%
+         family={Mitchell},
+         familyi={M\bibinitperiod},
+         given={Melanie},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=HP}{%
+         family={Hraber},
+         familyi={H\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+      {{hash=CJP}{%
+         family={Crutchfield},
+         familyi={C\bibinitperiod},
+         given={James\bibnamedelima P.},
+         giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MM+1}
+    \strng{fullhash}{MMHPCJP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    We present results from an experiment similar to one performed by Packard
+  (1988), in which a genetic algorithm is used to evolve cellular automata (CA)
+  to perform a particular computational task. Packard examined the frequency of
+  evolved CA rules as a function of Langton's lambda parameter (Langton, 1990),
+  and interpreted the results of his experiment as giving evidence for the
+  following two hypotheses: (1) CA rules able to perform complex computations
+  are most likely to be found near ``critical'' lambda values, which have been
+  claimed to correlate with a phase transition between ordered and chaotic
+  behavioral regimes for CA; (2) When CA rules are evolved to perform a complex
+  computation, evolution will tend to select rules with lambda values close to
+  the critical values. Our experiment produced very different results, and we
+  suggest that the interpretation of the original results is not correct. We
+  also review and discuss issues related to lambda, dynamical-behavior classes,
+  and computation in CA. The main constructive results of our study are
+  identifying the emergence and competition of computational strategies and
+  analyzing the central role of symmetries in an evolutionary system. In
+  particular, we demonstrate how symmetry breaking can impede the evolution
+  toward higher computational capability.%
+    }
+    \verb{eprint}
+    \verb adap-org/9303003
+    \endverb
+    \field{pages}{1\bibrangedash 38}
+    \field{title}{Revisiting the {{Edge}} of {{Chaos}}: {{Evolving Cellular
+  Automata}} to {{Perform Computations}}}
+    \verb{url}
+    \verb http://arxiv.org/abs/adap-org/9303003
+    \endverb
+    \field{eprinttype}{arxiv}
+    \field{year}{1993}
+    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
+  \endentry
+
+  \entry{Mitchella}{article}{}
+    \name{author}{3}{}{%
+      {{hash=MM}{%
+         family={Mitchell},
+         familyi={M\bibinitperiod},
+         given={Melanie},
+         giveni={M\bibinitperiod},
+      }}%
+      {{hash=CJP}{%
+         family={Crutchfield},
+         familyi={C\bibinitperiod},
+         given={James\bibnamedelima P},
+         giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod},
+      }}%
+      {{hash=HP}{%
+         family={Hraber},
+         familyi={H\bibinitperiod},
+         given={Peter},
+         giveni={P\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{MM+1}
+    \strng{fullhash}{MMCJPHP1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    In this paper we review previous work and present new work concerning the
+  relationship between dynamical systems theory and computation. In particular,
+  we review work by Langton 21] and Packard 29] on the relationship between
+  dynamical behavior and computational capability in cellular automata (CAs).
+  We present results from an experiment similar to the one described by Packard
+  29], which was cited as evidence for the hypothesis that rules capable of
+  performing complex computations are most likely to be found at a phase
+  transition between ordered and chaotic behavioral regimes for CAs (the
+  \textbackslash edge of chaos"). Our experiment produced very di erent results
+  from the original experiment, and we suggest that the interpretation of the
+  original results is not correct. We conclude by discussing general issues
+  related to dynamics, computation, and the \textbackslash edge of chaos" in
+  cellular automata.%
+    }
+    \field{pages}{17}
+    \field{title}{Dynamics, {{Computation}}, and the “{{Edge}} of
+  {{Chaos}}”: {{A Re- Examination}}}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/BLXWJ8A7/Mitchell et al. - Dynamics, Comp
+    \verb utation, and the “Edge of Chaos” A .pdf
+    \endverb
+  \endentry
+
+  \entry{Forgoston2018a}{article}{}
+    \name{author}{2}{}{%
+      {{hash=FE}{%
+         family={Forgoston},
+         familyi={F\bibinitperiod},
+         given={Eric},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=MRO}{%
+         family={Moore},
+         familyi={M\bibinitperiod},
+         given={Richard\bibnamedelima O.},
+         giveni={R\bibinitperiod\bibinitdelim O\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{FEMRO1}
+    \strng{fullhash}{FEMRO1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    Noise plays a fundamental role in a wide variety of physical and biological
+  dynamical systems. It can arise from an external forcing or due to random
+  dynamics internal to the system. It is well established that even weak noise
+  can result in large behavioral changes such as transitions between or escapes
+  from quasi-stable states. These transitions can correspond to critical events
+  such as failures or extinctions that make them essential phenomena to
+  understand and quantify, despite the fact that their occurrence is rare. This
+  article will provide an overview of the theory underlying the dynamics of
+  rare events for stochastic models along with some example applications.%
+    }
+    \verb{doi}
+    \verb 10.1137/17M1142028
+    \endverb
+    \field{issn}{0036-1445, 1095-7200}
+    \field{number}{4}
+    \field{pages}{969\bibrangedash 1009}
+    \field{shortjournal}{SIAM Rev.}
+    \field{title}{A {{Primer}} on {{Noise-Induced Transitions}} in {{Applied
+  Dynamical Systems}}}
+    \field{volume}{60}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/VL765RFM/Forgoston and Moore - 2018 - A P
+    \verb rimer on Noise-Induced Transitions in Applied D.pdf
+    \endverb
+    \field{journaltitle}{SIAM Review}
+    \field{month}{01}
+    \field{year}{2018}
+  \endentry
+
+  \entry{Czaplicka2013}{article}{}
+    \name{author}{3}{}{%
+      {{hash=CA}{%
+         family={Czaplicka},
+         familyi={C\bibinitperiod},
+         given={Agnieszka},
+         giveni={A\bibinitperiod},
+      }}%
+      {{hash=HJA}{%
+         family={Holyst},
+         familyi={H\bibinitperiod},
+         given={Janusz\bibnamedelima A.},
+         giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+      }}%
+      {{hash=SPM}{%
+         family={Sloot},
+         familyi={S\bibinitperiod},
+         given={Peter\bibnamedelima M.A.},
+         giveni={P\bibinitperiod\bibinitdelim M\bibinitperiod},
+      }}%
+    }
+    \keyw{statistical physics}
+    \strng{namehash}{CA+2}
+    \strng{fullhash}{CAHJASPM1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    We study the influence of noise on information transmission in the form of
+  packages shipped between nodes of hierarchical networks. Numerical
+  simulations are performed for artificial tree networks, scale-free
+  Ravasz-Barabási networks as well for a real network formed by email
+  addresses of former Enron employees. Two types of noise are considered. One
+  is related to packet dynamics and is responsible for a random part of packets
+  paths. The second one originates from random changes in initial network
+  topology. We find that the information transfer can be enhanced by the noise.
+  The system possesses optimal performance when both kinds of noise are tuned
+  to specific values, this corresponds to the Stochastic Resonance phenomenon.
+  There is a non-trivial synergy present for both noisy components. We found
+  also that hierarchical networks built of nodes of various degrees are more
+  efficient in information transfer than trees with a fixed branching factor.%
+    }
+    \verb{doi}
+    \verb 10.1038/srep01223
+    \endverb
+    \field{issn}{20452322}
+    \field{title}{Noise Enhances Information Transfer in Hierarchical Networks}
+    \field{volume}{3}
+    \field{journaltitle}{Scientific Reports}
+    \field{year}{2013}
+  \endentry
+
+  \entry{Nicolis2016}{article}{}
+    \name{author}{2}{}{%
+      {{hash=NG}{%
+         family={Nicolis},
+         familyi={N\bibinitperiod},
+         given={Grégoire},
+         giveni={G\bibinitperiod},
+      }}%
+      {{hash=NC}{%
+         family={Nicolis},
+         familyi={N\bibinitperiod},
+         given={Catherine},
+         giveni={C\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{NGNC1}
+    \strng{fullhash}{NGNC1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{abstract}{%
+    A class of complex self-organizing systems subjected to fluctuations of
+  environmental or intrinsic origin and to nonequilibrium constraints in the
+  form of an external periodic forcing is analyzed from the standpoint of
+  information theory. Conditions under which the response of information
+  entropy and related quantities to the nonequilibrium constraint can be
+  optimized via a stochastic resonance-type mechanism are identified, and the
+  role of key parameters is assessed.%
+    }
+    \verb{doi}
+    \verb 10.3390/e18050172
+    \endverb
+    \field{issn}{1099-4300}
+    \field{number}{5}
+    \field{pages}{172}
+    \field{shortjournal}{Entropy}
+    \field{title}{Stochastic {{Resonance}}, {{Self-Organization}} and
+  {{Information Dynamics}} in {{Multistable Systems}}}
+    \field{volume}{18}
+    \field{langid}{english}
+    \verb{file}
+    \verb /home/casper/Zotero/storage/IC42LUGS/Nicolis and Nicolis - 2016 - Sto
+    \verb chastic Resonance, Self-Organization and Inform.pdf
+    \endverb
+    \field{journaltitle}{Entropy}
+    \field{day}{04}
+    \field{month}{05}
+    \field{year}{2016}
   \endentry
 
   \entry{Hopfield1982b}{article}{}
@@ -417,6 +739,9 @@
   properties are only weakly sensitive to details of the modeling or the
   failure of individual devices.%
     }
+    \verb{eprint}
+    \verb 6953413
+    \endverb
     \field{issn}{0027-8424}
     \field{number}{8}
     \field{pages}{2554\bibrangedash 8}
@@ -425,6 +750,7 @@
     \field{volume}{79}
     \field{journaltitle}{Proceedings of the National Academy of Sciences of the
   United States of America}
+    \field{eprinttype}{pmid}
     \field{month}{05}
     \field{year}{1982}
   \endentry
@@ -450,13 +776,13 @@
   the values of the neighboring spins. This dependence is determined, in part,
   by the detailed balancing condition obeyed by the equilibrium state of the
   model. The Markoff process which describes the spin functions is analyzed in
-  detail for the case of a closed N-member chain. The expectation values of the
-  individual spins and of the products of pairs of spins, each of the pair
+  detail for the case of a closed N‐member chain. The expectation values of
+  the individual spins and of the products of pairs of spins, each of the pair
   evaluated at a different time, are found explicitly. The influence of a
-  uniform, time-varying magnetic field upon the model is discussed, and the
-  frequency-dependent magnetic susceptibility is found in the weak-field limit.
-  Some fluctuation-dissipation theorems are derived which relate the
-  susceptibility to the Fourier transform of the time-dependent correlation
+  uniform, time‐varying magnetic field upon the model is discussed, and the
+  frequency‐dependent magnetic susceptibility is found in the weak‐field
+  limit. Some fluctuation‐dissipation theorems are derived which relate the
+  susceptibility to the Fourier transform of the time‐dependent correlation
   function of the magnetization at equilibrium.%
     }
     \verb{doi}
@@ -487,7 +813,7 @@
       {{hash=PM}{%
          family={Perc},
          familyi={P\bibinitperiod},
-         given={Matja{\v z}},
+         given={Matjaž},
          giveni={M\bibinitperiod},
       }}%
     }
@@ -522,6 +848,7 @@
     \endverb
     \field{issn}{15710645}
     \field{pages}{1\bibrangedash 21}
+    \field{shortjournal}{Physics of Life Reviews}
     \field{shorttitle}{Statistical Physics of Crime}
     \field{title}{Statistical Physics of Crime: {{A}} Review}
     \field{volume}{12}
@@ -562,17 +889,17 @@
   biological, social and technological systems, translating topology into
   dynamic flow continues to challenge us, as similar networks exhibit
   fundamentally different flow patterns, driven by different interaction
-  mechanisms. To uncover a network's actual flow patterns, here we use a
+  mechanisms. To uncover a network’s actual flow patterns, here we use a
   perturbative formalism, analytically tracking the contribution of all
   nodes/paths to the flow of information, exposing the rules that link
   structure and dynamic information flow for a broad range of nonlinear
   systems. We find that the diversity of flow patterns can be mapped into a
-  single universal function, characterizing the interplay between the system's
-  topology and its dynamics, ultimately allowing us to identify the network's
-  main arteries of information flow. Counter-intuitively, our formalism
-  predicts a family of frequently encountered dynamics where the flow of
-  information avoids the hubs, favoring the network's peripheral pathways, a
-  striking disparity between structure and dynamics.%
+  single universal function, characterizing the interplay between the
+  system’s topology and its dynamics, ultimately allowing us to identify the
+  network’s main arteries of information flow. Counter-intuitively, our
+  formalism predicts a family of frequently encountered dynamics where the flow
+  of information avoids the hubs, favoring the network’s peripheral pathways,
+  a striking disparity between structure and dynamics.%
     }
     \verb{doi}
     \verb 10.1038/s41467-017-01916-3
@@ -605,9 +932,9 @@
          giveni={B\bibinitperiod},
       }}%
       {{hash=BAL}{%
-         family={Barab{\'a}si},
+         family={Barabási},
          familyi={B\bibinitperiod},
-         given={Albert-L{\'a}szl{\'o}},
+         given={Albert-László},
          giveni={A\bibinithyphendelim L\bibinitperiod},
       }}%
     }
@@ -646,6 +973,9 @@
     \verb{doi}
     \verb 10.1038/nature18019
     \endverb
+    \verb{eprint}
+    \verb 11507039
+    \endverb
     \field{isbn}{0008-5472 (Print)\$\textbackslash\$r0008-5472 (Linking)}
     \field{issn}{0028-0836}
     \field{number}{7615}
@@ -657,6 +987,7 @@
     \verb Universal resilience patterns in complex networks(2).pdf
     \endverb
     \field{journaltitle}{Nature}
+    \field{eprinttype}{pmid}
     \field{year}{2016}
   \endentry
 
@@ -675,7 +1006,7 @@
          giveni={B\bibinitperiod},
       }}%
       {{hash=KJ}{%
-         family={Kr{\"o}nke},
+         family={Krönke},
          familyi={K\bibinitperiod},
          given={Jonathan},
          giveni={J\bibinitperiod},
@@ -712,24 +1043,24 @@
     \field{abstract}{%
     In this study, we investigate how specific micro-interaction structures
   (motifs) affect the occurrence of tipping cascades on networks of stylized
-  tipping elements. We compare the properties of cascades in
-  Erdo\H{}s\textendash R\'enyi networks and an exemplary moisture recycling
-  network of the Amazon rainforest. Within these networks, decisive small-scale
-  motifs are the feed forward loop, the secondary feed forward loop, the zero
-  loop, and the neighboring loop. Of all motifs, the feed forward loop motif
-  stands out in tipping cascades since it decreases the critical coupling
-  strength necessary to initiate a cascade more than the other motifs. We find
-  that for this motif, the reduction of critical coupling strength is 11\% less
-  than the critical coupling of a pair of tipping elements. For highly
-  connected networks, our analysis reveals that coupled feed forward loops
-  coincide with a strong 90\% decrease in the critical coupling strength. For
-  the highly clustered moisture recycling network in the Amazon, we observe
-  regions of a very high motif occurrence for each of the four investigated
-  motifs, suggesting that these regions are more vulnerable. The occurrence of
-  motifs is found to be one order of magnitude higher than in a random
-  Erdo\H{}s\textendash R\'enyi network. This emphasizes the importance of local
-  interaction structures for the emergence of global cascades and the stability
-  of the network as a whole.%
+  tipping elements. We compare the properties of cascades in Erdo˝s–Rényi
+  networks and an exemplary moisture recycling network of the Amazon
+  rainforest. Within these networks, decisive small-scale motifs are the feed
+  forward loop, the secondary feed forward loop, the zero loop, and the
+  neighboring loop. Of all motifs, the feed forward loop motif stands out in
+  tipping cascades since it decreases the critical coupling strength necessary
+  to initiate a cascade more than the other motifs. We find that for this
+  motif, the reduction of critical coupling strength is 11\% less than the
+  critical coupling of a pair of tipping elements. For highly connected
+  networks, our analysis reveals that coupled feed forward loops coincide with
+  a strong 90\% decrease in the critical coupling strength. For the highly
+  clustered moisture recycling network in the Amazon, we observe regions of a
+  very high motif occurrence for each of the four investigated motifs,
+  suggesting that these regions are more vulnerable. The occurrence of motifs
+  is found to be one order of magnitude higher than in a random
+  Erdo˝s–Rényi network. This emphasizes the importance of local interaction
+  structures for the emergence of global cascades and the stability of the
+  network as a whole.%
     }
     \verb{doi}
     \verb 10.1063/1.5142827
@@ -737,6 +1068,7 @@
     \field{issn}{1054-1500, 1089-7682}
     \field{number}{4}
     \field{pages}{043129}
+    \field{shortjournal}{Chaos}
     \field{shorttitle}{How Motifs Condition Critical Thresholds for Tipping
   Cascades in Complex Networks}
     \field{title}{How Motifs Condition Critical Thresholds for Tipping Cascades
@@ -787,22 +1119,28 @@
     \verb{doi}
     \verb 10.1002/047174882X
     \endverb
+    \verb{eprint}
+    \verb 20660925
+    \endverb
     \field{isbn}{978-0-471-24195-9}
     \field{issn}{15579654}
+    \field{pagetotal}{1\bibrangedash 748}
     \field{title}{Elements of {{Information Theory}}}
     \verb{file}
     \verb /home/casper/Zotero/storage/296ZDX75/Cover, Thomas - 2005 - Elements
     \verb of Information Theory(2).pdf
     \endverb
-    \field{journaltitle}{Elements of Information Theory}
+    \field{eprinttype}{pmid}
     \field{year}{2005}
   \endentry
 
-  \entry{vanElteren2022}{article}{}
+  \entry{vanElteren2022}{article}{useprefix}
     \name{author}{3}{}{%
-      {{hash=vC}{%
-         family={{van Elteren}},
-         familyi={v\bibinitperiod},
+      {{hash=vEC}{%
+         prefix={van},
+         prefixi={v\bibinitperiod},
+         family={Elteren},
+         familyi={E\bibinitperiod},
          given={Casper},
          giveni={C\bibinitperiod},
       }}%
@@ -819,8 +1157,8 @@
          giveni={P\bibinitperiod},
       }}%
     }
-    \strng{namehash}{vC+1}
-    \strng{fullhash}{vCQRSP1}
+    \strng{namehash}{vEC+1}
+    \strng{fullhash}{vECQRSP1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{abstract}{%
@@ -850,6 +1188,7 @@
     \endverb
     \field{issn}{03784371}
     \field{pages}{126889}
+    \field{shortjournal}{Physica A: Statistical Mechanics and its Applications}
     \field{title}{Dynamic Importance of Network Nodes Is Poorly Predicted by
   Static Structural Features}
     \field{langid}{english}
@@ -913,7 +1252,7 @@
     \verb 10.1098/rsif.2013.0568
     \endverb
     \verb{eprint}
-    \verb 1111.5483
+    \verb 24004558
     \endverb
     \field{isbn}{1742-5689}
     \field{issn}{1742-5662}
@@ -929,9 +1268,8 @@
     \endverb
     \field{journaltitle}{Journal of the Royal Society, Interface / the Royal
   Society}
-    \field{eprinttype}{arxiv}
+    \field{eprinttype}{pmid}
     \field{year}{2013}
-    \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
   \endentry
 
   \entry{James2016a}{article}{}
@@ -984,7 +1322,7 @@
     \verb 10.1103/PhysRevLett.116.238701
     \endverb
     \verb{eprint}
-    \verb 1512.06479
+    \verb 27341264
     \endverb
     \field{issn}{10797114}
     \field{number}{23}
@@ -997,7 +1335,7 @@
     \verb 16 - Information Flows A Critique of Transfer Entropies(2).pdf
     \endverb
     \field{journaltitle}{Physical Review Letters}
-    \field{eprinttype}{arxiv}
+    \field{eprinttype}{pmid}
     \field{year}{2016}
     \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
   \endentry
@@ -1074,8 +1412,8 @@
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{abstract}{%
-    We consider the ``partial information decomposition'' (PID) problem, which
-  aims to decompose the information that a set of source random variables
+    We consider the “partial information decomposition” (PID) problem,
+  which aims to decompose the information that a set of source random variables
   provide about a target random variable into separate redundant, synergistic,
   union, and unique components. In the first part of this paper, we propose a
   general framework for constructing a multivariate PID. Our framework is
@@ -1096,6 +1434,7 @@
     \field{issn}{1099-4300}
     \field{number}{3}
     \field{pages}{403}
+    \field{shortjournal}{Entropy}
     \field{title}{A {{Novel Approach}} to the {{Partial Information
   Decomposition}}}
     \field{volume}{24}
@@ -1105,11 +1444,12 @@
     \verb oach to the Partial Information Decomp.pdf
     \endverb
     \field{journaltitle}{Entropy}
+    \field{day}{13}
     \field{month}{03}
     \field{year}{2022}
   \endentry
 
-  \entry{Williams2010}{article}{}
+  \entry{Williams2010}{unpublished}{}
     \name{author}{2}{}{%
       {{hash=WPL}{%
          family={Williams},
@@ -1205,6 +1545,7 @@
     \field{issn}{0036-1445, 1095-7200}
     \field{number}{4}
     \field{pages}{969\bibrangedash 1009}
+    \field{shortjournal}{SIAM Rev.}
     \field{title}{A Primer on Noise-Induced Transitions in Applied Dynamical
   Systems}
     \field{volume}{60}
@@ -1266,7 +1607,8 @@
   experimental approaches that analyse in detail possible reasons and necessary
   conditions for the appearance of stochastic resonance and vibrational
   resonance in neural systems. This article is part of the theme issue
-  `Vibrational and stochastic resonance in driven nonlinear systems (part 2)'.%
+  ‘Vibrational and stochastic resonance in driven nonlinear systems (part
+  2)’.%
     }
     \verb{doi}
     \verb 10.1098/rsta.2020.0236
@@ -1274,6 +1616,7 @@
     \field{issn}{1364-503X, 1471-2962}
     \field{number}{2198}
     \field{pages}{rsta.2020.0236, 20200236}
+    \field{shortjournal}{Phil. Trans. R. Soc. A.}
     \field{title}{Stochastic and Vibrational Resonance in Complex Networks of
   Neurons}
     \field{volume}{379}
@@ -1284,6 +1627,7 @@
     \endverb
     \field{journaltitle}{Philosophical Transactions of the Royal Society A:
   Mathematical, Physical and Engineering Sciences}
+    \field{day}{31}
     \field{month}{05}
     \field{year}{2021}
   \endentry
@@ -1318,7 +1662,7 @@
     We study the influence of noise on information transmission in the form of
   packages shipped between nodes of hierarchical networks. Numerical
   simulations are performed for artificial tree networks, scale-free
-  Ravasz-Barab\'asi networks as well for a real network formed by email
+  Ravasz-Barabási networks as well for a real network formed by email
   addresses of former Enron employees. Two types of noise are considered. One
   is related to packet dynamics and is responsible for a random part of packets
   paths. The second one originates from random changes in initial network
@@ -1440,7 +1784,7 @@
     \endverb
     \field{isbn}{978-1-4673-5863-7}
     \field{issn}{21606382}
-    \field{number}{January}
+    \field{issue}{January}
     \field{pages}{43\bibrangedash 51}
     \field{title}{Towards a Synergy-Based Approach to Measuring Information
   Modification}
@@ -1468,7 +1812,7 @@
       {{hash=JJ}{%
          family={Jost},
          familyi={J\bibinitperiod},
-         given={J{\"u}rgen},
+         given={Jürgen},
          giveni={J\bibinitperiod},
       }}%
       {{hash=WM}{%
@@ -1495,8 +1839,8 @@
   variables provides about a target. This attention resulted in a number of
   measures proposed to capture these concepts, theoretical investigations into
   such measures, and applications to empirical data (in particular to datasets
-  from neuroscience). In this Special Issue on ``Information Decomposition of
-  Target Effects from Multi-Source Interactions'' at Entropy, we have gathered
+  from neuroscience). In this Special Issue on “Information Decomposition of
+  Target Effects from Multi-Source Interactions” at Entropy, we have gathered
   current work on such information decomposition approaches from many of the
   leading research groups in the field. We begin our editorial by providing the
   reader with a review of previous information decomposition research,
@@ -1511,6 +1855,7 @@
     \verb{doi}
     \verb 10.3390/e20040307
     \endverb
+    \field{issue}{4}
     \field{number}{4}
     \field{pages}{307}
     \field{shorttitle}{Information {{Decomposition}} of {{Target Effects}} from
@@ -1538,9 +1883,9 @@
          given={Rick},
          giveni={R\bibinitperiod},
       }}%
-      {{hash=HO}{%
-         family={{Har-Shemesh}},
-         familyi={H\bibinitperiod},
+      {{hash=HSO}{%
+         family={Har-Shemesh},
+         familyi={H\bibinithyphendelim S\bibinitperiod},
          given={Omri},
          giveni={O\bibinitperiod},
       }}%
@@ -1554,7 +1899,7 @@
     \keyw{Higher order information,Information theory,Stochastic
   variables,Synergistic entropy,Synergistic information,Synergy}
     \strng{namehash}{QR+1}
-    \strng{fullhash}{QRHOSPM1}
+    \strng{fullhash}{QRHSOSPM1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{abstract}{%
@@ -1601,53 +1946,6 @@
     \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
   \endentry
 
-  \entry{Nicolis2016}{article}{}
-    \name{author}{2}{}{%
-      {{hash=NG}{%
-         family={Nicolis},
-         familyi={N\bibinitperiod},
-         given={Gr{\'e}goire},
-         giveni={G\bibinitperiod},
-      }}%
-      {{hash=NC}{%
-         family={Nicolis},
-         familyi={N\bibinitperiod},
-         given={Catherine},
-         giveni={C\bibinitperiod},
-      }}%
-    }
-    \strng{namehash}{NGNC1}
-    \strng{fullhash}{NGNC1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-    \field{abstract}{%
-    A class of complex self-organizing systems subjected to fluctuations of
-  environmental or intrinsic origin and to nonequilibrium constraints in the
-  form of an external periodic forcing is analyzed from the standpoint of
-  information theory. Conditions under which the response of information
-  entropy and related quantities to the nonequilibrium constraint can be
-  optimized via a stochastic resonance-type mechanism are identified, and the
-  role of key parameters is assessed.%
-    }
-    \verb{doi}
-    \verb 10.3390/e18050172
-    \endverb
-    \field{issn}{1099-4300}
-    \field{number}{5}
-    \field{pages}{172}
-    \field{title}{Stochastic {{Resonance}}, {{Self-Organization}} and
-  {{Information Dynamics}} in {{Multistable Systems}}}
-    \field{volume}{18}
-    \field{langid}{english}
-    \verb{file}
-    \verb /home/casper/Zotero/storage/IC42LUGS/Nicolis and Nicolis - 2016 - Sto
-    \verb chastic Resonance, Self-Organization and Inform.pdf
-    \endverb
-    \field{journaltitle}{Entropy}
-    \field{month}{05}
-    \field{year}{2016}
-  \endentry
-
   \entry{Lizier2010}{article}{}
     \name{author}{3}{}{%
       {{hash=LJT}{%
@@ -1679,6 +1977,7 @@
     \field{issn}{1054-1500, 1089-7682}
     \field{number}{3}
     \field{pages}{037109}
+    \field{shortjournal}{Chaos}
     \field{title}{Information Modification and Particle Collisions in
   Distributed Computation}
     \field{volume}{20}
@@ -1693,7 +1992,7 @@
     \field{year}{2010}
   \endentry
 
-  \entry{Scheffer2009}{article}{}
+  \entry{Scheffer2009}{article}{useprefix}
     \name{author}{10}{}{%
       {{hash=SM}{%
          family={Scheffer},
@@ -1737,9 +2036,11 @@
          given={Hermann},
          giveni={H\bibinitperiod},
       }}%
-      {{hash=vEH}{%
-         family={{van Nes}},
-         familyi={v\bibinitperiod},
+      {{hash=vNEH}{%
+         prefix={van},
+         prefixi={v\bibinitperiod},
+         family={Nes},
+         familyi={N\bibinitperiod},
          given={Egbert\bibnamedelima H},
          giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod},
       }}%
@@ -1757,7 +2058,7 @@
       }}%
     }
     \strng{namehash}{SM+1}
-    \strng{fullhash}{SMBJBWABVCSRDVHHvEHRMSG1}
+    \strng{fullhash}{SMBJBWABVCSRDVHHvNEHRMSG1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{abstract}{%
@@ -1771,12 +2072,16 @@
     \verb{doi}
     \verb 10.1038/nature08227
     \endverb
+    \verb{eprint}
+    \verb 19727193
+    \endverb
     \field{issn}{1476-4687}
     \field{number}{7260}
     \field{pages}{53\bibrangedash 9}
     \field{title}{Early-Warning Signals for Critical Transitions.}
     \field{volume}{461}
     \field{journaltitle}{Nature}
+    \field{eprinttype}{pmid}
     \field{year}{2009}
   \endentry
 
@@ -1817,6 +2122,7 @@
     \field{issn}{1539-3755, 1550-2376}
     \field{number}{4}
     \field{pages}{041116}
+    \field{shortjournal}{Phys. Rev. E}
     \field{title}{Relating {{Fisher}} Information to Order Parameters}
     \field{volume}{84}
     \field{langid}{english}
@@ -1825,6 +2131,7 @@
     \verb ing Fisher information to order parameters.pdf
     \endverb
     \field{journaltitle}{Physical Review E}
+    \field{day}{13}
     \field{month}{10}
     \field{year}{2011}
   \endentry
@@ -1872,6 +2179,7 @@
     \field{issn}{0028-0836, 1476-4687}
     \field{number}{6856}
     \field{pages}{591\bibrangedash 596}
+    \field{shortjournal}{Nature}
     \field{title}{Catastrophic Shifts in Ecosystems}
     \field{volume}{413}
     \field{langid}{english}
@@ -1934,6 +2242,7 @@
     \field{issn}{1618-954X, 1618-9558}
     \field{number}{4}
     \field{pages}{773\bibrangedash 783}
+    \field{shortjournal}{Clean Techn Environ Policy}
     \field{shorttitle}{Managing for Resilience}
     \field{title}{Managing for Resilience: Early Detection of Regime Shifts in
   Complex Systems}
@@ -1962,8 +2271,8 @@
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{isbn}{978-3-642-46246-7}
-    \field{title}{Volume 1 {{Edited}} by {{K}}. {{Krickeberg}}{$\cdot$} {{R}}.
-  {{C}}. {{Lewontin}} . {{J}}. {{Neyman M}}. {{Schreiber}}}
+    \field{title}{Volume 1 {{Edited}} by {{K}}. {{Krickeberg}}· {{R}}. {{C}}.
+  {{Lewontin}} . {{J}}. {{Neyman M}}. {{Schreiber}}}
     \field{volume}{1}
   \endentry
 
@@ -1997,6 +2306,9 @@
     \verb{doi}
     \verb 10.1142/S0219525908001465
     \endverb
+    \verb{eprint}
+    \verb 15823657
+    \endverb
     \field{isbn}{0219-5259}
     \field{issn}{0219-5259}
     \field{number}{01}
@@ -2008,10 +2320,11 @@
     \verb Flows in Causal Networks(2).pdf
     \endverb
     \field{journaltitle}{Advances in Complex Systems}
+    \field{eprinttype}{pmid}
     \field{year}{2008}
   \endentry
 
-  \entry{Runge2019}{article}{}
+  \entry{Runge2019}{article}{useprefix}
     \name{author}{21}{}{%
       {{hash=RJ}{%
          family={Runge},
@@ -2031,9 +2344,9 @@
          given={Erik},
          giveni={E\bibinitperiod},
       }}%
-      {{hash=CG}{%
-         family={{Camps-Valls}},
-         familyi={C\bibinitperiod},
+      {{hash=CVG}{%
+         family={Camps-Valls},
+         familyi={C\bibinithyphendelim V\bibinitperiod},
          given={Gustau},
          giveni={G\bibinitperiod},
       }}%
@@ -2067,15 +2380,17 @@
          given={Miguel\bibnamedelima D.},
          giveni={M\bibinitperiod\bibinitdelim D\bibinitperiod},
       }}%
-      {{hash=MJ}{%
-         family={{Mu{\~n}oz-Mar{\'i}}},
-         familyi={M\bibinitperiod},
+      {{hash=MMJ}{%
+         family={Muñoz-Marí},
+         familyi={M\bibinithyphendelim M\bibinitperiod},
          given={Jordi},
          giveni={J\bibinitperiod},
       }}%
-      {{hash=vEH}{%
-         family={{van Nes}},
-         familyi={v\bibinitperiod},
+      {{hash=vNEH}{%
+         prefix={van},
+         prefixi={v\bibinitperiod},
+         family={Nes},
+         familyi={N\bibinitperiod},
          given={Egbert\bibnamedelima H.},
          giveni={E\bibinitperiod\bibinitdelim H\bibinitperiod},
       }}%
@@ -2104,7 +2419,7 @@
          giveni={M\bibinitperiod},
       }}%
       {{hash=SB}{%
-         family={Sch{\"o}lkopf},
+         family={Schölkopf},
          familyi={S\bibinitperiod},
          given={Bernhard},
          giveni={B\bibinitperiod},
@@ -2144,7 +2459,7 @@
       {{Springer US}}%
     }
     \strng{namehash}{RJ+1}
-    \strng{fullhash}{RJBSBECGCDDEGCKMMMDMJvEHPJQRRMSMSBSPSGSJZKZJ1}
+    \strng{fullhash}{RJBSBECVGCDDEGCKMMMDMMJvNEHPJQRRMSMSBSPSGSJZKZJ1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{abstract}{%
@@ -2161,6 +2476,9 @@
     \verb{doi}
     \verb 10.1038/s41467-019-10105-3
     \endverb
+    \verb{eprint}
+    \verb 31201306
+    \endverb
     \field{isbn}{4146701910}
     \field{issn}{20411723}
     \field{number}{1}
@@ -2169,6 +2487,7 @@
   Sciences}
     \field{volume}{10}
     \field{journaltitle}{Nature Communications}
+    \field{eprinttype}{pmid}
     \field{year}{2019}
   \endentry
 
@@ -2191,6 +2510,7 @@
     \field{issn}{1539-3755, 1550-2376}
     \field{number}{3}
     \field{pages}{037101}
+    \field{shortjournal}{Phys. Rev. E}
     \field{title}{Functions of Neuronal Network Motifs}
     \field{volume}{78}
     \field{langid}{english}
@@ -2199,6 +2519,7 @@
     \verb l network motifs.pdf
     \endverb
     \field{journaltitle}{Physical Review E}
+    \field{day}{03}
     \field{month}{09}
     \field{year}{2008}
   \endentry
@@ -2253,7 +2574,7 @@
     \verb 10.1103/PhysRevLett.116.238701
     \endverb
     \verb{eprint}
-    \verb 1512.06479
+    \verb 27341264
     \endverb
     \field{issn}{10797114}
     \field{number}{23}
@@ -2266,7 +2587,7 @@
     \verb 16 - Information Flows A Critique of Transfer Entropies(2).pdf
     \endverb
     \field{journaltitle}{Physical Review Letters}
-    \field{eprinttype}{arxiv}
+    \field{eprinttype}{pmid}
     \field{year}{2016}
     \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
   \endentry
@@ -2322,6 +2643,7 @@
     \verb ctive Information.pdf
     \endverb
     \field{eprinttype}{arxiv}
+    \field{day}{25}
     \field{month}{02}
     \field{year}{1999}
     \field{urlday}{17}
@@ -2330,70 +2652,11 @@
     \warn{\item Can't use 'eprinttype' + 'archiveprefix'}
   \endentry
 
-  \entry{vanElteren2021}{article}{}
-    \name{author}{3}{}{%
-      {{hash=vC}{%
-         family={{van Elteren}},
-         familyi={v\bibinitperiod},
-         given={Casper},
-         giveni={C\bibinitperiod},
-      }}%
-      {{hash=QR}{%
-         family={Quax},
-         familyi={Q\bibinitperiod},
-         given={Rick},
-         giveni={R\bibinitperiod},
-      }}%
-      {{hash=SP}{%
-         family={Sloot},
-         familyi={S\bibinitperiod},
-         given={Peter},
-         giveni={P\bibinitperiod},
-      }}%
-    }
-    \strng{namehash}{vC+1}
-    \strng{fullhash}{vCQRSP1}
-    \field{labelnamesource}{author}
-    \field{labeltitlesource}{title}
-    \field{abstract}{%
-    One of the most central questions in network science is: which nodes are
-  most important? Often this question is answered using structural properties
-  such as high connectedness or centrality in the network. However, static
-  structural connectedness does not necessarily translate to dynamical
-  importance. To demonstrate this, we simulate the kinetic Ising spin model on
-  generated networks and one real-world weighted network. The dynamic impact of
-  nodes is assessed by causally intervening on node state probabilities and
-  measuring the effect on the systemic dynamics. The results show that
-  structural features such as network centrality or connectedness are actually
-  poor predictors of the dynamical impact of a node on the rest of the network.
-  A solution is offered in the form of an information theoretical measure named
-  integrated mutual information. The metric is able to accurately predict the
-  dynamically most important node (`driver' node) in networks based on
-  observational data of non-intervened dynamics. We conclude that the driver
-  node(s) in networks are not necessarily the most well-connected or central
-  nodes. Indeed, the common assumption of network structural features being
-  proportional to dynamical importance is false. Consequently, great care
-  should be taken when deriving dynamical importance from network data alone.
-  These results highlight the need for novel inference methods that take both
-  structure and dynamics into account.%
-    }
-    \field{pages}{27}
-    \field{title}{Dynamic Importance of Network Nodes Is Poorly Predicted by
-  Static Structural Features}
-    \field{langid}{english}
-    \verb{file}
-    \verb /home/casper/Zotero/storage/K7JPD7LM/van Elteren et al. - 2021 - Dyna
-    \verb mic importance of network nodes is poorly pred.pdf
-    \endverb
-    \field{journaltitle}{PHYSICA A}
-    \field{year}{2021}
-  \endentry
-
   \entry{Lopez-Ruiz1995a}{article}{}
     \name{author}{3}{}{%
-      {{hash=LR}{%
-         family={{L{\'o}pez-Ruiz}},
-         familyi={L\bibinitperiod},
+      {{hash=LRR}{%
+         family={López-Ruiz},
+         familyi={L\bibinithyphendelim R\bibinitperiod},
          given={R.},
          giveni={R\bibinitperiod},
       }}%
@@ -2410,8 +2673,8 @@
          giveni={X\bibinitperiod},
       }}%
     }
-    \strng{namehash}{LR+1}
-    \strng{fullhash}{LRMHLCX1}
+    \strng{namehash}{LRR+1}
+    \strng{fullhash}{LRRMHLCX1}
     \field{labelnamesource}{author}
     \field{labeltitlesource}{title}
     \field{abstract}{%
@@ -2420,7 +2683,7 @@
   intuitive notion of such a magnitude. It can be applied to many physical
   situations and to different descriptions of a given system. Moreover, the
   calculation of its value does not require a considerable computational effort
-  in many cases of physical interest. \textcopyright{} 1995.%
+  in many cases of physical interest. © 1995.%
     }
     \verb{doi}
     \verb 10.1016/0375-9601(95)00867-5

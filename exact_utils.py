@@ -2,6 +2,19 @@ import proplot as plt, cmasher as cmr, pandas as pd, numpy as np, os, sys, netwo
 from plexsim import models
 from imi import infcy
 from utils import get_binds, fit_curve as fc
+from exact import ising
+from exact import gen_states
+from scipy import optimize
+
+try:
+    import cupy as np
+
+    np.eye(5)
+    print("Using cupy")
+
+except:
+    print("Using numpy")
+    import numpy as np
 
 
 def show_panel(df, p, which="system"):
@@ -103,13 +116,16 @@ def fit_curve(df, f, offset=False):
 def get_p_gibbs(e, beta):
     p = np.exp(-e * beta)
     p /= np.nansum(p)
-    if np.any(np.isnan(p)):
-        print(p, e, beta, np.exp(-beta * e))
-        assert 0
+    # if np.any(np.isnan(p)):
+    # p[np.isnan(p)] = 0
+    # p /= np.nansum(p)
+    # print(p, e, beta, np.exp(-beta * e))
+    # assert 0
     return p
 
 
 def match_temp_exact(t, s, e, theta):
+    # match temperature based on Boltzmann distribution
     beta = 1 / t if t > 0 else np.inf
     p = get_p_gibbs(e, beta)
     return np.abs((p @ s) - theta)
@@ -122,35 +138,29 @@ def sc_match(t, s, e):
     return np.nansum(np.log2(p) * p, axis=-1) * np.nansum((p - 1 / len(p)) ** 2)
 
 
-from exact import ising
-
-
-from exact import gen_states
-from scipy import optimize
-
-
 def match_temp_stc(g, structure=None, e_func=ising):
-    import cupy as cp
+    # statistical complexity matching procedure
 
     n = len(g)
     if structure is None:
         states, _ = gen_states(n)
-        A = cp.asarray(nx.adjacency_matrix(g).todense())
+        A = np.asarray(nx.adjacency_matrix(g).todense())
         states, allowed = gen_states(n)
     else:
         A, states, allowed = structure
-    E = e_func(states, A)
+    print(type(states), type(A))
+    E = e_func(states, np.asarray(A))
 
-    E = np.array(E.get()).squeeze().sum(-1)
+    E = np.array(E).squeeze().sum(-1)
     # p = np.array([get_transfer(n, E, beta, allowed)[1] for beta in  1/temps])
-    s = np.array(abs(states.get().mean(1) - 0.5) * 2)
+    s = np.array(abs(states.mean(1) - 0.5) * 2)
 
     res = optimize.minimize(
         sc_match,
-        0.2,
+        0.1,
         args=(
-            s,
-            E,
+            np.asarray(s),
+            np.asarray(E),
         ),
         method="COBYLA",
     )

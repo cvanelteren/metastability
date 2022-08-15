@@ -20,6 +20,10 @@ fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=200.pkl"
 fp='exact_kite_dyn=ising_beta=0.5732374683235916_T=300_g.is_directed()=False.pkl'
 fp='exact_kite_dyn=ising_beta=0.5732374683235916_T=300_g.is_directed()=False.pkl'
 fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=2000.pkl"
+fp = "exact_0_dyn=ising_beta=0.7724235149856197_T=2000_g.is_directed()=False.pkl"
+fp = "exact_2_dyn=ising_beta=0.9001444450539172_T=300_g.is_directed()=False.pkl"
+fp='exact_kite_0_dyn=ising_beta=0.5732374683235916_T=300_g.is_directed()=False_NEW.pkl'
+fp='exact_kite_0_dyn=ising_beta=0.5732374683235916_T=300_g.is_directed()=False_NEW.pkl'
 # fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=30000.pkl"
 # fp = "exact_kite_dyn=ising_beta=0.5732374683235916_T=310.pkl"
 # fp='exact_kite_dyn=ising_beta=0.8333333333333334_T=310_g.is_directed()=False.pkl'
@@ -43,7 +47,8 @@ ndf = fit_curve(df, f, offset = True)
 #+end_src
 
 #+RESULTS:
-: Using numpy
+: The autoreload extension is already loaded. To reload it, use:
+:   %reload_ext autoreload
 : 1.05
 
 
@@ -60,7 +65,7 @@ fig.show()
 #+RESULTS:
 :RESULTS:
 #+attr_org: :width 262 :height 411
-[[file:./.ob-jupyter/ec69192c83f389a87e63f6d33a9f3ef3c3c6e5c3.png]]
+[[file:./.ob-jupyter/5583d4dcf34c04a8d5369b6f7c86577c8df38af2.png]]
 :END:
 
 #+begin_src jupyter-python
@@ -73,7 +78,7 @@ from sklearn.preprocessing import minmax_scale
 from utils import ccolors
 print(ndf.columns)
 imi = np.stack(ndf.imi)
-asy = np.stack(ndf.asymp)
+ai = np.stack(ndf.asymp)
 mi = np.stack(ndf.mi)
 
 h = np.stack(ndf.h)
@@ -82,7 +87,7 @@ imi = imi[:-1]
 # imi = (imi - imi.min(1)[:, None]) / (imi.max(1)[:, None] - imi.min(1)[:, None])
 g = df.attrs["settings"].g
 
-targets = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]
+targets = [0.1, 0.2, 0.3, 0.4, 0.5]
 # targets =  [ 0.0125,  0.1375,  0.2625,  0.3875,  0.5125, 0.6375 ]
 pos = nx.kamada_kawai_layout(g)
 
@@ -177,9 +182,23 @@ axs[2,0].format(
 
 for idx, t in enumerate(tits):
     axs[0, idx].set_title(round(t,2), y = 0.95)
-fig.savefig(f"./figures/{dyn}_kite_graph.pdf")
-fig.savefig("./figures/figure2.pdf")
+# fig.savefig(f"./figures/{dyn}_kite_graph.pdf")
+# fig.savefig("./figures/figure2.pdf")
 #+end_src
+
+#+RESULTS:
+:RESULTS:
+: Index(['mi', 'h', 'hc', 'mag', 'p0', 'pst', 'psc', 'coeffs', 'half', 'asymp',
+:        'imi', 'rmse'],
+:       dtype='object')
+: 0.1 (array([], dtype=int64),) [False False False False False False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.2 (array([], dtype=int64),) [False False False False False False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.3 (array([], dtype=int64),) [False False False False False False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.4 (array([4]),) [False False False False  True False False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+: 0.5 (array([5]),) [False False False False False  True False False False False False False] [ 0.    0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.   -1.05]
+#+attr_org: :width 1539 :height 1400
+[[file:./.ob-jupyter/9a94958c5b375c27deb7b6a665b98b7cdf141a8f.png]]
+:END:
 kalsdfjsl
 #+RESULTS:
 :RESULTS:
@@ -391,9 +410,9 @@ fig.show()
 
 #+RESULTS:
 :RESULTS:
-: (2000, 10)
+: (300, 10)
 #+attr_org: :width 288 :height 300
-[[file:./.ob-jupyter/1d0dab42017d5a64c9c3d9b80af243282f78ca49.png]]
+[[file:./.ob-jupyter/28bc713dbab0d1abca8e8e9e1b8dc8eb41ac4167.png]]
 :END:
 
 #+begin_src jupyter-python
@@ -423,28 +442,6 @@ fig.show()
 fig.savefig("test")
 mi.shape
 #+end_src
-
-#+RESULTS:
-:RESULTS:
-#+begin_example
-0     0.05
-1     0.15
-2     0.25
-3     0.35
-4     0.45
-5     0.55
-6     0.65
-7     0.75
-8     0.85
-9     0.95
-10    1.05
-11   -1.00
-Name: mag, dtype: float64
-#+end_example
-| 12 | 310 | 10 |
-#+attr_org: :width 342 :height 300
-[[file:./.ob-jupyter/d34873931d551eb092f36b16aff35dd9074d19c0.png]]
-:END:
 
 
 #+begin_src jupyter-python
@@ -484,11 +481,13 @@ fig.show()
 
 #+RESULTS:
 :RESULTS:
-: Index(['mi', 'h', 'hc', 'mag', 'p0', 'coeffs', 'half', 'asymp', 'imi', 'rmse'], dtype='object')
+: Index(['mi', 'h', 'hc', 'mag', 'p0', 'pst', 'psc', 'coeffs', 'half', 'asymp',
+:        'imi', 'rmse'],
+:       dtype='object')
 : (12, 10) (12, 10)
 : (2, 11, 10)
-#+attr_org: :width 623 :height 304
-[[file:./.ob-jupyter/c49d375fa934f7c2a37110fe09c96b875b3d5c10.png]]
+#+attr_org: :width 637 :height 304
+[[file:./.ob-jupyter/4a852e7845ec04cdd18e5f4b7d5f2b0badcf17c1.png]]
 :END:
 
 #+begin_src jupyter-python
@@ -578,7 +577,12 @@ fig.show()
 
 
 #+begin_src jupyter-python
-
+imi = np.stack(ndf.imi)
+ai = np.stack(ndf.asymp)
+mi = np.stack(ndf.mi)
+from utils import ccolors
+C = ccolors(10)
+g = nx.krackhardt_kite_graph()
 pos = nx.kamada_kawai_layout(g)
 mi = np.stack(ndf.mi)
 mag = (np.asarray(ndf.mag.copy()) - 0.05).round(1)[:-1]
@@ -703,7 +707,8 @@ ax[5].set_ylabel("Integrated mutual information\n($\mu(s_i)$)")
 ax[1,:].format(xlabel = "System macrostate ($\\langle S \\rangle $)")
 fig.suptitle("Fraction of nodes in state +1",
              fontsize = 32)
-fig.savefig("./figures/figure2_alt.pdf")
+# fig.savefig("./figures/figure2_alt.pdf")
+fig.savefig("test")
 fig.show()
 
 #+end_src
@@ -713,6 +718,5 @@ fig.show()
 : [0.  0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1. ]
 : Figure(refwidth=3.94)
 #+attr_org: :width 2510 :height 1104
-[[file:./.ob-jupyter/0090abb49fcfcad631bf46944d55df0f63819cf6.png]]
+[[file:./.ob-jupyter/216e9d6329388aef130692a4a4f56868f58edc30.png]]
 :END:
-#+RESULTS:
