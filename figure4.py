@@ -56,7 +56,7 @@ def system_trajectory(df, ax, nudge, seed=1234, spacing=0.6, max_t=20_000):
         yt.append(up)
         yt.append(up + 1)
         s = dfj.system
-        y = s.mean(1)[:max_t]+ up
+        y = s.mean(1)[:max_t] + up
 
         hi = Line2D(
             [],
@@ -143,7 +143,7 @@ def estimate_white_noise(row, tipping=0.5):
     return output
 
 
-def show_wn(df, X, Y, ax, Z=None, marker="o", by = "label", **kwargs):
+def show_wn(df, X, Y, ax, Z=None, marker="o", by="label", **kwargs):
     from utils import ccolors
     from scipy.stats import sem
 
@@ -176,7 +176,7 @@ def show_wn(df, X, Y, ax, Z=None, marker="o", by = "label", **kwargs):
         else:
             continue
             color = "tab:blue"
-            alpha = 0.05 # original
+            alpha = 0.05  # original
             # alpha = 0.0
 
             ax.axvspan(
@@ -197,9 +197,7 @@ def show_wn(df, X, Y, ax, Z=None, marker="o", by = "label", **kwargs):
         # ax.scatter(mux, muy)
         m = marker if intervention != "control" else ""
         alpha = 0.12
-        ax.scatter(x, y, color = color, alpha = alpha,
-                   zorder = 0,
-                   marker = m)
+        ax.scatter(x, y, color=color, alpha=alpha, zorder=0, marker=m)
         ax.errorbar(
             mux,
             muy,
@@ -210,8 +208,8 @@ def show_wn(df, X, Y, ax, Z=None, marker="o", by = "label", **kwargs):
             # markersize=0,
             **kwargs,
             marker=m,
-            markeredgewidth = 3,
-            markeredgecolor = 'k',
+            markeredgewidth=3,
+            markeredgecolor="k",
         )
 
         # ax.scatter(
@@ -263,7 +261,9 @@ if __name__ == "__main__":
 
     for x, e in errors.groupby("nudge"):
         nudge = x
+        print(nudge)
         fig, ax = plt.subplots(ncols=2, share=0)
+
         show_wn(
             e,
             "less_n",
@@ -279,6 +279,7 @@ if __name__ == "__main__":
             Z="greater_t",
             marker="s",
         )
+
         system_trajectory(df, ax[0], x)
         g = nx.krackhardt_kite_graph()
         from fa2 import ForceAtlas2 as fa2
@@ -327,7 +328,7 @@ if __name__ == "__main__":
             # space=0,
             ncols=1,
             fontsize=6,
-            frameon = 0
+            frameon=0,
         )
         ax[1].set_title("Noise dependent tipping behavior")
         ax[0].set_title("System trajectory under intervention")
@@ -352,7 +353,7 @@ if __name__ == "__main__":
                 )
             )
 
-        fig.legend(h, loc="r", title="Pinning\nintervention\non", ncols=1, frameon = 1)
+        fig.legend(h, loc="r", title="Pinning\nintervention\non", ncols=1, frameon=1)
 
         ax.format(abc=True, abc_kw=dict(fontsize=14))
 
@@ -365,25 +366,24 @@ if __name__ == "__main__":
         # inax.invert_yaxis()
 
         # ax[0].axis("off")
-        nx.draw(g, pos=pos, ax=inax, node_color=c, node_size = 30)
+        nx.draw(g, pos=pos, ax=inax, node_color=c, node_size=30)
         inax.axis("equal")
-
 
         inax = ax[1].inset_axes((0.70, 0.2, 0.25, 0.6))
         show_wn(
-                e,
-                "less_n",
-                "less_w",
+            e,
+            "less_n",
+            "less_w",
             inax,
-                Z="less_t",
+            Z="less_t",
             # markersize = 1,
-            )
+        )
         rect, indicators = inax.indicate_inset_zoom()
 
         [indicator.set_visible(0) for indicator in indicators]
         indicators[3].set_visible(1)
         indicators[1].set_visible(1)
-        inax.margins(30, tight = 0)
+        inax.margins(30, tight=0)
         inax.set_ylim(0, 0.02)
         ax[1].set_xlim(-0.05, 1.05)
         inax.set_xlim(0.50, 1.04)
