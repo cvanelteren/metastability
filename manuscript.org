@@ -1,5 +1,5 @@
 #+latex_class: fun_article
-#+options: ^:nil toc:nil date:nil title:nil
+#+options: ^:nil toc:nil date:nil title:nil author:nil
 #+latex_header: \usepackage{amsmath}
 #+latex_header: \usepackage{cleveref}
 #+latex_header: \usepackage{comment}
@@ -7,8 +7,18 @@
 #+latex_header: \usepackage{chngcntr}
 #+bibliography: library.bib
 #+title:An information theory perspective on tipping points in dynamical networks
-#+author: Casper van Elteren, Rick Quax, Peter Sloot
 
+
+#+latex_header: \usepackage{authblk}
+#+latex_header: \renewcommand*{\Affilfont}{\footnotesize\normalfont}
+#+latex_header: \author[1, 2, 3]{Casper van Elteren (c.vanelteren@uva.nl)}
+#+latex_header: \author[1, 2, 3]{Rick Quax}
+#+latex_header: \author[1, 2, 3, 4]{Peter Sloot}
+
+#+latex_header: \affil[1]{Institute for Advanced Study, University of Amsterdam, Amsterdam, The Netherlands}
+#+latex_header: \affil[2]{Computational Science Lab, University of Amsterdam, The Netherlands}
+#+latex_header: \affil[3]{Complexity Science Hub Vienna, Vienna, Austria}
+#+latex_header: \affil[4]{National Center for Cognitive Research, ITMO University, Saint Petersburg, Russia}
 
 \twocolumn[
   \begin{@twocolumnfalse}
@@ -38,13 +48,13 @@ cite:Galam2020,  or  the  multistability  of  ecosystems  or
 climate systems cite:1986,Wunderling2021.
 
 There is  increasing evidence that for  some complex systems
-noise plays a fundamental role in the transition between the
-metastable                                            states
+noise fluctuations play a fundamental role in the transition
+between            the           attractor            states
 cite:Beggs2012,Mitchell1993,Mitchella,Forgoston2018a.  Noise
 is traditionally  viewed as an unwanted  signal that reduces
 the effectiveness  of a system  or reduces the quality  of a
-measured signal.  Indeed it  is well  known that  for linear
-systems,  the signal  to  noise ratio  is  maximized in  the
+measured signal.  Indeed, it is  well known that  for linear
+systems,  the signal-to-noise ratio  is  maximized in  the
 absence of noise. For non-linear systems, however, noise may
 allow the system to explore  larger parts of its state space
 by     allowing     it     to    escape     local     minima
@@ -138,12 +148,12 @@ network structure than without it.
 
 Here, we present a method to uncover the network percolation
 process    that    facilitates    endogenously    generated,
-noise-induced transitions. The approach differs differs from
-the traditional approaches that focus on how the system as a
+noise-induced  transitions. The  approach  differs from  the
+traditional approaches  that focus  on how  the system  as a
 whole approaches  a tipping point. The  computational method
 is  broadly applicable.  It makes  no assumptions  about the
 network  structure nor  the type  of dynamics  governing the
-nodes. In  principle it requires  access only to  the system
+nodes. In principle,  it requires access only  to the system
 state probabilities over time.  These could be obtained, for
 instance, through cross-sections of time-series.
 
@@ -166,7 +176,7 @@ instance, through cross-sections of time-series.
 # analyzed.
 
 #+name:fig:introduction
-#+caption: A dynamical network governed by kinetic Ising dynamics produces multistable behavior. (a) A typical trajectory is shown for a kite network for which each node is governed by the Ising dynamics with $\beta \approx 0.534$. The panels show system configurations $S_i \in S$ as the system approaches the tipping point (orange to purple to red). For the system to transition between metastable points, it has to cross an energy barrier (c). (b) The dynamics of the system can be represented as a graph. Each node represents a system configuration $S_i \in S$ such as depicted in (a). The probability for a particular system configuration $p(S)$ is indicated with a color; some states are more likely than others. The trajectory from (a) is visualized. Dynamics that move towards the tipping point (midline) destabilize the system, whereas moving away from the tipping point are stabilizing dynamics. (c) The stationary distribution of the system is bistable. Transitions between the metastable states are infrequent and rare. For more information on the numerical simulations see [[Methods and definitions]].
+#+caption: A dynamical network governed by kinetic Ising dynamics produces multistable behavior. (a) A typical trajectory is shown for a kite network for which each node is governed by the Ising dynamics with $\beta \approx 0.534$. The panels show system configurations $S_i \in S$ as the system approaches the tipping point (orange to purple to red). For the system to transition between attractor states, it has to cross an energy barrier (c). (b) The dynamics of the system can be represented as a graph. Each node represents a system configuration $S_i \in S$ such as depicted in (a). The probability for a particular system configuration $p(S)$ is indicated with a color; some states are more likely than others. The trajectory from (a) is visualized. Dynamics that move towards the tipping point (midline) destabilize the system, whereas moving away from the tipping point are stabilizing dynamics. (c) The stationary distribution of the system is bistable. Crossing the tipping point requires crossing a high energy states (dashed line). Transitions between the attractor states are infrequent and rare. For more information on the numerical simulations see [[Methods and definitions]].
 #+attr_latex: :float multicolumn
 [[./figures/figure1_alt.pdf]]
 
@@ -194,8 +204,8 @@ and sustained level of long term information.
 # dynamics  of a  node  can be  quantified using  time-delayed
 # Shannon mutual information  cite:Cover2005.
 
-The contribtion of a node to the dynamics of the system will
-differ  depending  on the  network  connectivity  of a  node
+The contribution  of a  node to the  dynamics of  the system
+will differ depending on the  network connectivity of a node
 (\cref{fig:maj_flip})    cite:vanElteren2022,Quax2013.   The
 total  amount  of  fluctuations shared  between  the  node's
 current state and the  system's short-term future trajectory
@@ -219,33 +229,40 @@ intensity and duration of the short-term fluctuations on the
 how much of the node state is in the "working memory" of the
 system.
 
-The term  $\omega(s_i)$ quantifies  the long  term memory  of the
-system.  As   the  dynamics   of  the  system   evolve,  the
-short-lived  fluctuations  will  cancel and  the  long  term
-behavior of  the system will  dominate more and  more. These
-slow fluctuations  are correlated with the  metastable state
-the  system is  in. Around  a low  energy state,  the system
-produces  short-lived fluctuations.  However, as  the system
-approaches a  tipping point a  new low energy state  will be
-chosen.  Correspondingly, the  correlations of  a node  with
-this  new future  system  state will  produce long(er)  time
-scale correlations.  The next tipping point  will be reached
-on a  much longer timescale. Consequently,  \(\omega\) quantifies
-the system  returning to a  stable system regime.  For nodes
-with  fast  dynamics,  \(\mu(s_i)\)   is  generally  high  and
-\(\omega_{s_i}\) would be generally low.
+The  term $\omega(s_i)  \in \mathbb{R}_{\ge  0}$ quantifies  the long
+term memory of the system. Positive values of $\omega(s_i)$ imply
+a  separation   of  time-scales:   short-lived  correlations
+dissipate  for increasing  $t$  and are  replaced by  slower
+system  fluctuations.  These  slow fluctuations  embody  the
+multiple attractor  states the system can  inhabit. Around a
+low   energy   state,   the  system   produces   short-lived
+fluctuations. As the system approaches a tipping point a new
+low  energy  state  will  be  chosen.  Correspondingly,  the
+correlations of  a node  with this  new future  system state
+will  produce  long(er)  timescale  correlations.  The  next
+tipping point will be reached on a much longer timescale.
+
+Using these information features,  roles can be identified. A
+transition   between   nodes   with   "fast"   (short-lived)
+correlations  and nodes  with  longer-lived correlations  is
+identified  (see  [[Role  division in  tipping  behavior]]).
+First we  provide an in  depth analysis on how  to interpret
+the information flows. As a  function of the distance to the
+tipping  point  information  flows reveal  insights  into  a
+node's  predictive  information   about  a  system's  future
+behavior.  The  kite  graph  will be  used  as  an  example.
+Simulated interventions  will be used to  validate the roles
+in   generating  a   tipping  point   identified  from   the
+information features.  Finally, the random networks  will be
+used to extrapolate and validate our findings.
 
 In \cref{fig:kite_res}{a-e} the  information flows are shown
-at  different  stages  in  the  metastable  transition.  The
-results  are shown  for  the kite  graph  to illustrate  the
-information features  and to enhance clarity  of the meaning
-of the information flows. Results for synthetic networks are
-shown  in  \cref{fig:ER}.   The  metastable  transition  was
-decomposed by considering the local information flows from a
-given system partition \(S_{\gamma}  = \{S' \subseteq S | \langle  S' \rangle = \gamma\}\)
-where \(\gamma  \in [0,1]\) is  the fraction of nodes  having state
-+1.   This   yields   the  conditional   integrated   mutual
-information as
+at  different  stages as  the  system  approaches a  tipping
+point.   The  metastable   transition   was  decomposed   by
+considering the local information  flows from a given system
+partition \(S_{\gamma} =  \{S' \subseteq S |  \langle S' \rangle = \gamma\}\)  where \(\gamma \in
+[0,1]\) is the fraction of nodes having state 1. This yields
+the conditional integrated mutual information as
 
 #+name: eq:adj_imi_conditional
 \begin{equation}
@@ -258,7 +275,7 @@ Details  about  the estimation  procedure  can  be found  in
 appendix: [[Exact information flows \(I(s_i^{\tau} ; S^{\tau + t})\)]].
 
 #+name:fig:kite_res
-#+caption:(a-e) Information flows as distance to tipping point. Far away from the tipping point most information processing occurs in low degree nodes (f,g). As the system moves towards the tipping point, the information flows increase and the information flows move towards higher degrees. (f) Integrated mutual information as function of distance to tipping point. The graphical inset plots show how noise in introduced far away from the tipping point in the tail of the kite graph. As the system approaches the tipping point, the local information dynamics move from the tail to the core of the kite. (g) A rise in asymptotic information indicates the system is close to a tipping point. At the tipping point, the decay maximizes as trajectories stabilize into one of the two metastable states.
+#+caption:(a-e) Information flows as distance to tipping point. Far away from the tipping point most information processing occurs in low degree nodes (f,g). As the system moves towards the tipping point, the information flows increase and the information flows move towards higher degrees. (f) Integrated mutual information as function of distance to tipping point. The graphical inset plots show how noise in introduced far away from the tipping point in the tail of the kite graph. As the system approaches the tipping point, the local information dynamics move from the tail to the core of the kite. (g) A rise in asymptotic information indicates the system is close to a tipping point. At the tipping point, the decay maximizes as trajectories stabilize into one of the two attractor states.
 #+attr_latex: :float multicolumn :placement [th]
 [[./figures/figure2_alt.pdf]]
 
@@ -356,40 +373,31 @@ approaches a tipping point.
 
 #+name: fig:max_trajectory
 #+attr_latex: :float multicolumn
-#+caption:The tipping point is initiated from the bottom up. Each node is colored according to state 0 (black) and state 1 (yellow) Shown is a trajectory towards the the tipping point that maximizes $\sum_{{t=1}}^{{5}} \log p(S^{{t+1}} | S^t, S^0 =\{0\}, \langle S^5 \rangle ) = 0.5)$. As the system approaches the tipping point, low degree nodes flip first, and recruit ``higher'' degree nodes to further destabilize the system and push it towards a tipping point. In total 30240 trajectories that reach the tipping point in 5 steps, and there are 10 trajectories that have the same maximized values as the trajectory shown in this figure.
+#+caption:The tipping point is initiated from the bottom up. Each node is colored according to state 0 (black) and state 1 (yellow) Shown is a trajectory towards  the tipping point that maximizes $\sum_{{t=1}}^{{5}} \log p(S^{{t+1}} | S^t, S^0 =\{0\}, \langle S^5 \rangle ) = 0.5)$. As the system approaches the tipping point, low degree nodes flip first, and recruit ``higher'' degree nodes to further destabilize the system and push it towards a tipping point. In total 30240 trajectories that reach the tipping point in 5 steps, and there are 10 trajectories that have the same maximized values as the trajectory shown in this figure.
 [[./figures/kite_maximized_trajectory_30230.pdf]]
 
-To  further  illustrate  the   intricacies  encoded  in  the
-information flows,  the most  likely trajectory to  and from
-the tipping  point were  computed. The path  analysis reveal
-that  at the  tipping point  the  system is  most likely  to
-either (a) move from one  attractor state to another, or (b)
-relax  back   to  the   attractor  state  it   evolved  from
-(\cref{fig:max_trajectory}). The most  likely paths reaching
-the tipping point from one of  the ground state results in a
+The information  flows reflect how  certain a given  node is
+about  the future  system state.  At the  tipping point  the
+system is most likely to  either (a) move from one attractor
+state to another,  or (b) relax back to  the attractor state
+it evolved  from (\cref{fig:max_trajectory}).  Path analysis
+revealed  that the  most likely  paths reaching  the tipping
+point  from   one  of   the  ground   state  results   in  a
 configuration in  which a high  degree cluster set  of nodes
 has to flip (e.g.  1,0,3,4,6 in \cref{fig:max_trajectory} at
 \(\langle  S \rangle  =  0.5)\).  This trajectory  is  less likely  than
 essentially     reversing     the      path     shown     in
 \cref{fig:max_trajectory}. Hence, most of the tipping points
 "fail" and relax  back to the attractor state  from which it
-evolved (\cref{fig:butterfly}{b}). If, however, it does make
-the metastable transition  to the other side,  the "tail" in
-the  graph remains  stable for  these transitions,  yielding
-relative  high correlation  for node  8, 9.  The information
-flows reflect how  certain a given node is  about the future
-system state, e.g. \(H(S^{t + \tau} | s_i^{t})\), revealing how
-much  uncertainty it  has on  how quickly  \(p(S^{t +  \tau})\)
-converges  to   some  stable  trajectory  around   a  future
-attractor state.
+evolved (\cref{fig:butterfly}{b}).
 
 #+name:fig:butterfly
 #+attr_latex: :float multicolumn
-#+caption: (a) Shown are the conditional probability at time $t=10$ relative to the tipping point. The shared information between the hub node 3 and the tail node 8 is shared is similar but importantly caused through different sources. The hub (node 3) has high certainty on that the system macrostate will be the same sign as its state. In contrast, node 8 has high certainty that the system macrostate will be opposite to its state at the tipping point. This is caused by the interaction between the network structure and the system dynamics whereby the most likely trajectories to the tipping point from the stable regime is mediated by the noise-induced dynamics from the tail to the core in the kite graph (see main text).(b) Successful metastable transitions are affected by network structure. Successful metastable transitions are those for which the sign of the macrostate is not the same prior and after the tipping point, e.g. the system going from the 0 macrostate side to the +1 macrostate side or vice versa. Shown here are the number of successful metastable transitions for \cref{fig:kite_noise} under control and pinning interventions on the nodes in the kite graph.
+#+caption: (a) Shown are the conditional probability at time $t=10$ relative to the tipping point. The shared information between the hub node 3 and the tail node 8 is shared is similar but importantly caused through different sources. The hub (node 3) has high certainty on that the system macrostate will be the same sign as its state. In contrast, node 8 has high certainty that the system macrostate will be opposite to its state at the tipping point. This is caused by the interaction between the network structure and the system dynamics whereby the most likely trajectories to the tipping point from the stable regime is mediated by the noise-induced dynamics from the tail to the core in the kite graph (see main text).(b) Successful metastable transitions are affected by network structure. Successful metastable transitions are those for which the sign of the macrostate is not the same prior and after the tipping point, e.g. the system going from the 0 macrostate side to the +1 macrostate side or vice versa. Shown here are the number of successful metastable transitions for \cref{fig:interventions} under control and pinning interventions on the nodes in the kite graph.
 [[./figures/tipping_butterfly_success.pdf]]
 
 The increased information of node 8 around the tipping point
-can  now  be understood  by  considering  the what  kind  of
+can  now   be  understood   by  considering  what   kind  of
 information 8 has  about the future of the  system. The path
 analysis  revealed  that  the   network  structure  plays  a
 fundamental   role  whereby   a  domino   effect  from   the
@@ -408,8 +416,8 @@ ability  to "choose"  the next  stable point.  This is  most
 likely caused for the kite graph  by a failure of the system
 to       transition      between       attractor      states
 (\cref{fig:butterfly}{b}): most transitions  are more likely
-to  transition back  to the  metastable state  it transition
-from  towards the  tipping  point. Node  8, however,  shares
+to transition  back to the  attractor state it  evolved from
+than  to another  attractor state.  Node 8,  however, shares
 different  information   about  the  future   system  state.
 \Cref{fig:butterfly} shows that node  8 has higher certainty
 that the future system state  will most likely have opposite
@@ -431,47 +439,165 @@ still  having   a  relatively   high  degree.   These  nodes
 experience  more frustration  as they  attempt to  reconcile
 with the states of the nearest neighbors.
 
+#+begin_comment
+# old figures
 #+name: fig:kite_noise
-#+caption:For a system to cross a tipping point two different types of nodes are identified. High degree nodes are essential for system to move from one metastable point to another. Low degree nodes are essential to propagate noise into the system. In (a) typical system trajectories are shown under pinning intervention on a node. Each color indicates a targeted intervention on the colors matching in (a). (b) The effect of intervention has a different effect depending on which node is targeted; Targeting a high degree node to the 0 state (e.g. node 3) prevents the system into tipping the opposite side of the pinning effect. In contrast, targeting a low degree node (e.g. 9) the system is still able to explore the full state space. Intermediate connected nodes (e.g. node 7, 8) removed merely nudges the system macrostate to one side, and increases the probability to remain in the 0 macrostate. In (b) $\pm$ 2 standard error of the mean are shown.
+#+caption:For a system to cross a tipping point two different types of nodes are identified. High degree nodes are essential for system to move from one attractor state to another. Low degree nodes are essential to propagate noise into the system. In (a) typical system trajectories are shown under pinning intervention on a node. Each color indicates a targeted intervention on the colors matching in (a). (b) The effect of intervention has a different effect depending on which node is targeted; Targeting a high degree node to the 0 state (e.g. node 3) prevents the system into tipping the opposite side of the pinning effect. In contrast, targeting a low degree node (e.g. 9) the system is still able to explore the full state space. Intermediate connected nodes (e.g. node 7, 8) removed merely nudges the system macrostate to one side, and increases the probability to remain in the 0 macrostate. In (b) $\pm$ 2 standard error of the mean are shown.
 #+attr_latex: :float multicolumn
 [[./figures/figure4_nudge=inf.pdf]]
 
 #+name: fig:ER
-#+caption: The effect of pinning intervention per node on 0 state  in Erdos-Reniy graphs(N = 100 graphs with 10 nodes each and p = 0.2, 6 different seeds). Shown are the second moment (noise) and time spent below the tipping relative to the control per network. Pinning intervention on initiator nodes increases the occurrence of tipping points. In contrast, interventions on stabilizers prevents tipping points and increases noise above the tipping point.  These results extend \cref{fig:kite_noise}, for more details on the role approximation please see appendix: [[Role division in random networks]].
+#+caption: The effect of pinning intervention per node on 0 state  in Erdos-Reniy graphs(N = 100 graphs with 10 nodes each and p = 0.2, 6 different seeds). Shown are the second moment (noise) and time spent below the tipping relative to the control per network. Pinning intervention on initiator nodes increases the occurrence of tipping points. In contrast, interventions on stabilizers prevents tipping points and increases noise above the tipping point.  These results extend \cref{fig:kite_noise}, for more details on the role approximation please see [[#sec:roles]].
 [[./figures/fig4_ER_all_alt.pdf]]
+#+end_comment
+
+#+begin_comment
+NOTE: this  figure needs to  be saved manually  as proplot
+has some annoying rescaling issues which squishes the graph
+#+end_comment
+
+#+name: fig:interventions
+#+caption: For a system to cross a tipping point two different types of nodes are identified. \textbf{Stabilizer} nodes are essential for system to move from one attractor state to another, they contain information about  how the system chooses its next attractor state. \textbf{Initiator} nodes are essential to propagate noise into the system. (a) The effect of pinning intervention per node on 0 state  in Erdos-Renyi graphs (N = 100 graphs with 10 nodes each and p = 0.2, 6 different seeds). Shown are normalized system fluctuations (second moment) and time spent below the tipping relative to the control per network. Pinning intervention on initiator nodes increases the occurrence of tipping points. In contrast, interventions on stabilizers prevents tipping points and increases noise above the tipping point. For more details on the role approximation please see [[Role division in tipping behavior]]. In (b) typical system trajectories are shown under pinning intervention on a node for the kite graph. Colors per system trajectory reflect intervention on the corresponding color in the kite graph (inset b). Intervention on initiator nodes (e.g. purple / red purple) removes system fluctuations below the tipping point ($\langle S \rangle < 0.5$) congruent with the pinned state (0), but increases the system fluctuations above the tipping point compared to control (blue, bottom plot). In contrast, stabilizer nodes (e.g. green) increase system fluctuations compared to control but stabilizes tipping points.
+#+attr_latex: :float multicolumn
+[[./figures/fig4_interventions.pdf]]
+
 
 # #+caption: The effects of targeted intervention reveals how initiator nodes are essential to initiate the tipping point and stabilizer nodes are necessary to succesfully tip the system. These results extend \cref{fig:kite_noise} by generating random Erdos-Renyi graphs (N = 100 graphs with 10 nodes each and p = 0.2, 8 different seeds). The x and y values are normalized according to the control values per graph. The dashed line indicate the axes for the control values. A value of 1 would indicate no difference to the control conditions. There is a trend from initator to stabilizer where interventions on stabilizers causes less tipping points to occur with higher second moment. In contrast, pinning intervention on initiators yields relatively more tipping points. For more details on the role approximation please see appendix: [[Synthetic networks]]
 
-** Simulated interventions
-The  cascade of  flips  is further  studied using  simulated
-interventions  (\cref{fig:kite_noise},   \cref{fig:ER}).  By
-pinning each  node state to  0 in separate  simulations, the
-effect on the  occurrence of tipping points  is studied. The
-interventions   highlight  two   distinct   roles  for   the
-metastable  transitions. Intervention  on  low degree  nodes
-remove  fluctuations   in  the  system  macrostate   0  but
-increases  the  fluctuations  when the  system  reaches  the
-macrostate 1. The effect is  most prominent for node 9 which
-has  degree 1  (\cref{fig:kite_noise}{b}); interventions  on
-node  9 yields  the lowest  time spent  in the  0 metastable
-state (\cref{fig:kite_noise}{a}), and the highest time spent
-in  the  1 macrostate  relative  to  interventions on  other
-nodes(\cref{fig:kite_noise}{b}).  Notable,   the  number  of
-tipping transitions  is the  least affected by  lower degree
-nodes. In contrast,  high degree nodes seem  to be essential
-for the tipping  behavior to endure; lower  degree nodes are
-necessary to  destabilize the system, but  the higher degree
-nodes have to flip in order  for the new metastable state to
-endure.  This  can be  seen  by  the  time  spent in  the  1
-macrostate: interventions on a  hub node has increased white
-noise  compared to  control conditions  in the  0 macrostate
-(\cref{fig:kite_noise}{a}).  This  indicates that  noise  is
-propagated and nodes are  flipped towards the tipping point,
-but  are less  likely to  cross the  tipping point.  This is
-further  strengthened by  the reduced  time spent  in the  1
-macrostate as a function of degree \cref{fig:kite_noise}{b}.
 
-** Role division in random networks
+** Role division in tipping behavior
+:PROPERTIES:
+:NAME: sec:roles
+:CUSTOM_ID: sec:roles
+:END:
+The role for node $i$  can be approximated by the difference
+between   integrated  mutual   information  and   asymptotic
+information
+
+\begin{equation}
+r_i  = \max_{\langle S \rangle}  \mu^*(s_i | \langle S \rangle) - \max_{\langle S  \rangle} \omega^*(s_i) \in  [-1, 1],
+\end{equation}
+
+with
+\begin{equation}
+\begin{aligned}
+\mu^*(s_i |  \langle S  \rangle) &=  \frac{\mu(s_i |  \langle S  \rangle )}{\max_{j, \langle S \rangle}
+\mu(s_j | \langle S \rangle)}\\
+\omega^*(s_i | \langle S \rangle  ) &= \frac{\omega(s_i | \langle S \rangle)}{\max_{j, \langle S \rangle}
+\omega(s_j | \langle S \rangle)}.
+\end{aligned}
+\end{equation}
+
+For role  values close  to 1,  the node  is classified  as a
+(pure) initiator.  These nodes  have high  integrated mutual
+information  indicating  high predictive  information  about
+short-lived system  trajectories. However, these  nodes lack
+long-term predictive information about future system states.
+Conversely,  a  node  classified  as   -1,  has  is  a  pure
+stabilizer.  Roles  having  a  value  $r_i  \sim  0$  are  more
+difficult to interpret as the  zero value could be caused by
+an   equally  large   integrated   mutual  information   and
+asymptotic information or a  generally lacking high score in
+both.
+
+Simulated  interventions  were  used to  validate  the  role
+description  identified   using  information   features.  In
+\cref{fig:interventions} the  effect on  system fluctuations
+and number  of tipping points using  simulated interventions
+were  shown. Nodes were pinning to the 0 state in separate
+simulations in different Erdos-Renyi  graphs (N = 100 graphs
+with 10  nodes, non-isomorphic connected graphs,  please see
+appendix:   [[Synthetic  networks]]).   From  the   results  two
+conclusions can be made.
+
+First, tipping points are  promoted proportional to a node's
+role:  the higher  a node  scores as  a initiator,  the more
+likely  and  intervention  will  induce  tipping  points.  A
+typical  system trajectory  under intervention  is shown  in
+\cref{fig:interventions}{b}.  We denote  $\langle  S \rangle  < 0.5$  as
+below the  tipping point as interventions  were performed by
+pinning  the node  state  at  0. This  would  create a  bias
+towards  the   attractor  state  $S  =   \{0,  \dots,  0\}$.
+Interventions   on    initiator   nodes    mitigate   system
+fluctuations  below  the   tipping  point  compared  (circle
+markers) to  control conditions (blue lines  in dashed lines
+in   \cref{fig:interventions}{a},    and   blue    line   in
+\cref{fig:interventions}{b}). In contrast,  it increases the
+system  fluctuations   above  the  tipping   points  (square
+markers).  Together  this  implies  that as  a  node's  role
+approaches 1,  the role  of this  node is  promoting towards
+initiating the tipping behavior,  but not preventing tipping
+points from occurring.
+
+Second, interventions  on stabilizer nodes are  essential to
+stabilize  the transition  from one  attractor state  to the
+other. Intervening on stabilizer  nodes increases the system
+fluctuations  above the  tipping  point  (square markers  in
+\cref{fig:interventions}) and  increases the  duration below
+the tipping point. The  increased fluctuations indicate that
+the  stabilizer  nodes  are  necessary  for  the  system  to
+successfully transition between attractor states.
+
+
+** Simulated interventions :noexport:
+Simulated interventions confirm the  role initiators have on
+the system dynamics. Interventions  are performed by pinning
+each  node  to  the  0 state  in  separate  simulations  and
+measuring  the  effect on  the  occurrence  and duration  of
+tipping points. \Cref{fig:kite_noise} and \cref{fig:ER} show
+that interventions has different  consequences on the system
+behavior  depending   on  a   node's  ability   to  transmit
+fluctuations.  The  interventions  further confirm  the  two
+findings above.
+
+First, initiators mediate the  occurrence of tipping points.
+Interventions   on    initiator   nodes    mitigate   system
+fluctuations  below the  tipping point  compared to  control
+conditions  (blue  shade  in  \cref{fig:kite_noise},  dashed
+lines  in  \cref{fig:ER}).  In contrast,  it  increases  the
+system  fluctuations   above  the  tipping   points  (square
+markers). This  indicates that  the initiator  nodes promote
+tipping behavior.
+
+Second, interventions  on stabilizer nodes are  essential to
+stabilize  the transition  from one  attractor state  to the
+other. Intervening on stabilizer  nodes increases the system
+fluctuations  above the  tipping  point  (square markers  in
+\cref{fig:kite_noise,  fig:ER}) and  increases the  duration
+below the tipping point. The increased fluctuations indicate
+that the  stabilizer nodes are  necessary for the  system to
+successfully transition between attractor states.
+
+
+# The  cascade of  flips  is further  studied using  simulated
+# interventions  (\cref{fig:kite_noise},   \cref{fig:ER}).  By
+# pinning each  node state to  0 in separate  simulations, the
+# effect on the  occurrence of tipping points  is studied. The
+# interventions   highlight  two   distinct   roles  for   the
+# metastable  transitions. Intervention  on  low degree  nodes
+# remove  fluctuations   in  the  system  macrostate   0  but
+# increases  the  fluctuations  when the  system  reaches  the
+# macrostate 1. The effect is  most prominent for node 9 which
+# has  degree 1  (\cref{fig:kite_noise}{b}); interventions  on
+# node  9 yields  the lowest  time spent  in the  0 metastable
+# state (\cref{fig:kite_noise}{a}), and the highest time spent
+# in  the  1 macrostate  relative  to  interventions on  other
+# nodes(\cref{fig:kite_noise}{b}).  Notable,   the  number  of
+# tipping transitions  is the  least affected by  lower degree
+# nodes. In contrast,  high degree nodes seem  to be essential
+# for the tipping  behavior to endure; lower  degree nodes are
+# necessary to  destabilize the system, but  the higher degree
+# nodes have to flip in order  for the new attractor state to
+# endure.  This  can be  seen  by  the  time  spent in  the  1
+# macrostate: interventions on a  hub node has increased white
+# noise  compared to  control conditions  in the  0 macrostate
+# (\cref{fig:kite_noise}{a}).  This  indicates that  noise  is
+# propagated and nodes are  flipped towards the tipping point,
+# but  are less  likely to  cross the  tipping point.  This is
+# further  strengthened by  the reduced  time spent  in the  1
+# macrostate as a function of degree \cref{fig:kite_noise}{b}.
+
+** Role division in random networks :noexport:
 The  contribution  of each  node  to  the tipping  point  be
 decomposed as a continuum  between two roles. Initiator node
 are essential  to kickstart  the domino effect.  These nodes
@@ -517,11 +643,11 @@ using  the  second moment  and  normalized  per system  (see
 appendix: [[Synthetic networks]]). Three observations can be
 made.
 
-First,  intervention  on  initiator  nodes  increases
-tipping behavior of the system. As the role $r_i$ approaches
-1, the  noise fluctuations  and tipping  behavior approaches
-control (dashed lines). As  the role approaches -1, however,
-the  tipping  behavior  decreases compared  to  the  control
+First,  intervention on  initiator  nodes increases  tipping
+behavior of the system. As  the role $r_i$ approaches 1, the
+noise fluctuations  and tipping behavior  approaches control
+(dashed  lines). As  the  role approaches  -1, however,  the
+tipping   behavior  decreases   compared   to  the   control
 condition.
 
 Second,   intervention  on   initiator  reduces   the  noise
@@ -558,13 +684,13 @@ could  be identified:  /initiator/  and /stabilizer/  nodes.
 Initiator  nodes  are  essential  early  in  the  metastable
 transition. Due to their high degree of freedom, these nodes
 are more  effected by  external noise. They  are instigators
-and inject noise into  the system, destabilizing more stable
-nodes. In  contrast, stabilizer  nodes, have high  degree of
-freedom and require more energy to change state. These nodes
-are essential for the  metastable behavior as they stabilize
-the system  macrostate. During  the metastable  transition a
-domino sequence of  node state changes are  propagated in an
-ordered sequence towards the tipping point.
+and  inject  propagate  in the  system,  destabilizing  more
+stable nodes. In contrast, stabilizer nodes, have low degree
+of freedom  and require more  energy to change  state. These
+nodes  are essential  for  the metastable  behavior as  they
+stabilize  the  system  macrostate.  During  the  metastable
+transition  a  domino sequence  of  node  state changes  are
+propagated in an ordered sequence towards the tipping point.
 
 This  domino effect  was  revealed  through two  information
 features unvealing an /information cascade/ underpinning the
@@ -729,11 +855,6 @@ providing insights and feedback  in various ideas present in
 this  paper. This  research is  supported by  grant Hyperion
 2454972 of the Dutch National Police.
 
-* References
-:PROPERTIES:
-:CUSTOM_ID: sec:org26fe258
-:END:
-\printbibliography[heading=none]
 * Author contribution
 *Casper  van Elteren*:  first  draft, (code)  implementation,
  visualization.    *Rick   Quax*:   feedback,   supervision,
@@ -741,7 +862,16 @@ this  paper. This  research is  supported by  grant Hyperion
  conceptualization.
 
 
+* Competing interests
+The authors declare no competing interests.
+* References
+:PROPERTIES:
+:CUSTOM_ID: sec:org26fe258
+:END:
+\printbibliography[heading=none]
 
+
+* FORMATTING PAGE page :ignore:
 \newpage
 \appendix
 * Appendix
@@ -1190,12 +1320,12 @@ constraints as measured by degree.
 :PROPERTIES:
 :CUSTOM_ID: additional-networks
 :END:
-The kite graph was chosen as it allowed for computing exact information
-flows while retaining a high variety of degree distribution given the
-small size. Other networks were also tested. In
-\cref{fig:other_systems}) different network structure
-were used. Each node is governed by kinetic Ising spin dynamics.
-
+The kite graph was chosen  as it allowed for computing exact
+information flows  while retaining a high  variety of degree
+distribution given the small  size. Other networks were also
+tested.   In  \cref{fig:other_systems})   different  network
+structure were used. Each node  is governed by kinetic Ising
+spin dynamics.
 
 #+name: fig:other_systems
 #+caption:Adjusted mutual information for a random tree (top), and Leder-Coxeter Fruchte graphs (middle, bottom). Each node is goverened by kinetic Ising spin dyanmics. Far away from the tipping point (fraction nodes 1 = 0.5) most information flows are concentrated on non-hub nodes. As the system approaches the tipping point (fraction = 0.5), the information flows move inwards, generating higher adjusted integrated mutual information for nodes with higher degree.
@@ -1254,9 +1384,10 @@ were computed as function of the macrostate $\langle S \rangle$.
 Various network  structures are  generated in  the synthetic
 networks. The  variety of  network structure  has non-linear
 effects on the information flows. The effect of intervention
-in \cref{fig:ER} is made relative  to the control values for
+in \cref{fig:interventions} is made relative  to the control values for
 the  graph and  seed. The  second moment  (appendix: [[Noise
 estimation procedure]]) and the time spent below the tipping
 point   are   normalized   with   respect   to   the   graph
 (\cref{fig:ER_family}) and  the seed.  In total 6  seeds are
 used (0, 12, 123, 1234, 123456, 1234567).
+
