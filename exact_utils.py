@@ -163,8 +163,9 @@ def match_temp_stc(g, structure=None, e_func=ising):
             np.asarray(E),
         ),
         method="COBYLA",
-    )
+    ) 
+    print(res)
 
     if not res.success:
         raise ValueError("Optimalization valued")
-    return res.x[0]
+    return res.x

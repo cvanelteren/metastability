@@ -191,10 +191,14 @@ def setup_sim(g, id):
     g.id = id
     return g, 1 / t
 
-
+from pathlib import Path
 with mp.Pool(mp.cpu_count() - 1) as p:
     for id, g in enumerate(tqdm(graphs, position=0)):
         print(id)
+	fp = f"./kite_isi_{g.id=}_ts.pkl"
+        if Path(fp).exists():
+            print("skipping")
+            continue
         df = []
         g, best_beta = setup_sim(g, id)
         beta = 1 / np.linspace(0, 10, 20)
@@ -206,8 +210,7 @@ with mp.Pool(mp.cpu_count() - 1) as p:
                 df.append(j)
         df = pd.DataFrame(df)
         df["best_beta"] = best_beta
-        df.to_pickle(f"./kite_isi_{g.id=}_ts.pkl")
-        break
-
+        df.to_pickle(fp)
+print("Done")
 # df.to_pickle(f"small_tree_isi_{beta=}.pickle")
 # df.to_pickle(f"./kite_isi_{beta=}.pkl")
