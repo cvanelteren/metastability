@@ -1,0 +1,118 @@
+#+begin_src jupyter-python
+import proplot as plt, cmasher as cmr, pandas as pd,\
+    numpy as np, os, sys, networkx as nx, warnings
+from plexsim import models
+from imi import infcy
+
+df = pd.read_pickle("./success_n.pkl")
+other = pd.read_pickle("../combined_errors.pkl")
+df.head(1), other.head(1)
+#+end_src
+
+#+RESULTS:
+
+#+begin_src jupyter-python
+l = "id label seed nudge".split()
+test = pd.merge(other, df, left_on = l, right_on = l)
+#+end_src
+
+#+RESULTS:
+
+
+#+begin_src jupyter-python
+print(test.columns)
+#+end_src
+
+#+RESULTS:
+: Index(['greater_n', 'greater_w', 'greater_t', 'less_n', 'less_w', 'less_t',
+:        'label', 'seed', 'nudge', 'n_tips', 'success', 'id', 'success_1_to_0',
+:        'success_0_to_1'],
+:       dtype='object')
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots(ncols = 1, share = 0)
+
+# inax = ax.inset_axes((0.5, 0.3, 0.4, 0.4), transform = "figure")
+for group, dfi in test.groupby("label seed".split()):
+
+    c = "tab:blue"
+    if group[0] != "control":
+        c = "tab:red"
+    ax[0].scatter(dfi.success_0_to_1.mean(),
+                  dfi.less_w.mean(),
+                  alpha = .1,
+                  # label = str(group)
+                  color = c,
+                  )
+    # ax[0].scatter(dfi.less_n, dfi.less_w, alpha = 0.1)
+
+    ax[0].scatter(dfi.success_1_to_0.mean(),
+                  dfi.less_w.mean(),
+                  color = c,
+                  alpha = .1)
+
+
+    ax[0].scatter(dfi.success_1_to_0.mean(),
+                  dfi.greater_w.mean(),
+                  color = c,
+                  alpha = .1)
+
+    ax[0].scatter(dfi.success_0_to_1.mean(),
+                  dfi.greater_w.mean(),
+                  color = c,
+                  alpha = .1)
+
+    # inax.scatter(dfi.success_0_to_1.mean(),
+    #               dfi.less_w.mean(),
+    #               alpha = .1,
+    #               # label = str(group)
+                  # color = c,
+                  # )
+
+
+
+
+
+
+ax.format()
+ax.legend(loc = 'r')
+fig.show()
+fig.savefig("test")
+
+print(df.id.unique().size)
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_163385/296781494.py:47: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+: 42
+#+attr_org: :width 321 :height 282
+[[file:./.ob-jupyter/a7ee6472bf32eb0837b2fed2e702a2da763faf3d.png]]
+:END:
+
+#+begin_src jupyter-python
+test.columns
+
+#+end_src
+
+#+RESULTS:
+: Index(['greater_n', 'greater_w', 'greater_t', 'less_n', 'less_w', 'less_t',
+:        'label', 'seed', 'nudge', 'n_tips', 'success', 'id', 'success_1_to_0',
+:        'success_0_to_1'],
+:       dtype='object')
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+ax.scatter(test.success_0_to_1.values, test.greater_n.values)
+fig.show()
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_163385/747619755.py:3: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 288 :height 282
+[[file:./.ob-jupyter/db0d827f14185a4fe0056b829b0cac18c4c41637.png]]
+:END:

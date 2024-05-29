@@ -1,0 +1,55 @@
+#+begin_src jupyter-python
+import proplot as plt, cmasher as cmr, pandas as pd,\
+    numpy as np, os, sys, networkx as nx, warnings
+from plexsim import models
+from imi import infcy
+
+fp = "/run/media/casper/9ee50225-d11d-4dae-81d9-9fa441997327/recal/"
+
+from pathlib import Path
+
+from tqdm import tqdm
+fig, ax = plt.subplots()
+for file_ in tqdm(Path(fp).iterdir()):
+    if file_.name.endswith(".pkl"):
+        df = pd.read_pickle(file_)
+        ax.scatter(df.success_0_to_1, df.greater_n, c = "tab:blue")
+        ax.scatter(df.success_1_to_0, df.less_n, c = "tab:orange")
+        break
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: <frozen importlib._bootstrap>:228: RuntimeWarning: plexsim.models.base.Model size changed, may indicate binary incompatibility. Expected 312 from C header, got 1048 from PyObject
+: 0it [00:10, ?it/s]
+#+attr_org: :width 305 :height 300
+[[file:./.ob-jupyter/0cd025689ad501a396341d810464c5a051b8ef47.png]]
+:END:
+
+#+begin_src jupyter-python
+df.columns
+#+end_src
+
+#+RESULTS:
+: Index(['label', 'isi', 'seed', 'system', 'nudge', 'p', 'success_0_to_1',
+:        'success_1_to_0', 'num_tips', 'id', 'beta', 'greater_n', 'greater_w',
+:        'greater_t', 'less_n', 'less_w', 'less_t', 'best_beta'],
+:       dtype='object')
+
+#+begin_src jupyter-python
+fig, ax = plt.subplots()
+ax.scatter(df.success_0_to_1, df.greater_n)
+ax.scatter(df.success_1_to_0, df.less_n)
+ax.format()
+fig.show()
+
+#+end_src
+
+#+RESULTS:
+:RESULTS:
+: /tmp/ipykernel_367781/2010649288.py:5: UserWarning: Matplotlib is currently using module://matplotlib_inline.backend_inline, which is a non-GUI backend, so cannot show the figure.
+:   fig.show()
+#+attr_org: :width 305 :height 300
+[[file:./.ob-jupyter/2a2dcec0a647ca20332b54a1d2ec1a645ce0ea22.png]]
+:END:
